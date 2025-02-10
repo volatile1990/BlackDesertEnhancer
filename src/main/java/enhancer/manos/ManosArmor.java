@@ -1,4 +1,4 @@
-package manos;
+package enhancer.manos;
 
 import java.util.Random;
 

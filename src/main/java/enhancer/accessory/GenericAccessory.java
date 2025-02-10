@@ -1,8 +1,8 @@
-package accessory;
+package enhancer.accessory;
 
 import java.util.Random;
 
-import misc.Constants;
+import enhancer.Constants;
 
 public class GenericAccessory {
 

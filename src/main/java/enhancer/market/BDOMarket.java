@@ -1,4 +1,4 @@
-package market;
+package enhancer.market;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,7 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import misc.Constants;
+import enhancer.Constants;
 
 public class BDOMarket {
 

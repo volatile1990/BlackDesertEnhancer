@@ -1,12 +1,12 @@
-package calculator;
+package enhancer.calculator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import market.BDOMarket;
-import market.Costume;
-import misc.Constants;
-import misc.CostumeStack;
+import enhancer.Constants;
+import enhancer.market.BDOMarket;
+import enhancer.market.Costume;
+import enhancer.models.CostumeStack;
 
 public class CostumeProfitCalculator {
 

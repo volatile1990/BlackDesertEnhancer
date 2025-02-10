@@ -1,4 +1,4 @@
-package misc;
+package enhancer.models;
 
 public enum AccessoryStack {
 

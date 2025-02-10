@@ -1,9 +1,9 @@
-package manos;
+package enhancer.manos;
 
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import accessory.GenericAccessory;
+import enhancer.accessory.GenericAccessory;
 
 public class Enhancer {
 	private static final int SIMULATION_COUNT = 10000;

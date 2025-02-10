@@ -1,4 +1,4 @@
-package market;
+package enhancer.market;
 
 public class Costume extends Item {
 

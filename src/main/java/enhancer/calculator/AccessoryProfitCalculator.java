@@ -1,4 +1,4 @@
-package calculator;
+package enhancer.calculator;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -6,11 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import accessory.GenericAccessory;
-import market.Accessory;
-import market.BDOMarket;
-import misc.AccessoryStack;
-import misc.Constants;
+import enhancer.Constants;
+import enhancer.accessory.GenericAccessory;
+import enhancer.market.Accessory;
+import enhancer.market.BDOMarket;
+import enhancer.models.AccessoryResult;
+import enhancer.models.AccessoryStack;
+import enhancer.models.EnhancementResult;
+import enhancer.models.SimulationRun;
 
 public class AccessoryProfitCalculator {
 
@@ -90,28 +93,6 @@ public class AccessoryProfitCalculator {
 		return str.substring(0, maxLength - 3) + "...";
 	}
 
-	private static class AccessoryResult {
-		final String name;
-		final long baseStock;
-		final long triItems;
-		final long triProfit;
-		final long tetItems;
-		final long tetProfit;
-		final double triProfitPerItem;
-		final double tetProfitPerItem;
-
-		AccessoryResult(String name, long baseStock, long triItems, long triProfit, long tetItems, long tetProfit) {
-			this.name = name;
-			this.baseStock = baseStock;
-			this.triItems = triItems;
-			this.triProfit = triProfit;
-			this.tetItems = tetItems;
-			this.tetProfit = tetProfit;
-			this.triProfitPerItem = (double) triProfit / triItems;
-			this.tetProfitPerItem = (double) tetProfit / tetItems;
-		}
-	}
-
 	private EnhancementResult calculateEnhancementCost(Accessory accessory, boolean doTet) {
 		long totalCost = 0;
 		long totalItems = 0;
@@ -153,23 +134,4 @@ public class AccessoryProfitCalculator {
 		return String.format("%,d", number);
 	}
 
-	private static class EnhancementResult {
-		final long avgCost;
-		final long avgItems;
-
-		EnhancementResult(long avgCost, long avgItems) {
-			this.avgCost = avgCost;
-			this.avgItems = avgItems;
-		}
-	}
-
-	private static class SimulationRun {
-		final long cost;
-		final long items;
-
-		SimulationRun(long cost, long items) {
-			this.cost = cost;
-			this.items = items;
-		}
-	}
 }
