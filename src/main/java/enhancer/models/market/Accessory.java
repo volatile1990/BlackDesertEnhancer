@@ -1,4 +1,4 @@
-package enhancer.market;
+package enhancer.models.market;
 
 public class Accessory extends Item {
 

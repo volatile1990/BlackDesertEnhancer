@@ -48,14 +48,14 @@ public class ManosArmor {
 		}
 
 		if (currentFails >= maxFails) {
-//			System.out.println("100% Erfolg! Level erhöht von " + currentLevel + " auf " + (currentLevel + 1));
+//			System.out.println("100% Erfolg! Level erhÃ¶ht von " + currentLevel + " auf " + (currentLevel + 1));
 			currentLevel++;
 			currentFails = 0;
 			return true;
 		} else {
 			boolean success = random.nextDouble() * 100 <= currentChance;
 			if (success) {
-//				System.out.println("Erfolg! Level erhöht von " + currentLevel + " auf " + (currentLevel));
+//				System.out.println("Erfolg! Level erhÃ¶ht von " + currentLevel + " auf " + (currentLevel));
 				++currentLevel;
 				currentFails = 0;
 				return true;

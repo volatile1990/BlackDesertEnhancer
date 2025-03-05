@@ -28,13 +28,13 @@ public class GenericAccessory {
 		this.enhanceChances = new double[] { 83.5, 54, 47.4 };
 		this.pity = new int[] { 5, 6, 8, 10 };
 		this.fails = new int[] { 0, 0, 0, 0 };
-		this.chanceIncreaseOnFail = new double[] { 0, 03, 0, 01, 0, 0075, 0, 0025 };
+		this.chanceIncreaseOnFail = new double[] { 0.03, 0.01, 0.0075, 0.0025 };
 
 		this.enhanceCost = 0;
 		this.itemsNeeded = 0;
 	}
 
-	public GenericAccessory(int basePrice, double[] enhanceChances, long[] failstackCost) {
+	public GenericAccessory(long basePrice, double[] enhanceChances, long[] failstackCost) {
 		this();
 		this.basePrice = basePrice;
 		this.enhanceChances = enhanceChances;

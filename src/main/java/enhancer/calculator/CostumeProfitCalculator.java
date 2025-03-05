@@ -1,18 +1,20 @@
 package enhancer.calculator;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import enhancer.Constants;
 import enhancer.market.BDOMarket;
 import enhancer.market.Costume;
 import enhancer.models.CostumeStack;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Slf4j
 public class CostumeProfitCalculator {
 
 	private static final int SIMULATION_RUNS = 100000;
 
-	// Used Stacks;
+	// Used Stacks
 	private static final CostumeStack MON_STACK = CostumeStack.TEN;
 	private static final CostumeStack DUO_STACK = CostumeStack.TWENTY;
 	private static final CostumeStack TRI_STACK = CostumeStack.THIRY;
@@ -38,17 +40,17 @@ public class CostumeProfitCalculator {
 
 		for (Costume costume : costumes) {
 			// Calculate TRI profits
-			EnhancementResult triResult = calculateEnhancementCost(costume.basePrice, false);
-			long triProfit = calculateProfit(costume.triPrice, triResult.avgCost);
+			EnhancementResult triResult = calculateEnhancementCost(costume.getBasePrice(), false);
+			long triProfit = calculateProfit(costume.getTriPrice(), triResult.avgCost);
 
 			// Calculate TET profits
-			EnhancementResult tetResult = calculateEnhancementCost(costume.basePrice, true);
-			long tetProfit = calculateProfit(costume.tetPrice, tetResult.avgCost);
+			EnhancementResult tetResult = calculateEnhancementCost(costume.getBasePrice(), true);
+			long tetProfit = calculateProfit(costume.getTetPrice(), tetResult.avgCost);
 
-			results.add(new CostumeResult(costume.name, triResult.avgCostumes, triProfit, tetResult.avgCostumes, tetProfit));
+			results.add(new CostumeResult(costume.getName(), triResult.avgCostumes, triProfit, tetResult.avgCostumes, tetProfit));
 		}
 
-		// Format strings für die verschiedenen Tabellen
+		// Format strings fï¿½r die verschiedenen Tabellen
 		String triFormat = "%-40s | %12s | %15s%n";
 		String tetFormat = "%-40s | %12s | %15s%n";
 
@@ -100,7 +102,7 @@ public class CostumeProfitCalculator {
 		}
 	}
 
-	private EnhancementResult calculateEnhancementCost(int basePrice, boolean doTet) {
+	private EnhancementResult calculateEnhancementCost(long basePrice, boolean doTet) {
 		long totalCost = 0;
 		long totalCostumes = 0;
 
@@ -113,7 +115,7 @@ public class CostumeProfitCalculator {
 		return new EnhancementResult(totalCost / SIMULATION_RUNS, totalCostumes / SIMULATION_RUNS);
 	}
 
-	private SimulationRun simulateEnhancement(int basePrice, boolean doTet) {
+	private SimulationRun simulateEnhancement(long basePrice, boolean doTet) {
 		long cost = 0;
 		long costumesNeeded = 0;
 		boolean done = false;
