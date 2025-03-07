@@ -1,9 +1,9 @@
 package enhancer.manos;
 
+import enhancer.accessory.GenericAccessory;
+
 import java.text.NumberFormat;
 import java.util.Locale;
-
-import enhancer.accessory.GenericAccessory;
 
 public class Enhancer {
 	private static final int SIMULATION_COUNT = 10000;
@@ -27,7 +27,7 @@ public class Enhancer {
 				acc.enhance();
 			}
 
-			totalCost += acc.getEnhanceCost();
+			totalCost += acc.getTotalEnhanceCost();
 		}
 
 		double avgCost = (double) totalCost / SIMULATION_COUNT;

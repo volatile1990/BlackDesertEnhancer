@@ -120,7 +120,7 @@ public class AccessoryProfitCalculator {
             enhanceAccessory.enhance();
         }
 
-        return new SimulationRun(enhanceAccessory.getEnhanceCost(), enhanceAccessory.getItemsNeeded());
+        return new SimulationRun(enhanceAccessory.getTotalEnhanceCost(), enhanceAccessory.getTotalItemsConsumed());
 
     }
 
