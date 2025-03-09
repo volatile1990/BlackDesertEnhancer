@@ -8,30 +8,32 @@ import enhancer.models.AccessoryStack;
 import enhancer.models.EnhancementResult;
 import enhancer.models.SimulationRun;
 import enhancer.models.market.Accessory;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
+@Setter
+@Getter
 @Slf4j
 public class AccessoryProfitCalculator {
 
-    private static final int SIMULATION_RUNS = 100000;
+    private int simulationRuns = 10000;
 
-    // Used Stacks
-    private static final AccessoryStack MON_STACK = AccessoryStack.FOURTY;
-    private static final AccessoryStack DUO_STACK = AccessoryStack.FOURTY;
-    private static final AccessoryStack TRI_STACK = AccessoryStack.FOURTYFIVE;
-    private static final AccessoryStack TET_STACK = AccessoryStack.HUNDREDTEN_FREE;
+    // Default stacks that can be overridden
+    private AccessoryStack monStack = AccessoryStack.FOURTY;
+    private AccessoryStack duoStack = AccessoryStack.FOURTY;
+    private AccessoryStack triStack = AccessoryStack.FOURTYFIVE;
+    private AccessoryStack tetStack = AccessoryStack.HUNDREDTEN_FREE;
 
     public static void main(String[] args) {
         new AccessoryProfitCalculator().calculateAndPrintProfits();
     }
 
-    public void calculateAndPrintProfits() {
+    // Modified method that returns calculation results
+    public List<AccessoryResult> calculateProfits() {
         BDOMarket market = new BDOMarket();
         List<Accessory> accessories = market.getAccessories();
         List<AccessoryResult> results = new ArrayList<>();
@@ -50,109 +52,38 @@ public class AccessoryProfitCalculator {
             results.add(new AccessoryResult(accessory.getName(), accessory.getBaseStock(), duoResult.avgItems, duoProfit, triResult.avgItems, triProfit, tetResult.avgItems, tetProfit));
         }
 
+        return results;
+    }
+
+    // Original method for console output
+    public void calculateAndPrintProfits() {
+        List<AccessoryResult> results = calculateProfits();
+
         Printer printer = new Printer();
-        //printer.printComprehensiveTable(results);
         printer.printDetailedAnalysisByLevel(results);
-
-        /*
-        // Sort by DUO Profit per Item (descending) to find the most profitable DUO upgrades
-        results.sort((a, b) -> Double.compare(b.duoProfitPerItem, a.duoProfitPerItem));
-
-        // Print DUO Analysis
-        printProfitTable(results, "DUO Profit Analysis", 2);
-
-        // Sort by TRI Profit per Item (descending) to find the most profitable TRI upgrades
-        results.sort((a, b) -> Double.compare(b.triProfitPerItem, a.triProfitPerItem));
-
-        // Print TRI Analysis
-        printProfitTable(results, "TRI Profit Analysis", 3);
-
-        // Sort by TET Profit per Item (descending) to find the most profitable TET upgrades
-        results.sort((a, b) -> Double.compare(b.tetProfitPerItem, a.tetProfitPerItem));
-
-        // Print TET Analysis
-        printProfitTable(results, "TET Profit Analysis", 4);*/
-
-    }
-
-    private void printProfitTable(List<AccessoryResult> results, String title, int level) {
-
-        String levelTag = switch (level) {
-            case 2 -> {
-                yield "DUO";
-            }
-            case 3 -> {
-                yield "TRI";
-            }
-            case 4 -> {
-                yield "TET";
-            }
-            default -> throw new IllegalStateException("Unexpected value: " + level);
-        };
-
-        String format = "%-39s | %13s | %12s | %15s | %15s  | %15s | %15s";
-        log.info("\n{}", title);
-        log.info("=".repeat(125));
-        log.info("{}", String.format(format, "Name", "Avg " + levelTag + " Items", "Base Stock", levelTag + " Profit", "DUO Profit/Item", "TRI Profit/Item", "TET Profit/Item"));
-        log.info("-".repeat(125));
-
-        for (AccessoryResult result : results) {
-            long items = 0;
-            long profit = switch (level) {
-                case 2 -> {
-                    items = result.duoItems;
-                    yield result.duoProfit;
-                }
-                case 3 -> {
-                    items = result.triItems;
-                    yield result.triProfit;
-                }
-                case 4 -> {
-                    items = result.tetItems;
-                    yield result.tetProfit;
-                }
-                default -> 0;
-            };
-
-            log.info("{}", String.format(format, truncateString(result.name, 39), items, result.baseStock, formatNumber(profit), formatNumber(result.duoProfitPerItem), formatNumber(result.triProfitPerItem), formatNumber(result.tetProfitPerItem)));
-        }
-        log.info("=".repeat(125));
-    }
-
-    private String formatNumber(double number) {
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.GERMANY);
-        DecimalFormat formatter = new DecimalFormat("#,##0", symbols);
-        return formatter.format(number);
-    }
-
-    private String truncateString(String str, int maxLength) {
-        if (str.length() <= maxLength) {
-            return str;
-        }
-        return str.substring(0, maxLength - 3) + "...";
     }
 
     private EnhancementResult calculateEnhancementCost(Accessory accessory, int targetLevel) {
         long totalCost = 0;
         long totalItems = 0;
 
-        for (int i = 0; i < SIMULATION_RUNS; i++) {
+        for (int i = 0; i < simulationRuns; i++) {
             SimulationRun run = simulateEnhancement(accessory, targetLevel);
             totalCost += run.cost;
             totalItems += run.items;
         }
 
-        return new EnhancementResult(totalCost / SIMULATION_RUNS, totalItems / SIMULATION_RUNS);
+        return new EnhancementResult(totalCost / simulationRuns, totalItems / simulationRuns);
     }
 
     private SimulationRun simulateEnhancement(Accessory accessory, int targetLevel) {
 
-        long monStackCost = MON_STACK.blackStoneCount * Constants.BLACK_STONE_PRICE;
-        long duoStackCost = DUO_STACK.blackStoneCount * Constants.BLACK_STONE_PRICE;
-        long triStackCost = TRI_STACK.blackStoneCount * Constants.BLACK_STONE_PRICE;
-        long tetStackCost = TET_STACK.blackStoneCount * Constants.BLACK_STONE_PRICE;
+        long monStackCost = monStack.blackStoneCount * Constants.BLACK_STONE_PRICE;
+        long duoStackCost = duoStack.blackStoneCount * Constants.BLACK_STONE_PRICE;
+        long triStackCost = triStack.blackStoneCount * Constants.BLACK_STONE_PRICE;
+        long tetStackCost = tetStack.blackStoneCount * Constants.BLACK_STONE_PRICE;
 
-        double[] enhanceChances = new double[]{MON_STACK.mon, DUO_STACK.duo, TRI_STACK.tri, TET_STACK.tet};
+        double[] enhanceChances = new double[]{monStack.mon, duoStack.duo, triStack.tri, tetStack.tet};
         long[] failstackCost = new long[]{monStackCost, duoStackCost, triStackCost, tetStackCost};
         GenericAccessory enhanceAccessory = new GenericAccessory(accessory.getBasePrice(), enhanceChances, failstackCost);
 
@@ -161,7 +92,6 @@ public class AccessoryProfitCalculator {
         }
 
         return new SimulationRun(enhanceAccessory.getTotalEnhanceCost(), enhanceAccessory.getTotalItemsConsumed());
-
     }
 
     private long calculateProfit(long salePrice, long cost) {
@@ -171,5 +101,4 @@ public class AccessoryProfitCalculator {
     private String formatNumber(long number) {
         return String.format("%,d", number);
     }
-
 }

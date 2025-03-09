@@ -7,11 +7,11 @@ public class AccessoryResult {
 	public final long triProfit;
 	public final long tetItems;
 	public final long tetProfit;
-	public final long duoItems;
-	public final long duoProfit;
-	public final double duoProfitPerItem;
-	public final double triProfitPerItem;
-	public final double tetProfitPerItem;
+	public long duoItems;
+	public long duoProfit;
+	public double duoProfitPerItem;
+	public double triProfitPerItem;
+	public double tetProfitPerItem;
 
 	public AccessoryResult(String name, long baseStock, long duoItems, long duoProfit, long triItems, long triProfit, long tetItems, long tetProfit) {
 		this.name = name;
