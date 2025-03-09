@@ -13,9 +13,13 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 @Setter
@@ -25,14 +29,19 @@ public class AccessoryProfitCalculator {
 
     private int simulationRuns = 10000;
 
+    // Anzahl der Threads für die parallele Berechnung
+    private int threadCount = Runtime.getRuntime().availableProcessors();
+
     // Default stacks that can be overridden
     private AccessoryStack monStack = AccessoryStack.FOURTY;
     private AccessoryStack duoStack = AccessoryStack.FOURTY;
     private AccessoryStack triStack = AccessoryStack.FOURTYFIVE;
     private AccessoryStack tetStack = AccessoryStack.HUNDREDTEN_FREE;
 
+    // Cached market accessories list
+    private List<Accessory> cachedAccessories = null;
+
     // Add method to set the progress callback
-    // Add a progress callback
     @Setter
     private Consumer<String> progressCallback;
 
@@ -42,15 +51,25 @@ public class AccessoryProfitCalculator {
 
     // Completely restructured method to calculate by enhancement level
     public List<AccessoryResult> calculateProfits() {
+        if (cachedAccessories == null || cachedAccessories.isEmpty()) {
+            // Nur wenn keine Daten im Cache sind, neu laden
+            BDOMarket market = new BDOMarket();
+            market.setProgressCallback(this.progressCallback);
+            cachedAccessories = market.getAccessories();
+        }
 
-        BDOMarket market = new BDOMarket();
-        market.setProgressCallback(this.progressCallback);
-        List<Accessory> accessories = market.getAccessories();
+        return calculateProfitsWithAccessories(cachedAccessories);
+    }
 
-        // Store intermediate results
-        Map<String, AccessoryResult> resultMap = new HashMap<>();
+    // Neue Methode zur Berechnung mit gegebenen Accessoires - parallelisiert
+    public List<AccessoryResult> calculateProfitsWithAccessories(List<Accessory> accessories) {
+        // Accessoires im Cache speichern
+        this.cachedAccessories = accessories;
 
-        // Initialize result objects for all accessories
+        // Thread-sichere Map für Zwischenergebnisse
+        Map<String, AccessoryResult> resultMap = new ConcurrentHashMap<>();
+
+        // Initialisiere Ergebnisobjekte für alle Accessoires
         for (Accessory accessory : accessories) {
             resultMap.put(accessory.getName(), new AccessoryResult(
                     accessory.getName(),
@@ -61,40 +80,22 @@ public class AccessoryProfitCalculator {
             ));
         }
 
-        // Calculate DUO profits for all accessories
-        updateProgress("Calculating DUO enhancements for all accessories...");
-        for (Accessory accessory : accessories) {
-            EnhancementResult duoResult = calculateEnhancementCost(accessory, 2);
-            long duoProfit = calculateProfit(accessory.getDuoPrice(), duoResult.avgCost);
+        // Erstelle einen Thread-Pool
+        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
 
-            // Update the result object
-            AccessoryResult result = resultMap.get(accessory.getName());
-            result.duoItems = duoResult.avgItems;
-            result.duoProfit = duoProfit;
-        }
+        try {
+            // DUO-Berechnungen (Level 2)
+            calculateLevelInParallel(accessories, resultMap, 2, executorService);
 
-        // Calculate TRI profits for all accessories
-        updateProgress("Calculating TRI enhancements for all accessories...");
-        for (Accessory accessory : accessories) {
-            EnhancementResult triResult = calculateEnhancementCost(accessory, 3);
-            long triProfit = calculateProfit(accessory.getTriPrice(), triResult.avgCost);
+            // TRI-Berechnungen (Level 3)
+            calculateLevelInParallel(accessories, resultMap, 3, executorService);
 
-            // Update the result object
-            AccessoryResult result = resultMap.get(accessory.getName());
-            result.triItems = triResult.avgItems;
-            result.triProfit = triProfit;
-        }
+            // TET-Berechnungen (Level 4)
+            calculateLevelInParallel(accessories, resultMap, 4, executorService);
 
-        // Calculate TET profits for all accessories
-        updateProgress("Calculating TET enhancements for all accessories...");
-        for (Accessory accessory : accessories) {
-            EnhancementResult tetResult = calculateEnhancementCost(accessory, 4);
-            long tetProfit = calculateProfit(accessory.getTetPrice(), tetResult.avgCost);
-
-            // Update the result object
-            AccessoryResult result = resultMap.get(accessory.getName());
-            result.tetItems = tetResult.avgItems;
-            result.tetProfit = tetProfit;
+        } finally {
+            // Thread-Pool beenden
+            executorService.shutdown();
         }
 
         // Final progress update
@@ -102,6 +103,96 @@ public class AccessoryProfitCalculator {
 
         // Convert map to list for return
         return new ArrayList<>(resultMap.values());
+    }
+
+    // Neue Methode für parallele Berechnung pro Enhancement-Level
+    private void calculateLevelInParallel(List<Accessory> accessories,
+                                          Map<String, AccessoryResult> resultMap,
+                                          int level,
+                                          ExecutorService executorService) {
+        String levelName = getLevelName(level);
+        updateProgress("Calculating " + levelName + " enhancements for all accessories...");
+
+        // CountDownLatch zur Synchronisation
+        CountDownLatch latch = new CountDownLatch(accessories.size());
+
+        // Fortschrittsanzeige
+        AtomicInteger completedCount = new AtomicInteger(0);
+        int totalCount = accessories.size();
+
+        // Für jedes Accessory einen Task starten
+        for (Accessory accessory : accessories) {
+            executorService.submit(() -> {
+                try {
+                    // Berechnung für dieses Accessory
+                    EnhancementResult result = calculateEnhancementCost(accessory, level);
+                    long profit = calculateProfit(getPrice(accessory, level), result.avgCost);
+
+                    // Ergebnis aktualisieren
+                    AccessoryResult accessoryResult = resultMap.get(accessory.getName());
+                    updateAccessoryResult(accessoryResult, level, result.avgItems, profit);
+
+                    // Fortschritt melden
+                    int completed = completedCount.incrementAndGet();
+                    if (completed % 10 == 0 || completed == totalCount) {
+                        updateProgress("Calculating " + levelName + " enhancements: " +
+                                completed + "/" + totalCount + " complete");
+                    }
+                } catch (Exception e) {
+                    log.error("Error calculating enhancement for " + accessory.getName() +
+                            " at level " + level, e);
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        try {
+            // Warten bis alle Tasks für dieses Level abgeschlossen sind
+            latch.await();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            log.error("Interrupted while waiting for enhancement calculations", e);
+        }
+    }
+
+    // Hilfsmethode zum Abrufen des Preises für ein bestimmtes Level
+    private long getPrice(Accessory accessory, int level) {
+        return switch (level) {
+            case 2 -> accessory.getDuoPrice();
+            case 3 -> accessory.getTriPrice();
+            case 4 -> accessory.getTetPrice();
+            default -> throw new IllegalArgumentException("Unsupported enhancement level: " + level);
+        };
+    }
+
+    // Hilfsmethode zum Aktualisieren des Ergebnisses für ein bestimmtes Level
+    private synchronized void updateAccessoryResult(AccessoryResult result, int level, long items, long profit) {
+        switch (level) {
+            case 2 -> {
+                result.duoItems = items;
+                result.duoProfit = profit;
+            }
+            case 3 -> {
+                result.triItems = items;
+                result.triProfit = profit;
+            }
+            case 4 -> {
+                result.tetItems = items;
+                result.tetProfit = profit;
+            }
+            default -> throw new IllegalArgumentException("Unsupported enhancement level: " + level);
+        }
+    }
+
+    // Hilfsmethode um den Namen des Levels zu erhalten
+    private String getLevelName(int level) {
+        return switch (level) {
+            case 2 -> "DUO";
+            case 3 -> "TRI";
+            case 4 -> "TET";
+            default -> "Level " + level;
+        };
     }
 
     // Helper method to send progress updates

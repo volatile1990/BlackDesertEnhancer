@@ -72,10 +72,8 @@ public class GenericAccessory {
 
 	/**
 	 * Attempts to enhance the accessory to the next level.
-	 *
-	 * @return true if enhancement was successful, false otherwise
 	 */
-	public boolean enhance() {
+	public void enhance() {
 		// Calculate and add material cost
 		addMaterialCost();
 
@@ -87,10 +85,8 @@ public class GenericAccessory {
 		boolean pity = hasReachedPity();
 		if (success || pity) {
 			handleSuccess(pity);
-			return true;
 		} else {
 			handleFailure();
-			return false;
 		}
 	}
 

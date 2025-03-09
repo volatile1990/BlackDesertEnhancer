@@ -2,8 +2,10 @@ package enhancer.ui;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import enhancer.calculator.AccessoryProfitCalculator;
+import enhancer.market.BDOMarket;
 import enhancer.models.AccessoryResult;
 import enhancer.models.AccessoryStack;
+import enhancer.models.market.Accessory;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -26,8 +28,14 @@ public class EnhanceProfitGUI extends JFrame {
     private JSpinner simulationRunsSpinner;
     private JTextField filterTextField;
     private TableRowSorter<TableModel> tableRowSorter;
-    // Add a class variable for the calculate button
+
+    // Die beiden Buttons
+    private JButton loadMarketDataButton;
     private JButton calculateButton;
+    private JButton optimizeButton;
+
+    // Liste der geladenen Accessoires
+    private List<Accessory> marketAccessories;
 
     // Stack selection combo boxes
     private JComboBox<AccessoryStack> monStackCombo;
@@ -79,6 +87,10 @@ public class EnhanceProfitGUI extends JFrame {
 
         setContentPane(mainPanel);
         setLocationRelativeTo(null);
+
+        // Initial button state
+        calculateButton.setEnabled(false); // Deaktivieren bis Daten geladen sind
+        optimizeButton.setEnabled(false);
     }
 
     private void setupFlatLafDarkTheme() {
@@ -106,9 +118,28 @@ public class EnhanceProfitGUI extends JFrame {
         JPanel controlPanel = new JPanel();
         controlPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-        // Initialize calculate button as class variable instead of local variable
-        calculateButton = new JButton("Calculate Profits");
+        // Buttons erstellen
+        loadMarketDataButton = new JButton("Fetch & Calculate");
+        loadMarketDataButton.addActionListener(e -> loadMarketData());
+
+        calculateButton = new JButton("Calculate");
         calculateButton.addActionListener(e -> calculateProfits());
+
+        // Button für Stack-Optimierung
+        optimizeButton = new JButton("Optimize Stacks");
+        optimizeButton.setToolTipText("Find optimal failstack combinations for each accessory");
+        optimizeButton.addActionListener(e -> {
+            if (marketAccessories == null || marketAccessories.isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Please load market data first!",
+                        "No Data",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Rufe die OptimalStackDialog-Klasse auf
+            OptimalStackDialog.optimizeAndShowDialog(this, marketAccessories, this);
+        });
 
         // Simulation Runs Konfiguration hinzufügen
         JLabel simulationRunsLabel = new JLabel("Simulation Runs:");
@@ -124,7 +155,9 @@ public class EnhanceProfitGUI extends JFrame {
         Dimension spinnerSize = new Dimension(120, calculateButton.getPreferredSize().height);
         simulationRunsSpinner.setPreferredSize(spinnerSize);
 
+        controlPanel.add(loadMarketDataButton);
         controlPanel.add(calculateButton);
+        controlPanel.add(optimizeButton);
         controlPanel.add(Box.createHorizontalStrut(20)); // Abstand zwischen Elementen
         controlPanel.add(simulationRunsLabel);
         controlPanel.add(simulationRunsSpinner);
@@ -255,7 +288,6 @@ public class EnhanceProfitGUI extends JFrame {
 
             return c;
         }
-
     }
 
     private void createMainTable() {
@@ -347,10 +379,69 @@ public class EnhanceProfitGUI extends JFrame {
         };
     }
 
-    private void calculateProfits() {
-        // Disable the calculate button during calculation
+    private void loadMarketData() {
+        // Disable both buttons during loading
+        loadMarketDataButton.setEnabled(false);
         calculateButton.setEnabled(false);
+        optimizeButton.setEnabled(false);
 
+        statusLabel.setText("Loading market data...");
+
+        SwingWorker<List<Accessory>, Void> worker = new SwingWorker<>() {
+            @Override
+            protected List<Accessory> doInBackground() {
+                BDOMarket market = new BDOMarket();
+                market.setProgressCallback(statusText -> {
+                    // Update status from background thread to EDT
+                    SwingUtilities.invokeLater(() -> statusLabel.setText("Market data: " + statusText));
+                });
+
+                return market.getAccessories();
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    marketAccessories = get();
+                    statusLabel.setText("Market data loaded. " + marketAccessories.size() + " accessories found.");
+
+                    // Setze die geladenen Daten im Calculator
+                    calculator.setCachedAccessories(marketAccessories);
+
+                    // Nach dem Laden direkt die Berechnung starten
+                    calculateProfitsWithLoadedData();
+
+                    // Enable both buttons
+                    loadMarketDataButton.setEnabled(true);
+                    calculateButton.setEnabled(true);
+                    optimizeButton.setEnabled(true);
+                } catch (Exception e) {
+                    statusLabel.setText("Error loading market data: " + e.getMessage());
+                    log.error("Error loading market data", e);
+                    loadMarketDataButton.setEnabled(true);
+                }
+            }
+        };
+
+        worker.execute();
+    }
+
+    private void calculateProfits() {
+        // Prüfen ob Marktdaten geladen wurden
+        if (marketAccessories == null || marketAccessories.isEmpty()) {
+            statusLabel.setText("Please load market data first!");
+            return;
+        }
+
+        // UI deaktivieren
+        calculateButton.setEnabled(false);
+        optimizeButton.setEnabled(false);
+
+        // Direkt zur Berechnung fortfahren
+        calculateProfitsWithLoadedData();
+    }
+
+    private void calculateProfitsWithLoadedData() {
         // Update the calculator with the current stack selections
         calculator.setMonStack((AccessoryStack) monStackCombo.getSelectedItem());
         calculator.setDuoStack((AccessoryStack) duoStackCombo.getSelectedItem());
@@ -377,7 +468,13 @@ public class EnhanceProfitGUI extends JFrame {
         SwingWorker<List<AccessoryResult>, Void> worker = new SwingWorker<>() {
             @Override
             protected List<AccessoryResult> doInBackground() {
-                return calculator.calculateProfits();
+                if (marketAccessories != null && !marketAccessories.isEmpty()) {
+                    // Benutze die vorhandenen Daten direkt für die Berechnung
+                    return calculator.calculateProfitsWithAccessories(marketAccessories);
+                } else {
+                    // Fallback, falls aus irgendeinem Grund keine Daten vorhanden sind
+                    return calculator.calculateProfits();
+                }
             }
 
             @Override
@@ -392,18 +489,19 @@ public class EnhanceProfitGUI extends JFrame {
                         updateFilter();
                     }
                 } catch (Exception e) {
-                    statusLabel.setText("Error: " + e.getMessage());
+                    statusLabel.setText("Calculation error: " + e.getMessage());
                     log.error("Error calculating profits", e);
                 } finally {
-                    // Re-enable the calculate button regardless of success or failure
+                    // Re-enable the buttons
                     calculateButton.setEnabled(true);
+                    loadMarketDataButton.setEnabled(true);
+                    optimizeButton.setEnabled(true);
                 }
             }
         };
 
         worker.execute();
     }
-
 
     private void updateTable() {
         if (results == null || results.isEmpty()) {
@@ -428,6 +526,47 @@ public class EnhanceProfitGUI extends JFrame {
 
         // Force table repaint to ensure proper formatting
         mainTable.repaint();
+    }
+
+    /**
+     * Diese Methode aktualisiert die Statusmeldung
+     */
+    public void updateStatus(String message) {
+        statusLabel.setText(message);
+    }
+
+    /**
+     * Diese Methode wendet die optimierten Stacks für ein Accessoire an
+     */
+    public void applyStacksForAccessory(String accessoryName,
+                                        AccessoryStack priStack,
+                                        AccessoryStack duoStack,
+                                        AccessoryStack triStack) {
+        // Speichere die ursprünglichen Stacks (nicht nötig, nur zur Info)
+        AccessoryStack originalPriStack = calculator.getMonStack();
+        AccessoryStack originalDuoStack = calculator.getDuoStack();
+        AccessoryStack originalTriStack = calculator.getTriStack();
+
+        // Setze die optimierten Stacks
+        calculator.setMonStack(priStack);
+        calculator.setDuoStack(duoStack);
+        calculator.setTriStack(triStack);
+
+        // Aktualisiere die ComboBoxen
+        monStackCombo.setSelectedItem(priStack);
+        duoStackCombo.setSelectedItem(duoStack);
+        triStackCombo.setSelectedItem(triStack);
+
+        // Statusmeldung
+        updateStatus(String.format("Applied optimal stacks for %s: PRI=%s, DUO=%s, TRI=%s",
+                accessoryName,
+                NameResolver.getDisplayNameForStack(priStack.name()),
+                NameResolver.getDisplayNameForStack(duoStack.name()),
+                NameResolver.getDisplayNameForStack(triStack.name())
+        ));
+
+        // Starte die Berechnung mit den neuen Stacks
+        calculateProfits();
     }
 
     public static void main(String[] args) {
