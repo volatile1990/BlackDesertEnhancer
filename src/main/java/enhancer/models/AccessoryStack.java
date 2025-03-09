@@ -12,7 +12,7 @@ public enum AccessoryStack {
 	public final double tri;
 	public final double tet;
 
-	private AccessoryStack(int blackStoneCount, double mon, double duo, double tri, double tet) {
+	AccessoryStack(int blackStoneCount, double mon, double duo, double tri, double tet) {
 		this.blackStoneCount = blackStoneCount;
 		this.mon = mon;
 		this.duo = duo;

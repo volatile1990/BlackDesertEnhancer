@@ -1,12 +1,12 @@
 package enhancer.models;
 
 public class AccessoryResult {
-	public final String name;
-	public final long baseStock;
-	public final long triItems;
-	public final long triProfit;
-	public final long tetItems;
-	public final long tetProfit;
+	public String name;
+	public long baseStock;
+	public long triItems;
+	public long triProfit;
+	public long tetItems;
+	public long tetProfit;
 	public long duoItems;
 	public long duoProfit;
 	public double duoProfitPerItem;

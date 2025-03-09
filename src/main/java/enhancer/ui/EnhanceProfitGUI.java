@@ -7,6 +7,8 @@ import enhancer.models.AccessoryStack;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -20,9 +22,12 @@ public class EnhanceProfitGUI extends JFrame {
     private JTable mainTable;
     private final AccessoryProfitCalculator calculator;
     private List<AccessoryResult> results;
-    private final JProgressBar progressBar;
     private final JLabel statusLabel;
     private JSpinner simulationRunsSpinner;
+    private JTextField filterTextField;
+    private TableRowSorter<TableModel> tableRowSorter;
+    // Add a class variable for the calculate button
+    private JButton calculateButton;
 
     // Stack selection combo boxes
     private JComboBox<AccessoryStack> monStackCombo;
@@ -49,17 +54,19 @@ public class EnhanceProfitGUI extends JFrame {
         // Create stack selection panel
         JPanel stackPanel = createStackSelectionPanel();
 
+        // Create filter panel
+        JPanel filterPanel = createFilterPanel();
+
         // Combine control panels
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.add(controlPanel, BorderLayout.NORTH);
         topPanel.add(stackPanel, BorderLayout.CENTER);
+        topPanel.add(filterPanel, BorderLayout.SOUTH);
 
         // Bottom status panel
         JPanel statusPanel = new JPanel(new BorderLayout());
-        progressBar = new JProgressBar();
         statusLabel = new JLabel("Ready");
-        statusPanel.add(progressBar, BorderLayout.CENTER);
-        statusPanel.add(statusLabel, BorderLayout.EAST);
+        statusPanel.add(statusLabel, BorderLayout.WEST);
 
         // Create the main table
         createMainTable();
@@ -99,7 +106,8 @@ public class EnhanceProfitGUI extends JFrame {
         JPanel controlPanel = new JPanel();
         controlPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-        JButton calculateButton = new JButton("Calculate Profits");
+        // Initialize calculate button as class variable instead of local variable
+        calculateButton = new JButton("Calculate Profits");
         calculateButton.addActionListener(e -> calculateProfits());
 
         // Simulation Runs Konfiguration hinzufügen
@@ -122,6 +130,63 @@ public class EnhanceProfitGUI extends JFrame {
         controlPanel.add(simulationRunsSpinner);
 
         return controlPanel;
+    }
+
+    private JPanel createFilterPanel() {
+        JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        filterPanel.setBorder(BorderFactory.createTitledBorder("Filter"));
+
+        JLabel filterLabel = new JLabel("Filter by Name:");
+        filterTextField = new JTextField(20);
+
+        // Add document listener to implement live filtering
+        filterTextField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateFilter();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateFilter();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateFilter();
+            }
+        });
+
+        filterPanel.add(filterLabel);
+        filterPanel.add(filterTextField);
+
+        // Add clear button
+        JButton clearButton = new JButton("Clear");
+        clearButton.addActionListener(e -> {
+            filterTextField.setText("");
+            updateFilter();
+        });
+        filterPanel.add(clearButton);
+
+        return filterPanel;
+    }
+
+    private void updateFilter() {
+        String text = filterTextField.getText();
+        if (text.trim().isEmpty()) {
+            tableRowSorter.setRowFilter(null);
+            statusLabel.setText("Filter cleared");
+        } else {
+            try {
+                // Case insensitive filter on the Name column (index 0)
+                tableRowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text, 0));
+                int filteredRows = mainTable.getRowCount();
+                statusLabel.setText("Filtered: " + filteredRows + " items shown");
+            } catch (java.util.regex.PatternSyntaxException e) {
+                log.warn("Invalid regex pattern in filter", e);
+                statusLabel.setText("Invalid filter pattern");
+            }
+        }
     }
 
     private JPanel createStackSelectionPanel() {
@@ -199,24 +264,23 @@ public class EnhanceProfitGUI extends JFrame {
 
         mainTable = new JTable(model);
         mainTable.setRowHeight(25);
-        mainTable.setAutoCreateRowSorter(true);
+
+        // Use TableRowSorter for both sorting and filtering
+        tableRowSorter = new TableRowSorter<>(model);
+        mainTable.setRowSorter(tableRowSorter);
 
         // Set default sorting to TRI Profit column (index 5) in descending order
-        RowSorter<? extends TableModel> sorter = mainTable.getRowSorter();
-        if (sorter instanceof TableRowSorter) {
-            TableRowSorter<TableModel> tableRowSorter = (TableRowSorter<TableModel>) sorter;
-            tableRowSorter.setSortKeys(List.of(new RowSorter.SortKey(5, SortOrder.ASCENDING)));
+        tableRowSorter.setSortKeys(List.of(new RowSorter.SortKey(5, SortOrder.ASCENDING)));
 
-            // Make first click on any column header sort in descending order
-            for (int i = 0; i < mainTable.getColumnCount(); i++) {
-                tableRowSorter.setSortsOnUpdates(true);
-                tableRowSorter.setComparator(i, (o1, o2) -> {
-                    if (o1 instanceof Comparable && o2 instanceof Comparable) {
-                        return ((Comparable) o2).compareTo(o1); // Reverse natural order
-                    }
-                    return 0;
-                });
-            }
+        // Make first click on any column header sort in descending order
+        for (int i = 0; i < mainTable.getColumnCount(); i++) {
+            tableRowSorter.setSortsOnUpdates(true);
+            tableRowSorter.setComparator(i, (o1, o2) -> {
+                if (o1 instanceof Comparable && o2 instanceof Comparable) {
+                    return ((Comparable) o2).compareTo(o1); // Reverse natural order
+                }
+                return 0;
+            });
         }
 
         // Custom cell renderer for profit columns
@@ -284,13 +348,16 @@ public class EnhanceProfitGUI extends JFrame {
     }
 
     private void calculateProfits() {
+        // Disable the calculate button during calculation
+        calculateButton.setEnabled(false);
+
         // Update the calculator with the current stack selections
         calculator.setMonStack((AccessoryStack) monStackCombo.getSelectedItem());
         calculator.setDuoStack((AccessoryStack) duoStackCombo.getSelectedItem());
         calculator.setTriStack((AccessoryStack) triStackCombo.getSelectedItem());
         calculator.setTetStack((AccessoryStack) tetStackCombo.getSelectedItem());
 
-        // Setze die Anzahl der Simulationsläufe
+        // Set the number of simulation runs
         calculator.setSimulationRuns((Integer) simulationRunsSpinner.getValue());
 
         // Display which stacks are being used in the status
@@ -301,10 +368,15 @@ public class EnhanceProfitGUI extends JFrame {
                 Objects.requireNonNull(NameResolver.getDisplayNameForStack(Objects.requireNonNull(tetStackCombo.getSelectedItem()).toString())),
                 calculator.getSimulationRuns()));
 
+        // Set up progress callback
+        calculator.setProgressCallback(statusText -> {
+            // Update status from background thread to EDT
+            SwingUtilities.invokeLater(() -> statusLabel.setText(statusText));
+        });
+
         SwingWorker<List<AccessoryResult>, Void> worker = new SwingWorker<>() {
             @Override
             protected List<AccessoryResult> doInBackground() {
-                progressBar.setIndeterminate(true);
                 return calculator.calculateProfits();
             }
 
@@ -313,11 +385,18 @@ public class EnhanceProfitGUI extends JFrame {
                 try {
                     results = get();
                     updateTable();
-                    progressBar.setIndeterminate(false);
                     statusLabel.setText("Calculation complete");
+
+                    // Reapply filter if one exists
+                    if (!filterTextField.getText().trim().isEmpty()) {
+                        updateFilter();
+                    }
                 } catch (Exception e) {
                     statusLabel.setText("Error: " + e.getMessage());
                     log.error("Error calculating profits", e);
+                } finally {
+                    // Re-enable the calculate button regardless of success or failure
+                    calculateButton.setEnabled(true);
                 }
             }
         };
