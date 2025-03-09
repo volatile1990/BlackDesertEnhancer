@@ -14,10 +14,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -39,7 +36,7 @@ public class BDOMarket {
         List<Accessory> accessories = new ArrayList<>();
 
         try {
-            updateProgress("Fetching accessory data from market API in parallel...");
+            updateProgress("Fetching accessory data from market API ...");
             // Step 1: Fetch accessory data in parallel
             Map<String, CompletableFuture<String>> futureDataMap = getAccessoryDataParallel();
 
@@ -56,7 +53,7 @@ public class BDOMarket {
                 totalAccessories += jsonArray.length();
             }
 
-            updateProgress("Processing market data for " + totalAccessories + " accessories in parallel");
+            updateProgress("Processing market data for " + totalAccessories + " accessories");
 
             AtomicInteger processedCount = new AtomicInteger(0);
             final int finalTotalAccessories = totalAccessories; // Make totalAccessories available in lambda
@@ -105,9 +102,9 @@ public class BDOMarket {
             List<Accessory> accessoryList = accessoryFutures.stream()
                     .map(CompletableFuture::join)
                     .flatMap(List::stream)
-                    .collect(Collectors.toList());
+                    .toList();
 
-            updateProgress("Enriching accessory data with enhanced information in parallel...");
+            updateProgress("Enriching accessory data with enhanced information ...");
 
             // Step 3: Enrich accessory data in parallel
             List<CompletableFuture<Accessory>> enrichmentFutures = new ArrayList<>();
@@ -129,7 +126,7 @@ public class BDOMarket {
             // Wait for all enrichment to complete and collect valid results
             accessories = enrichmentFutures.stream()
                     .map(CompletableFuture::join)
-                    .filter(acc -> acc != null)
+                    .filter(Objects::nonNull)
                     .collect(Collectors.toList());
 
             updateProgress("Market data processing complete. Found " + accessories.size() + " valid accessories");
