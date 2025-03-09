@@ -45,10 +45,6 @@ public class AccessoryProfitCalculator {
     @Setter
     private Consumer<String> progressCallback;
 
-    public static void main(String[] args) {
-        new AccessoryProfitCalculator().calculateAndPrintProfits();
-    }
-
     // Completely restructured method to calculate by enhancement level
     public List<AccessoryResult> calculateProfits() {
         if (cachedAccessories == null || cachedAccessories.isEmpty()) {

@@ -26,11 +26,6 @@ public class BDOMarket {
 
     private Consumer<String> progressCallback;
 
-    public static void main(String[] args) {
-        List<Accessory> accessories = new BDOMarket().getAccessories();
-        System.out.println(accessories.size());
-    }
-
     public List<Accessory> getAccessories() {
         updateProgress("Initializing market data retrieval...");
 
