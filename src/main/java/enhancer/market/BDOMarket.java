@@ -173,6 +173,9 @@ public class BDOMarket {
         // Get Base bidding info list
         enrichBiddingInfoForItemLevel(item, 0);
 
+        // Get DUO bidding info list
+        enrichBiddingInfoForItemLevel(item, 2);
+
         // Get TRI bidding info list
         enrichBiddingInfoForItemLevel(item, 3);
 
@@ -230,6 +233,9 @@ public class BDOMarket {
                 case 0:
                     item.setBasePrice(lowestPrice);
                     break;
+                case 2:
+                    item.setDuoPrice(lowestPrice);
+                    break;
                 case 3:
                     item.setTriPrice(lowestPrice);
                     break;
@@ -242,7 +248,7 @@ public class BDOMarket {
 
     private long findLowestPrice(JSONArray orders) {
         return IntStream.range(0, orders.length())
-                .mapToObj(i -> orders.getJSONObject(i))
+                .mapToObj(orders::getJSONObject)
                 .filter(orderObj -> orderObj.getInt("sellers") > 0)
                 .mapToLong(orderObj -> orderObj.getLong("price"))
                 .min()
@@ -289,19 +295,15 @@ public class BDOMarket {
             String[] split = resultMsg.split("\\|");
             for (String enhancementLine : split) {
 
-                String[] enhancementLineSplit = enhancementLine.split("\\-");
-                if (enhancementLineSplit[2].equals("3")) {
-
-                    // TRI Price
-                    item.setTriPrice(Long.parseLong(enhancementLineSplit[8]));
-                } else if (enhancementLineSplit[2].equals("4")) {
-
-                    // TET Price
-                    item.setTetPrice(Long.parseLong(enhancementLineSplit[8]));
-                } else if (enhancementLineSplit[2].equals("0")) {
-
-                    // Base Stock
-                    item.setBaseStock(Integer.parseInt(enhancementLineSplit[4]));
+                int enhancementIndex = 2;
+                int priceIndex = 8;
+                int baseStockIndex = 4;
+                String[] enhancementLineSplit = enhancementLine.split("-");
+                switch (enhancementLineSplit[enhancementIndex]) {
+                    case "2" -> item.setDuoPrice(Long.parseLong(enhancementLineSplit[priceIndex])); // DUO Price
+                    case "3" -> item.setTriPrice(Long.parseLong(enhancementLineSplit[priceIndex])); // TRI Price
+                    case "4" -> item.setTetPrice(Long.parseLong(enhancementLineSplit[priceIndex])); // TET Price
+                    case "0" -> item.setBaseStock(Integer.parseInt(enhancementLineSplit[baseStockIndex])); // Base Stock
                 }
             }
         } else {

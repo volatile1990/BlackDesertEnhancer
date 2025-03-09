@@ -9,6 +9,7 @@ public class Item {
 	private int id;
 	private long basePrice;
 	private int baseStock;
+	private long duoPrice;
 	private long triPrice;
 	private long tetPrice;
 
