@@ -32,7 +32,8 @@ public class CostumeProfitCalculator {
 
 	public void calculateAndPrintProfits() {
 		BDOMarket market = new BDOMarket();
-		List<Costume> costumes = market.getCostumes();
+		//List<Costume> costumes = market.getCostumes();
+		List<Costume> costumes = new ArrayList<>();
 		List<CostumeResult> results = new ArrayList<>();
 
 		System.out.println("Profit Analysis for Available Costumes");

@@ -18,21 +18,36 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Setter
 public class BDOMarket {
 
     private Consumer<String> progressCallback;
+    // Thread pool for parallel operations
+    private final ExecutorService executorService = Executors.newWorkStealingPool();
 
     public List<Accessory> getAccessories() {
         updateProgress("Initializing market data retrieval...");
-
         List<Accessory> accessories = new ArrayList<>();
+
         try {
-            updateProgress("Fetching accessory data from market API...");
-            Map<String, String> accessoryDataMap = getAccessoryData();
+            updateProgress("Fetching accessory data from market API in parallel...");
+            // Step 1: Fetch accessory data in parallel
+            Map<String, CompletableFuture<String>> futureDataMap = getAccessoryDataParallel();
+
+            // Wait for all fetches to complete and collect results
+            Map<String, String> accessoryDataMap = new ConcurrentHashMap<>();
+            for (Map.Entry<String, CompletableFuture<String>> entry : futureDataMap.entrySet()) {
+                accessoryDataMap.put(entry.getKey(), entry.getValue().join());
+            }
 
             // Count total accessories
             int totalAccessories = 0;
@@ -41,52 +56,146 @@ public class BDOMarket {
                 totalAccessories += jsonArray.length();
             }
 
-            updateProgress("Processing market data for " + totalAccessories + " accessories");
+            updateProgress("Processing market data for " + totalAccessories + " accessories in parallel");
 
-            int processedAccessories = 0;
+            AtomicInteger processedCount = new AtomicInteger(0);
+            final int finalTotalAccessories = totalAccessories; // Make totalAccessories available in lambda
+            List<CompletableFuture<List<Accessory>>> accessoryFutures = new ArrayList<>();
 
-            // Process each accessory type
+            // Step 2: Process each accessory type in parallel
             for (Map.Entry<String, String> entry : accessoryDataMap.entrySet()) {
                 String accessoryType = entry.getKey();
                 String jsonData = entry.getValue();
                 updateProgress("Processing " + accessoryType + " data");
 
-                JSONArray jsonArray = new JSONArray(jsonData);
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    processedAccessories++;
+                CompletableFuture<List<Accessory>> future = CompletableFuture.supplyAsync(() -> {
+                    List<Accessory> typeAccessories = new ArrayList<>();
+                    JSONArray jsonArray = new JSONArray(jsonData);
 
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    String name = jsonObject.getString("name");
-                    int id = jsonObject.getInt("id");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        int currentProcessed = processedCount.incrementAndGet();
 
-                    Accessory accessory = new Accessory(name, id);
-                    accessory.setBasePrice(jsonObject.getInt("basePrice"));
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String name = jsonObject.getString("name");
+                        int id = jsonObject.getInt("id");
 
-                    if (skipCurrentAccessory(accessory)) {
-                        continue;
+                        Accessory accessory = new Accessory(name, id);
+                        accessory.setBasePrice(jsonObject.getInt("basePrice"));
+
+                        if (skipCurrentAccessory(accessory)) {
+                            continue;
+                        }
+
+                        // Only update every 5 accessories to avoid too frequent updates
+                        if (currentProcessed % 5 == 0 || currentProcessed == finalTotalAccessories) {
+                            updateProgress(String.format("Market data progress: %d of %d accessories (%d%%)",
+                                    currentProcessed, finalTotalAccessories,
+                                    (int)(currentProcessed * 100.0 / finalTotalAccessories)));
+                        }
+
+                        typeAccessories.add(accessory);
                     }
+                    return typeAccessories;
+                }, executorService);
 
-                    // Only update every 5 accessories to avoid too frequent updates
-                    if (processedAccessories % 5 == 0 || processedAccessories == totalAccessories) {
-                        updateProgress(String.format("Market data progress: %d of %d accessories (%d%%)",
-                                processedAccessories, totalAccessories,
-                                (int)(processedAccessories * 100.0 / totalAccessories)));
-                    }
-
-                    // Enrich Base/TRI/TET sale price
-                    enrichEnhancedData(accessory);
-
-                    accessories.add(accessory);
-                }
+                accessoryFutures.add(future);
             }
+
+            // Wait for all processing to complete and collect results
+            List<Accessory> accessoryList = accessoryFutures.stream()
+                    .map(CompletableFuture::join)
+                    .flatMap(List::stream)
+                    .collect(Collectors.toList());
+
+            updateProgress("Enriching accessory data with enhanced information in parallel...");
+
+            // Step 3: Enrich accessory data in parallel
+            List<CompletableFuture<Accessory>> enrichmentFutures = new ArrayList<>();
+            for (Accessory accessory : accessoryList) {
+                CompletableFuture<Accessory> future = CompletableFuture.supplyAsync(() -> {
+                    try {
+                        enrichEnhancedData(accessory);
+                        return accessory;
+                    } catch (IOException e) {
+                        updateProgress("Error enriching data for " + accessory.getName() + ": " + e.getMessage());
+                        e.printStackTrace();
+                        return null;
+                    }
+                }, executorService);
+
+                enrichmentFutures.add(future);
+            }
+
+            // Wait for all enrichment to complete and collect valid results
+            accessories = enrichmentFutures.stream()
+                    .map(CompletableFuture::join)
+                    .filter(acc -> acc != null)
+                    .collect(Collectors.toList());
 
             updateProgress("Market data processing complete. Found " + accessories.size() + " valid accessories");
 
         } catch (Exception e) {
             updateProgress("Error loading market data: " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            // Clean up resources
+            executorService.shutdown();
         }
+
         return accessories;
+    }
+
+    private Map<String, CompletableFuture<String>> getAccessoryDataParallel() {
+        Map<String, CompletableFuture<String>> futures = new HashMap<>();
+
+        Map<String, String> endpoints = new HashMap<>();
+        endpoints.put("ring", Constants.ACCESSORY_RING_CALL_URL);
+        endpoints.put("necklace", Constants.ACCESSORY_NECKLACE_CALL_URL);
+        endpoints.put("earring", Constants.ACCESSORY_EARRING_CALL_URL);
+        endpoints.put("belt", Constants.ACCESSORY_BELT_CALL_URL);
+
+        AtomicInteger processed = new AtomicInteger(0);
+        int total = endpoints.size();
+
+        // Create a future for each endpoint
+        for (Map.Entry<String, String> entry : endpoints.entrySet()) {
+            String accessoryType = entry.getKey();
+            String endpoint = entry.getValue();
+
+            CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+                int current = processed.incrementAndGet();
+                updateProgress(String.format("Requesting %s data from market API (%d of %d)",
+                        accessoryType, current, total));
+
+                try {
+                    StringBuilder result = new StringBuilder();
+                    URL url = new URL(endpoint);
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    con.setRequestMethod("GET");
+
+                    if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                        try (BufferedReader reader = new BufferedReader(
+                                new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
+                            String line;
+                            while ((line = reader.readLine()) != null) {
+                                result.append(line);
+                            }
+                        }
+                        return result.toString();
+                    } else {
+                        String errorMsg = String.format("HTTP error for %s: %d", accessoryType, con.getResponseCode());
+                        updateProgress(errorMsg);
+                        throw new RuntimeException(errorMsg);
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException("Error fetching " + accessoryType + ": " + e.getMessage(), e);
+                }
+            }, executorService);
+
+            futures.put(accessoryType, future);
+        }
+
+        return futures;
     }
 
     private static boolean skipCurrentAccessory(Accessory accessory) {
@@ -114,115 +223,8 @@ public class BDOMarket {
         return accessory.getBasePrice() < Constants.BASE_PRICE_ACCESSORY_THRESHOLD;
     }
 
-    private Map<String, String> getAccessoryData() throws Exception {
-        Map<String, String> results = new HashMap<>();
-
-        Map<String, String> endpoints = new HashMap<>();
-        endpoints.put("ring", Constants.ACCESSORY_RING_CALL_URL);
-        endpoints.put("necklace", Constants.ACCESSORY_NECKLACE_CALL_URL);
-        endpoints.put("earring", Constants.ACCESSORY_EARRING_CALL_URL);
-        endpoints.put("belt", Constants.ACCESSORY_BELT_CALL_URL);
-
-        int processed = 0;
-        int total = endpoints.size();
-
-        for (Map.Entry<String, String> entry : endpoints.entrySet()) {
-            processed++;
-            String accessoryType = entry.getKey();
-            updateProgress(String.format("Requesting %s data from market API (%d of %d)",
-                    accessoryType, processed, total));
-
-            StringBuilder result = new StringBuilder();
-            URL url = new URL(entry.getValue());
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
-
-            try {
-                if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    try (BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                            result.append(line);
-                        }
-                    }
-                    results.put(entry.getKey(), result.toString());
-                } else {
-                    String errorMsg = String.format("HTTP error for %s: %d", accessoryType, con.getResponseCode());
-                    updateProgress(errorMsg);
-                    throw new RuntimeException(errorMsg);
-                }
-            } finally {
-                con.disconnect();
-            }
-        }
-
-        updateProgress("Successfully fetched all accessory data from market API");
-        return results;
-    }
-
-    public List<Costume> getCostumes() {
-        updateProgress("Loading costume data from market...");
-        List<Costume> costumes = new ArrayList<>();
-
-        try {
-            String getResult = getCostumeData();
-            JSONArray jsonArray = new JSONArray(getResult);
-            updateProgress("Processing " + jsonArray.length() + " costumes from market data");
-
-            int total = jsonArray.length();
-            int processed = 0;
-            int added = 0;
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-                processed++;
-
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String name = jsonObject.getString("name");
-
-                if (name.contains("Silver Embroidered")) {
-                    int id = jsonObject.getInt("id");
-                    Costume costume = new Costume(name, id);
-                    costume.setBasePrice(jsonObject.getInt("basePrice"));
-
-                    // Get TRI/TET sale price
-                    enrichEnhancedData(costume);
-
-                    costumes.add(costume);
-                    added++;
-                }
-
-                // Periodic update
-                if (processed % 10 == 0 || processed == total) {
-                    updateProgress(String.format("Costume data: processed %d of %d (%d%%)",
-                            processed, total, (processed * 100 / total)));
-                }
-            }
-
-            updateProgress("Costume data processing complete. Added " + added + " costumes");
-
-        } catch (Exception e) {
-            updateProgress("Error loading costume data: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        return costumes;
-    }
-
-    private String getCostumeData() throws IOException {
-        updateProgress("Fetching costume data from market API...");
-        URL url = new URL(Constants.FUNCTIONAL_ARMOR_CALL_URL);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        StringBuilder result = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
-            for (String line; (line = reader.readLine()) != null; ) {
-                result.append(line);
-            }
-        }
-        return result.toString();
-    }
-
-    private void enrichEnhancedData(Item item) throws IOException {
+    // Synchronized to prevent concurrent HTTP connections from overwhelming the server
+    private synchronized void enrichEnhancedData(Item item) throws IOException {
         enrichBaseEnhancedData(item);
 
         // Get Base bidding info list
@@ -356,10 +358,11 @@ public class BDOMarket {
         }
     }
 
-    // Helper method to send progress updates
-    private void updateProgress(String message) {
+    // Thread-safe method to send progress updates
+    private synchronized void updateProgress(String message) {
         if (progressCallback != null) {
             progressCallback.accept(message);
         }
     }
+
 }
