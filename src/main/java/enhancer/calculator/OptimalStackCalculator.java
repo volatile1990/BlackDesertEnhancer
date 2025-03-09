@@ -34,7 +34,7 @@ public class OptimalStackCalculator {
      * Konstruktor mit Standard-Simulationsläufen und Thread-Anzahl
      */
     public OptimalStackCalculator() {
-        this(10000, Runtime.getRuntime().availableProcessors());
+        this(Constants.OPTIMIZATION_RUN_COUNT, Runtime.getRuntime().availableProcessors());
     }
 
     /**
@@ -88,7 +88,7 @@ public class OptimalStackCalculator {
                             progressCallback.accept(message);
                         }
                     } catch (Exception e) {
-                        log.error("Error optimizing stacks for " + accessory.getName(), e);
+                        log.error("Error optimizing stacks for {}", accessory.getName(), e);
                     } finally {
                         latch.countDown();
                     }
@@ -253,7 +253,6 @@ public class OptimalStackCalculator {
 
         // Kosten und Verbrauchte Items berechnen
         long totalCost = 0;
-        long totalItems = 0;
 
         for (int i = 0; i < simulationRunsPerCombination; i++) {
             GenericAccessory enhanceAccessory = new GenericAccessory(
@@ -264,7 +263,6 @@ public class OptimalStackCalculator {
             }
 
             totalCost += enhanceAccessory.getTotalEnhanceCost();
-            totalItems += enhanceAccessory.getTotalItemsConsumed();
         }
 
         // Durchschnittliche Kosten berechnen

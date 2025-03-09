@@ -44,7 +44,6 @@ public class BDOMarket {
             updateProgress("Processing market data for " + totalAccessories + " accessories");
 
             int processedAccessories = 0;
-            int addedAccessories = 0;
 
             // Process each accessory type
             for (Map.Entry<String, String> entry : accessoryDataMap.entrySet()) {
@@ -78,12 +77,6 @@ public class BDOMarket {
                     enrichEnhancedData(accessory);
 
                     accessories.add(accessory);
-                    addedAccessories++;
-
-                    // Periodically update on added accessories
-                    if (addedAccessories % 10 == 0) {
-                        updateProgress(String.format("Found %d valid accessories so far", addedAccessories));
-                    }
                 }
             }
 

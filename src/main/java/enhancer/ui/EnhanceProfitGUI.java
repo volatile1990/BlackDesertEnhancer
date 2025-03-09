@@ -140,6 +140,17 @@ public class EnhanceProfitGUI extends JFrame {
                 return;
             }
 
+            // Sicherheitsabfrage hinzugefügt
+            int response = JOptionPane.showConfirmDialog(this,
+                    "Do you want to optimize failstacks for all accessories?\nThis may take a moment.",
+                    "Confirm Optimization",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+
+            if (response != JOptionPane.YES_OPTION) {
+                return; // Abbruch, wenn der Benutzer nicht bestätigt
+            }
+
             // Rufe die OptimalStackDialog-Klasse auf
             OptimalStackDialog.optimizeAndShowDialog(this, marketAccessories, this);
         });
@@ -153,7 +164,7 @@ public class EnhanceProfitGUI extends JFrame {
                 calculator.getSimulationRuns(), // initial value
                 1000,                           // minimum value
                 1000000,                        // maximum value
-                10000);                         // step size
+                50000);                         // step size
         simulationRunsSpinner = new JSpinner(spinnerModel);
         simulationRunsSpinner.setEditor(new JSpinner.NumberEditor(simulationRunsSpinner, "#,###"));
 

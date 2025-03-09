@@ -27,7 +27,7 @@ import java.util.function.Consumer;
 @Slf4j
 public class AccessoryProfitCalculator {
 
-    private int simulationRuns = 10000;
+    private int simulationRuns = Constants.SIMULATION_RUN_COUNT;
 
     // Anzahl der Threads für die parallele Berechnung
     private int threadCount = Runtime.getRuntime().availableProcessors();
@@ -135,8 +135,7 @@ public class AccessoryProfitCalculator {
                                 completed + "/" + totalCount + " complete");
                     }
                 } catch (Exception e) {
-                    log.error("Error calculating enhancement for " + accessory.getName() +
-                            " at level " + level, e);
+                    log.error("Error calculating enhancement for {} at level {}", accessory.getName(), level, e);
                 } finally {
                     latch.countDown();
                 }
@@ -196,14 +195,6 @@ public class AccessoryProfitCalculator {
         if (progressCallback != null) {
             progressCallback.accept(message);
         }
-    }
-
-    // Original method for console output
-    public void calculateAndPrintProfits() {
-        List<AccessoryResult> results = calculateProfits();
-
-        Printer printer = new Printer();
-        printer.printDetailedAnalysisByLevel(results);
     }
 
     private EnhancementResult calculateEnhancementCost(Accessory accessory, int targetLevel) {

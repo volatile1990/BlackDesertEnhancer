@@ -61,7 +61,7 @@ public class CostumeProfitCalculator {
 		System.out.printf(triFormat, "Name", "Avg TRI Items", "TRI Profit");
 		System.out.println("-".repeat(75));
 		for (CostumeResult result : results) {
-			System.out.printf(triFormat, truncateString(result.name, 39), result.triItems, formatNumber(result.triProfit));
+			System.out.printf(triFormat, truncateString(result.name), result.triItems, formatNumber(result.triProfit));
 		}
 		System.out.println("=".repeat(75));
 
@@ -74,16 +74,16 @@ public class CostumeProfitCalculator {
 		System.out.printf(tetFormat, "Name", "Avg TET Items", "TET Profit");
 		System.out.println("-".repeat(75));
 		for (CostumeResult result : results) {
-			System.out.printf(tetFormat, truncateString(result.name, 39), result.tetItems, formatNumber(result.tetProfit));
+			System.out.printf(tetFormat, truncateString(result.name), result.tetItems, formatNumber(result.tetProfit));
 		}
 		System.out.println("=".repeat(75));
 	}
 
-	private String truncateString(String str, int maxLength) {
-		if (str.length() <= maxLength) {
+	private String truncateString(String str) {
+		if (str.length() <= 39) {
 			return str;
 		}
-		return str.substring(0, maxLength - 3) + "...";
+		return str.substring(0, 39 - 3) + "...";
 	}
 
 	private static class CostumeResult {

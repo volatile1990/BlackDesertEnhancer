@@ -9,6 +9,9 @@ public class Constants {
 
     public static final long BASE_PRICE_ACCESSORY_THRESHOLD = 4000000;
 
+    public static final int SIMULATION_RUN_COUNT = 100000;
+    public static final int OPTIMIZATION_RUN_COUNT = 20000;
+
     public static final String FUNCTIONAL_ARMOR_CALL_URL = "https://api.arsha.io/v2/eu/GetWorldMarketList?mainCategory=15&subCategory=5";
     public static final String ENHANCED_COST_URL = "https://eu-trade.naeu.playblackdesert.com/Trademarket/GetWorldMarketSubList";
     public static final String BIDDING_INFO_LIST_URL = "https://api.arsha.io/v2/eu/GetBiddingInfoList";
