@@ -4,6 +4,7 @@ import enhancer.Constants;
 import enhancer.accessory.GenericAccessory;
 import enhancer.models.AccessoryStack;
 import enhancer.models.OptimalStackResult;
+import enhancer.models.StacksUsed;
 import enhancer.models.market.Accessory;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -254,9 +255,12 @@ public class OptimalStackCalculator {
         // Kosten und Verbrauchte Items berechnen
         long totalCost = 0;
 
+        StacksUsed stacksUsed = new StacksUsed(priStack,duoStack,triStack,null);
+
         for (int i = 0; i < simulationRunsPerCombination; i++) {
             GenericAccessory enhanceAccessory = new GenericAccessory(
                     accessory.getBasePrice(), enhanceChances, failstackCost);
+            enhanceAccessory.setStacksUsed(stacksUsed);
 
             while (enhanceAccessory.getCurrentLevel() < targetLevel) {
                 enhanceAccessory.enhance();

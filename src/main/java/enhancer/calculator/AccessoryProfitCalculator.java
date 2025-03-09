@@ -3,10 +3,7 @@ package enhancer.calculator;
 import enhancer.Constants;
 import enhancer.accessory.GenericAccessory;
 import enhancer.market.BDOMarket;
-import enhancer.models.AccessoryResult;
-import enhancer.models.AccessoryStack;
-import enhancer.models.EnhancementResult;
-import enhancer.models.SimulationRun;
+import enhancer.models.*;
 import enhancer.models.market.Accessory;
 import lombok.Getter;
 import lombok.Setter;
@@ -217,9 +214,12 @@ public class AccessoryProfitCalculator {
         long triStackCost = triStack.blackStoneCount * Constants.BLACK_STONE_PRICE;
         long tetStackCost = tetStack.blackStoneCount * Constants.BLACK_STONE_PRICE;
 
+        StacksUsed stacksUsed = new StacksUsed(this.monStack, this.duoStack, this.triStack, this.tetStack);
+
         double[] enhanceChances = new double[]{monStack.mon, duoStack.duo, triStack.tri, tetStack.tet};
         long[] failstackCost = new long[]{monStackCost, duoStackCost, triStackCost, tetStackCost};
         GenericAccessory enhanceAccessory = new GenericAccessory(accessory.getBasePrice(), enhanceChances, failstackCost);
+        enhanceAccessory.setStacksUsed(stacksUsed);
 
         while (enhanceAccessory.getCurrentLevel() < targetLevel) {
             enhanceAccessory.enhance();

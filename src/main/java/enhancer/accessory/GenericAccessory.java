@@ -1,7 +1,9 @@
 package enhancer.accessory;
 
 import enhancer.Constants;
+import enhancer.models.StacksUsed;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Random;
 
@@ -9,6 +11,8 @@ import java.util.Random;
  * Represents a generic accessory that can be enhanced with different success rates
  * and costs depending on the enhancement level.
  */
+@Getter
+@Setter
 public class GenericAccessory {
 
 	// Constants
@@ -23,6 +27,10 @@ public class GenericAccessory {
 	private final long[] failstackCost;         // Cost of failstack at each level
 	private final int[] pityThreshold;          // Number of fails needed for guaranteed success
 	private final double[] chanceIncreaseOnFail;// How much the chance increases per fail
+	private final double[] changeIncreaseOnFailAfterSoftcap;
+	private final int[] softcapThreshold;
+
+	private StacksUsed stacksUsed;
 
 	// State tracking
 	private final int[] failCounter;            // Number of fails at each level
@@ -64,10 +72,14 @@ public class GenericAccessory {
 		this.random = new Random();
 		this.pityThreshold = new int[] { 5, 6, 8, 10 };
 		this.failCounter = new int[] { 0, 0, 0, 0 };
-		this.chanceIncreaseOnFail = new double[] { 0.03, 0.01, 0.0075, 0.0025 };
+		this.chanceIncreaseOnFail = new double[] { 0.025, 0.01, 0.0075, 0.0025 };
+		this.changeIncreaseOnFailAfterSoftcap = new double[] { 0.005, 0.002, 0.0015, 0.0005 };
+		this.softcapThreshold = new int[] { 18, 40, 44, 110 };
 
 		this.totalEnhanceCost = 0;
 		this.totalItemsConsumed = 0;
+
+		this.stacksUsed = null;
 	}
 
 	/**
@@ -111,6 +123,20 @@ public class GenericAccessory {
 	 * @return the success percentage (0-100)
 	 */
 	private double calculateSuccessChance() {
+
+		int stack = switch (currentLevel) {
+			case 0 -> this.stacksUsed.getMonStack().stackCount;
+			case 1 -> this.stacksUsed.getDuoStack().stackCount;
+			case 2 -> this.stacksUsed.getTriStack().stackCount;
+			case 3 -> this.stacksUsed.getTetStack().stackCount;
+            default -> throw new IllegalStateException("Unexpected value: " + currentLevel);
+        };
+
+		if (failCounter[currentLevel] + stack > this.softcapThreshold[currentLevel]) {
+			return enhanceChances[currentLevel] +
+					(failCounter[currentLevel] * changeIncreaseOnFailAfterSoftcap[currentLevel]) * 100;
+		}
+
 		return enhanceChances[currentLevel] +
 				(failCounter[currentLevel] * chanceIncreaseOnFail[currentLevel]) * 100;
 	}
