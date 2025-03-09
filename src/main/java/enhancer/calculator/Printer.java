@@ -14,11 +14,9 @@ public class Printer {
     private static final String YELLOW = "\u001B[33m";
     private static final String BLUE = "\u001B[34m";
     private static final String PURPLE = "\u001B[35m";
-    private static final String CYAN = "\u001B[36m";
 
     // Textformatierung
     private static final String BOLD = "\u001B[1m";
-    private static final String UNDERLINE = "\u001B[4m";
 
     public void printComprehensiveTable(List<AccessoryResult> results) {
         // Sortiere nach dem höchsten Profit (unabhängig vom Level)
@@ -29,7 +27,7 @@ public class Printer {
 
         String format = "%-39s | %10s | %15s | %15s | %15s | %15s";
         log.info("\n" + BOLD + BLUE + "ACCESSORY ENHANCEMENT PROFIT ANALYSIS" + RESET);
-        log.info(YELLOW + "=".repeat(130) + RESET);
+        log.info(YELLOW + "{}" + RESET, "=".repeat(130));
         log.info("{}", String.format(format,
                 BOLD + "Name" + RESET,
                 BOLD + "Base Stock" + RESET,
@@ -37,14 +35,14 @@ public class Printer {
                 BOLD + "TRI Profit" + RESET,
                 BOLD + "TET Profit" + RESET,
                 BOLD + "Best Level" + RESET));
-        log.info(YELLOW + "-".repeat(130) + RESET);
+        log.info(YELLOW + "{}" + RESET, "-".repeat(130));
 
         for (AccessoryResult result : results) {
             // Bestimme das profitabelste Enhancement-Level
             String bestLevel = getBestEnhancementLevel(result);
 
             log.info("{}", String.format(format,
-                    truncateString(result.name, 39),
+                    truncateString(result.name),
                     result.baseStock,
                     colorProfitOutput(result.duoProfit, bestLevel.equals("DUO")),
                     colorProfitOutput(result.triProfit, bestLevel.equals("TRI")),
@@ -52,7 +50,7 @@ public class Printer {
                     colorLevelOutput(bestLevel)
             ));
         }
-        log.info(YELLOW + "=".repeat(130) + RESET);
+        log.info(YELLOW + "{}" + RESET, "=".repeat(130));
     }
 
     // Bestimmt das profitabelste Enhancement-Level
@@ -114,7 +112,7 @@ public class Printer {
         final int profitWidth = 15;
         final int itemsWidth = 12;
 
-        log.info("\n" + BOLD + levelColor + title + RESET);
+        log.info("\n" + BOLD + "{}{}" + RESET, levelColor, title);
         String separator = levelColor + "=".repeat(nameWidth + stockWidth + profitWidth + itemsWidth + 9) + RESET; // +9 für "| " Abstandshalter
         log.info(separator);
 
@@ -129,7 +127,7 @@ public class Printer {
         appendWithPadding(header, BOLD + "Avg Items" + RESET, itemsWidth);
         log.info(header.toString());
 
-        log.info(levelColor + "-".repeat(nameWidth + stockWidth + profitWidth + itemsWidth + 9) + RESET);
+        log.info("{}{}" + RESET, levelColor, "-".repeat(nameWidth + stockWidth + profitWidth + itemsWidth + 9));
 
         // Ausgabe der Daten
         for (AccessoryResult result : results) {
@@ -166,7 +164,7 @@ public class Printer {
 
             // Zeile manuell erstellen
             StringBuilder row = new StringBuilder();
-            appendWithPadding(row, truncateString(result.name, nameWidth), nameWidth);
+            appendWithPadding(row, truncateString(result.name), nameWidth);
             row.append(" | ");
             appendWithPadding(row, String.valueOf(result.baseStock), stockWidth);
             row.append(" | ");
@@ -205,10 +203,10 @@ public class Printer {
         return String.format("%,d", number);
     }
 
-    private String truncateString(String str, int maxLength) {
-        if (str.length() <= maxLength) {
+    private String truncateString(String str) {
+        if (str.length() <= 39) {
             return str;
         }
-        return str.substring(0, maxLength - 3) + "...";
+        return str.substring(0, 39 - 3) + "...";
     }
 }
