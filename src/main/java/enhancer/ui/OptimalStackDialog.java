@@ -21,16 +21,20 @@ import java.util.List;
 public class OptimalStackDialog extends JDialog {
 
     private final List<OptimalStackResult> optimalResults;
-    private final JTable resultsTable;
 
     /**
      * Konstruktor für den Dialog
      *
      * @param owner Parent-Frame
      * @param optimalResults Liste der optimalen Stack-Ergebnisse
+     * @param isSelectionBased True wenn nur ausgewählte Accessoires optimiert wurden
      */
-    public OptimalStackDialog(Frame owner, List<OptimalStackResult> optimalResults) {
-        super(owner, "Optimal Stack Combinations (TRI Optimized)", true);
+    public OptimalStackDialog(Frame owner, List<OptimalStackResult> optimalResults, boolean isSelectionBased) {
+        super(owner,
+                isSelectionBased ?
+                        "Optimal Stack Combinations - Selected Accessories (TRI Optimized)" :
+                        "Optimal Stack Combinations (TRI Optimized)",
+                true);
         this.optimalResults = optimalResults;
 
         setSize(750, 500);
@@ -40,14 +44,20 @@ public class OptimalStackDialog extends JDialog {
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Infotext am oberen Rand
-        JLabel infoLabel = new JLabel("<html>The table below shows the optimal failstack combinations " +
-                "for each accessory to maximize <b>TRI profit</b>. These are only recommendations and " +
-                "may vary based on market conditions.</html>");
+        // Infotext am oberen Rand - angepasst für Selektions-basierte Optimierung
+        String infoText = isSelectionBased ?
+                "<html>The table below shows the optimal failstack combinations for your <b>selected accessories</b> " +
+                        "to maximize <b>TRI profit</b>. These are only recommendations and " +
+                        "may vary based on market conditions.</html>" :
+                "<html>The table below shows the optimal failstack combinations " +
+                        "for each accessory to maximize <b>TRI profit</b>. These are only recommendations and " +
+                        "may vary based on market conditions.</html>";
+
+        JLabel infoLabel = new JLabel(infoText);
         mainPanel.add(infoLabel, BorderLayout.NORTH);
 
         // Tabelle für Ergebnisse
-        resultsTable = createResultsTable();
+        JTable resultsTable = createResultsTable();
         JScrollPane scrollPane = new JScrollPane(resultsTable);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
@@ -173,8 +183,11 @@ public class OptimalStackDialog extends JDialog {
      *
      * @param parent Parent-Frame
      * @param accessories Liste der Accessoires
+     * @param parentGUI Referenz zur Haupt-GUI
+     * @param isSelectionBased True wenn nur ausgewählte Accessoires optimiert werden
      */
-    public static void optimizeAndShowDialog(Frame parent, List<Accessory> accessories, EnhanceProfitGUI parentGUI) {
+    public static void optimizeAndShowDialog(Frame parent, List<Accessory> accessories,
+                                             EnhanceProfitGUI parentGUI, boolean isSelectionBased) {
         // Deaktiviere den Parent-Frame während der Berechnung
         parent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
@@ -185,9 +198,7 @@ public class OptimalStackDialog extends JDialog {
                 OptimalStackCalculator calculator = new OptimalStackCalculator();
 
                 // Statusmeldungen an die GUI weiterleiten
-                return calculator.findOptimalStacks(accessories, message -> {
-                    publish(message);
-                });
+                return calculator.findOptimalStacks(accessories, this::publish);
             }
 
             @Override
@@ -204,8 +215,8 @@ public class OptimalStackDialog extends JDialog {
                     // Ergebnisse holen
                     List<OptimalStackResult> results = get();
 
-                    // Dialog anzeigen
-                    OptimalStackDialog dialog = new OptimalStackDialog(parent, results);
+                    // Dialog anzeigen, jetzt mit isSelectionBased Parameter
+                    OptimalStackDialog dialog = new OptimalStackDialog(parent, results, isSelectionBased);
                     dialog.setVisible(true);
 
                 } catch (Exception e) {
@@ -223,6 +234,18 @@ public class OptimalStackDialog extends JDialog {
         };
 
         worker.execute();
+    }
+
+    /**
+     * Methode zum Ausführen der Stack-Optimierung und Anzeigen des Dialogs
+     * (Legacy-Methode ohne isSelectionBased-Parameter)
+     *
+     * @param parent Parent-Frame
+     * @param accessories Liste der Accessoires
+     * @param parentGUI Referenz zur Haupt-GUI
+     */
+    public static void optimizeAndShowDialog(Frame parent, List<Accessory> accessories, EnhanceProfitGUI parentGUI) {
+        optimizeAndShowDialog(parent, accessories, parentGUI, false);
     }
 
     /**

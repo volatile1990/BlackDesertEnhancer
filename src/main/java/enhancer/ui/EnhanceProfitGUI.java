@@ -16,8 +16,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class EnhanceProfitGUI extends JFrame {
@@ -33,6 +35,7 @@ public class EnhanceProfitGUI extends JFrame {
     private JButton loadMarketDataButton;
     private JButton calculateButton;
     private JButton optimizeButton;
+    private JButton optimizeSelectedButton;
 
     // Liste der geladenen Accessoires
     private List<Accessory> marketAccessories;
@@ -141,6 +144,9 @@ public class EnhanceProfitGUI extends JFrame {
             OptimalStackDialog.optimizeAndShowDialog(this, marketAccessories, this);
         });
 
+        // Button for optimizing selected accessories
+        JButton optimizeSelectedButton = getOptimizeSelectedButton();
+
         // Simulation Runs Konfiguration hinzufügen
         JLabel simulationRunsLabel = new JLabel("Simulation Runs:");
         SpinnerNumberModel spinnerModel = new SpinnerNumberModel(
@@ -158,11 +164,62 @@ public class EnhanceProfitGUI extends JFrame {
         controlPanel.add(loadMarketDataButton);
         controlPanel.add(calculateButton);
         controlPanel.add(optimizeButton);
+        controlPanel.add(optimizeSelectedButton);
         controlPanel.add(Box.createHorizontalStrut(20)); // Abstand zwischen Elementen
         controlPanel.add(simulationRunsLabel);
         controlPanel.add(simulationRunsSpinner);
 
         return controlPanel;
+    }
+
+    private JButton getOptimizeSelectedButton() {
+        optimizeSelectedButton = new JButton("Optimize Selected");
+        optimizeSelectedButton.setToolTipText("Find optimal failstack combinations for selected accessories only");
+        optimizeSelectedButton.setEnabled(false); // Initially disabled until selection happens
+
+        optimizeSelectedButton.addActionListener(e -> {
+            // Check if market data is loaded
+            if (marketAccessories == null || marketAccessories.isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Please load market data first!",
+                        "No Data",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Get selected rows from the table
+            int[] selectedRows = mainTable.getSelectedRows();
+            if (selectedRows.length == 0) {
+                JOptionPane.showMessageDialog(this,
+                        "Please select at least one accessory from the table",
+                        "No Selection",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Convert view indices to model indices (important when table is sorted/filtered)
+            int[] modelIndices = new int[selectedRows.length];
+            for (int i = 0; i < selectedRows.length; i++) {
+                modelIndices[i] = mainTable.convertRowIndexToModel(selectedRows[i]);
+            }
+
+            // Get accessory names from the selected rows
+            List<String> selectedAccessoryNames = new ArrayList<>();
+            for (int modelIndex : modelIndices) {
+                String accessoryName = (String) mainTable.getModel().getValueAt(modelIndex, 0);
+                selectedAccessoryNames.add(accessoryName);
+            }
+
+            // Filter market accessories to only those selected
+            List<Accessory> selectedAccessories = marketAccessories.stream()
+                    .filter(accessory -> selectedAccessoryNames.contains(accessory.getName()))
+                    .collect(Collectors.toList());
+
+            // Run optimization on selected accessories
+            optimizeSelectedAccessories(selectedAccessories);
+        });
+
+        return optimizeSelectedButton;
     }
 
     private JPanel createFilterPanel() {
@@ -290,12 +347,27 @@ public class EnhanceProfitGUI extends JFrame {
         }
     }
 
+    private void setupTableSelectionListener() {
+        // Add a selection listener to enable/disable the optimizeSelectedButton
+        mainTable.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) { // Only respond to final selection events
+                boolean hasSelection = mainTable.getSelectedRowCount() > 0;
+                // Only enable the button if market data is loaded AND there's a selection
+                boolean shouldEnable = hasSelection && marketAccessories != null && !marketAccessories.isEmpty();
+                if (optimizeSelectedButton != null) {
+                    optimizeSelectedButton.setEnabled(shouldEnable);
+                }
+            }
+        });
+    }
+
     private void createMainTable() {
         // Create table with the required columns
         DefaultTableModel model = getDefaultTableModel();
 
         mainTable = new JTable(model);
         mainTable.setRowHeight(25);
+        setupTableSelectionListener();
 
         // Use TableRowSorter for both sorting and filtering
         tableRowSorter = new TableRowSorter<>(model);
@@ -415,6 +487,9 @@ public class EnhanceProfitGUI extends JFrame {
                     loadMarketDataButton.setEnabled(true);
                     calculateButton.setEnabled(true);
                     optimizeButton.setEnabled(true);
+                    if (optimizeSelectedButton != null) {
+                        optimizeSelectedButton.setEnabled(mainTable.getSelectedRowCount() > 0);
+                    }
                 } catch (Exception e) {
                     statusLabel.setText("Error loading market data: " + e.getMessage());
                     log.error("Error loading market data", e);
@@ -436,6 +511,9 @@ public class EnhanceProfitGUI extends JFrame {
         // UI deaktivieren
         calculateButton.setEnabled(false);
         optimizeButton.setEnabled(false);
+        if (optimizeSelectedButton != null) {
+            optimizeSelectedButton.setEnabled(false);
+        }
 
         // Direkt zur Berechnung fortfahren
         calculateProfitsWithLoadedData();
@@ -536,37 +614,19 @@ public class EnhanceProfitGUI extends JFrame {
     }
 
     /**
-     * Diese Methode wendet die optimierten Stacks für ein Accessoire an
+     * Run optimization on selected accessories only
      */
-    public void applyStacksForAccessory(String accessoryName,
-                                        AccessoryStack priStack,
-                                        AccessoryStack duoStack,
-                                        AccessoryStack triStack) {
-        // Speichere die ursprünglichen Stacks (nicht nötig, nur zur Info)
-        AccessoryStack originalPriStack = calculator.getMonStack();
-        AccessoryStack originalDuoStack = calculator.getDuoStack();
-        AccessoryStack originalTriStack = calculator.getTriStack();
+    private void optimizeSelectedAccessories(List<Accessory> selectedAccessories) {
+        if (selectedAccessories.isEmpty()) {
+            statusLabel.setText("No accessories selected for optimization");
+            return;
+        }
 
-        // Setze die optimierten Stacks
-        calculator.setMonStack(priStack);
-        calculator.setDuoStack(duoStack);
-        calculator.setTriStack(triStack);
+        // Inform user about the optimization
+        statusLabel.setText("Optimizing stacks for " + selectedAccessories.size() + " selected accessories...");
 
-        // Aktualisiere die ComboBoxen
-        monStackCombo.setSelectedItem(priStack);
-        duoStackCombo.setSelectedItem(duoStack);
-        triStackCombo.setSelectedItem(triStack);
-
-        // Statusmeldung
-        updateStatus(String.format("Applied optimal stacks for %s: PRI=%s, DUO=%s, TRI=%s",
-                accessoryName,
-                NameResolver.getDisplayNameForStack(priStack.name()),
-                NameResolver.getDisplayNameForStack(duoStack.name()),
-                NameResolver.getDisplayNameForStack(triStack.name())
-        ));
-
-        // Starte die Berechnung mit den neuen Stacks
-        calculateProfits();
+        // Create and show modified OptimalStackDialog for selected accessories
+        OptimalStackDialog.optimizeAndShowDialog(this, selectedAccessories, this);
     }
 
     public static void main(String[] args) {
