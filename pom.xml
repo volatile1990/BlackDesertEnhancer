@@ -2,37 +2,49 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>de.priv</groupId>
+	<groupId>com.bdo</groupId>
 	<artifactId>BlackDesertEnhancer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<name>Black Desert Enhancement Profit Calculator</name>
+	<description>Tool for calculating enhancement profit in Black Desert Online</description>
 
 	<properties>
 		<maven.compiler.target>16</maven.compiler.target>
 		<maven.compiler.source>16</maven.compiler.source>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<dependencies>
+		<!-- UI Components -->
 		<dependency>
 			<groupId>com.formdev</groupId>
 			<artifactId>flatlaf</artifactId>
 			<version>3.4.1</version>
 		</dependency>
+		
+		<!-- JSON Parsing -->
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20210307</version>
 		</dependency>
+		
+		<!-- Utility Libraries -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.12.0</version>
 		</dependency>
+		
+		<!-- Code Generation and Convenience -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.18.36</version>
 			<scope>provided</scope>
 		</dependency>
+		
+		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -47,13 +59,14 @@
 
 	<build>
 		<plugins>
+			<!-- Assembly Plugin for creating executable JAR -->
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.3.0</version> <!-- Nutze die aktuellste Version -->
+				<version>3.6.0</version>
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>calculator.CostumeProfitCalculator</mainClass>
+							<mainClass>com.bdo.enhancer.EnhancerApplication</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
@@ -62,8 +75,8 @@
 				</configuration>
 				<executions>
 					<execution>
-						<id>make-assembly</id> <!-- Dies ist eine ID für deine Konfiguration -->
-						<phase>package</phase> <!-- Bindet an die Package-Phase -->
+						<id>make-assembly</id>
+						<phase>package</phase>
 						<goals>
 							<goal>single</goal>
 						</goals>
