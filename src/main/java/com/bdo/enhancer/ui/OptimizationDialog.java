@@ -1,10 +1,8 @@
 package com.bdo.enhancer.ui;
 
 import com.bdo.enhancer.calculator.OptimalStackCalculator;
-import com.bdo.enhancer.model.stack.AccessoryStack;
-import com.bdo.enhancer.model.result.OptimalStackResult;
 import com.bdo.enhancer.model.item.Accessory;
-import com.bdo.enhancer.ui.util.DisplayNameResolver;
+import com.bdo.enhancer.model.result.OptimalStackResult;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -100,9 +98,9 @@ public class OptimizationDialog extends JDialog {
         for (OptimalStackResult result : optimalResults) {
             model.addRow(new Object[] {
                     result.getAccessoryName(),
-                    formatStackName(result.getOptimalPriStack()),
-                    formatStackName(result.getOptimalDuoStack()),
-                    formatStackName(result.getOptimalTriStack()),
+                    result.getOptimalPriStack().getStackCount(),
+                    result.getOptimalDuoStack().getStackCount(),
+                    result.getOptimalTriStack().getStackCount(),
                     result.getTotalProfit() // Important: Use raw Long values for sorting
             });
         }
@@ -176,13 +174,6 @@ public class OptimizationDialog extends JDialog {
         table.getColumnModel().getColumn(4).setCellRenderer(profitRenderer);
 
         return table;
-    }
-
-    /**
-     * Formats the stack name for display
-     */
-    private String formatStackName(AccessoryStack stack) {
-        return DisplayNameResolver.getDisplayNameForStack(stack.name());
     }
 
     /**

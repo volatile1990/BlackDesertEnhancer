@@ -1,12 +1,13 @@
 package com.bdo.enhancer.ui;
 
-import com.formdev.flatlaf.FlatDarkLaf;
 import com.bdo.enhancer.calculator.AccessoryProfitCalculator;
 import com.bdo.enhancer.market.MarketDataService;
-import com.bdo.enhancer.model.result.AccessoryEnhancementResult;
-import com.bdo.enhancer.model.stack.AccessoryStack;
 import com.bdo.enhancer.model.item.Accessory;
+import com.bdo.enhancer.model.result.AccessoryEnhancementResult;
+import com.bdo.enhancer.model.stack.AbstractStack;
+import com.bdo.enhancer.model.stack.AccessoryStack;
 import com.bdo.enhancer.ui.util.DisplayNameResolver;
+import com.formdev.flatlaf.FlatDarkLaf;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -45,10 +46,10 @@ public class EnhancerMainFrame extends JFrame {
     private List<Accessory> marketAccessories;
 
     // Stack selection combo boxes
-    private JComboBox<AccessoryStack> monStackCombo;
-    private JComboBox<AccessoryStack> duoStackCombo;
-    private JComboBox<AccessoryStack> triStackCombo;
-    private JComboBox<AccessoryStack> tetStackCombo;
+    private JComboBox<AbstractStack> monStackCombo;
+    private JComboBox<AbstractStack> duoStackCombo;
+    private JComboBox<AbstractStack> triStackCombo;
+    private JComboBox<AbstractStack> tetStackCombo;
 
     /**
      * Konstruktor - initialisiert das Hauptfenster
@@ -310,40 +311,40 @@ public class EnhancerMainFrame extends JFrame {
         // MON stack selection
         stackPanel.add(new JLabel("PRI Stack:"), gbc);
         gbc.gridx++;
-        monStackCombo = new JComboBox<>(AccessoryStack.values());
+        monStackCombo = new JComboBox<>(AccessoryStack.VALUES);
         monStackCombo.setSelectedItem(calculator.getMonStack());
         monStackCombo.setRenderer(new StackComboRenderer());
-        monStackCombo.addActionListener(e -> calculator.setMonStack((AccessoryStack) monStackCombo.getSelectedItem()));
+        monStackCombo.addActionListener(e -> calculator.setMonStack((AbstractStack) monStackCombo.getSelectedItem()));
         stackPanel.add(monStackCombo, gbc);
 
         // DUO stack selection
         gbc.gridx++;
         stackPanel.add(new JLabel("DUO Stack:"), gbc);
         gbc.gridx++;
-        duoStackCombo = new JComboBox<>(AccessoryStack.values());
+        duoStackCombo = new JComboBox<>(AccessoryStack.VALUES);
         duoStackCombo.setSelectedItem(calculator.getDuoStack());
         duoStackCombo.setRenderer(new StackComboRenderer());
-        duoStackCombo.addActionListener(e -> calculator.setDuoStack((AccessoryStack) duoStackCombo.getSelectedItem()));
+        duoStackCombo.addActionListener(e -> calculator.setDuoStack((AbstractStack) duoStackCombo.getSelectedItem()));
         stackPanel.add(duoStackCombo, gbc);
 
         // TRI stack selection
         gbc.gridx++;
         stackPanel.add(new JLabel("TRI Stack:"), gbc);
         gbc.gridx++;
-        triStackCombo = new JComboBox<>(AccessoryStack.values());
+        triStackCombo = new JComboBox<>(AccessoryStack.VALUES);
         triStackCombo.setSelectedItem(calculator.getTriStack());
         triStackCombo.setRenderer(new StackComboRenderer());
-        triStackCombo.addActionListener(e -> calculator.setTriStack((AccessoryStack) triStackCombo.getSelectedItem()));
+        triStackCombo.addActionListener(e -> calculator.setTriStack((AbstractStack) triStackCombo.getSelectedItem()));
         stackPanel.add(triStackCombo, gbc);
 
         // TET stack selection
         gbc.gridx++;
         stackPanel.add(new JLabel("TET Stack:"), gbc);
         gbc.gridx++;
-        tetStackCombo = new JComboBox<>(AccessoryStack.values());
+        tetStackCombo = new JComboBox<>(AccessoryStack.VALUES);
         tetStackCombo.setSelectedItem(calculator.getTetStack());
         tetStackCombo.setRenderer(new StackComboRenderer());
-        tetStackCombo.addActionListener(e -> calculator.setTetStack((AccessoryStack) tetStackCombo.getSelectedItem()));
+        tetStackCombo.addActionListener(e -> calculator.setTetStack((AbstractStack) tetStackCombo.getSelectedItem()));
         stackPanel.add(tetStackCombo, gbc);
 
         return stackPanel;
@@ -356,9 +357,8 @@ public class EnhancerMainFrame extends JFrame {
         public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-            if (value instanceof AccessoryStack stack) {
-                String name = stack.name();
-                setText(DisplayNameResolver.getDisplayNameForStack(name));
+            if (value instanceof AbstractStack stack) {
+                setText(stack.toString());
             }
 
             return c;
@@ -539,10 +539,10 @@ public class EnhancerMainFrame extends JFrame {
 
     private void calculateProfitsWithLoadedData() {
         // Update the calculator with the current stack selections
-        calculator.setMonStack((AccessoryStack) monStackCombo.getSelectedItem());
-        calculator.setDuoStack((AccessoryStack) duoStackCombo.getSelectedItem());
-        calculator.setTriStack((AccessoryStack) triStackCombo.getSelectedItem());
-        calculator.setTetStack((AccessoryStack) tetStackCombo.getSelectedItem());
+        calculator.setMonStack((AbstractStack) monStackCombo.getSelectedItem());
+        calculator.setDuoStack((AbstractStack) duoStackCombo.getSelectedItem());
+        calculator.setTriStack((AbstractStack) triStackCombo.getSelectedItem());
+        calculator.setTetStack((AbstractStack) tetStackCombo.getSelectedItem());
 
         // Set the number of simulation runs
         calculator.setSimulationRuns((Integer) simulationRunsSpinner.getValue());

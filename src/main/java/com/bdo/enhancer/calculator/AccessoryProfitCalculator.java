@@ -1,17 +1,20 @@
 package com.bdo.enhancer.calculator;
 
-import com.bdo.enhancer.model.constants.Constants;
 import com.bdo.enhancer.core.AccessoryEnhancer;
 import com.bdo.enhancer.market.MarketDataService;
-import com.bdo.enhancer.model.stack.AccessoryStack;
-import com.bdo.enhancer.model.stack.FailStackSet;
+import com.bdo.enhancer.model.constants.Constants;
 import com.bdo.enhancer.model.item.Accessory;
 import com.bdo.enhancer.model.result.AccessoryEnhancementResult;
 import com.bdo.enhancer.model.result.EnhancementResult;
 import com.bdo.enhancer.model.result.SimulationRun;
+import com.bdo.enhancer.model.stack.AbstractStack;
+import com.bdo.enhancer.model.stack.AccessoryStack;
+import com.bdo.enhancer.model.stack.CostumeStack;
+import com.bdo.enhancer.model.stack.FailStackSet;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +36,11 @@ public class AccessoryProfitCalculator {
     // Anzahl der Threads für die parallele Berechnung
     private int threadCount = Runtime.getRuntime().availableProcessors();
 
-    // Default stacks that can be overridden
-    private AccessoryStack monStack = AccessoryStack.FOURTY;
-    private AccessoryStack duoStack = AccessoryStack.FOURTY;
-    private AccessoryStack triStack = AccessoryStack.FOURTYFIVE;
-    private AccessoryStack tetStack = AccessoryStack.HUNDREDTEN_FREE;
+    // Default stacks that can be overridden - using the new Stack interface instead of OldAccessoryStack
+    private AbstractStack monStack = AccessoryStack.FOURTY;
+    private AbstractStack duoStack = AccessoryStack.FOURTY;
+    private AbstractStack triStack = AccessoryStack.FOURTYFIVE;
+    private AbstractStack tetStack = AccessoryStack.HUNDREDTEN_FREE;
 
     // Cached market accessories list
     private List<Accessory> cachedAccessories = null;
@@ -49,7 +52,7 @@ public class AccessoryProfitCalculator {
     // Completely restructured method to calculate by enhancement level
     public List<AccessoryEnhancementResult> calculateProfits() {
         if (cachedAccessories == null || cachedAccessories.isEmpty()) {
-            // Nur wenn keine Daten im Cache sind, neu laden
+            // Reload if nothing is cached
             MarketDataService marketService = new MarketDataService();
             marketService.setProgressCallback(this.progressCallback);
             cachedAccessories = marketService.getAccessories();
@@ -58,7 +61,6 @@ public class AccessoryProfitCalculator {
         return calculateProfitsWithAccessories(cachedAccessories);
     }
 
-    // Neue Methode zur Berechnung mit gegebenen Accessoires - parallelisiert
     public List<AccessoryEnhancementResult> calculateProfitsWithAccessories(List<Accessory> accessories) {
         // Accessoires im Cache speichern
         this.cachedAccessories = accessories;
@@ -131,7 +133,7 @@ public class AccessoryProfitCalculator {
 
                     // Fortschritt melden
                     int completed = completedCount.incrementAndGet();
-                    if (completed % 10 == 0 || completed == totalCount) {
+                    if (completed % 5 == 0 || completed == totalCount) {
                         updateProgress("Calculating " + levelName + " enhancements: " +
                                 completed + "/" + totalCount + " complete");
                     }
@@ -212,17 +214,33 @@ public class AccessoryProfitCalculator {
     }
 
     private SimulationRun simulateEnhancement(Accessory accessory, int targetLevel) {
-        // Berechne die Kosten der Failstacks
-        long monStackCost = monStack.blackStoneCount * Constants.BLACK_STONE_PRICE;
-        long duoStackCost = duoStack.blackStoneCount * Constants.BLACK_STONE_PRICE;
-        long triStackCost = triStack.blackStoneCount * Constants.BLACK_STONE_PRICE;
-        long tetStackCost = tetStack.blackStoneCount * Constants.BLACK_STONE_PRICE;
 
+        if (StringUtils.containsIgnoreCase(accessory.getName(), "Silver")) {
+            // Get costume stack for corresponding stack count
+            monStack = CostumeStack.findByStackCount(monStack.getStackCount());
+            duoStack = CostumeStack.findByStackCount(duoStack.getStackCount());
+            triStack = CostumeStack.findByStackCount(triStack.getStackCount());
+            tetStack = CostumeStack.findByStackCount(tetStack.getStackCount());
+        }
+
+        // Berechne die Kosten der Failstacks
+        long monStackCost = monStack.getBlackStoneCount() * Constants.BLACK_STONE_PRICE;
+        long duoStackCost = duoStack.getBlackStoneCount() * Constants.BLACK_STONE_PRICE;
+        long triStackCost = triStack.getBlackStoneCount() * Constants.BLACK_STONE_PRICE;
+        long tetStackCost = tetStack.getBlackStoneCount() * Constants.BLACK_STONE_PRICE;
+
+        // Die FailStackSet-Klasse muss ebenfalls angepasst werden, um mit Stack statt OldAccessoryStack zu arbeiten
         FailStackSet stacksUsed = new FailStackSet(this.monStack, this.duoStack, this.triStack, this.tetStack);
 
-        double[] enhanceChances = new double[]{monStack.mon, duoStack.duo, triStack.tri, tetStack.tet};
+        double[] enhanceChances = new double[]{
+                monStack.getMonChance(),
+                duoStack.getDuoChance(),
+                triStack.getTriChance(),
+                tetStack.getTetChance()
+        };
+
         long[] failstackCost = new long[]{monStackCost, duoStackCost, triStackCost, tetStackCost};
-        
+
         AccessoryEnhancer enhancer = new AccessoryEnhancer(accessory.getBasePrice(), enhanceChances, failstackCost);
         enhancer.setStacksUsed(stacksUsed);
 

@@ -2,7 +2,6 @@ package com.bdo.enhancer.core;
 
 import com.bdo.enhancer.model.constants.Constants;
 import com.bdo.enhancer.model.stack.FailStackSet;
-import com.bdo.enhancer.model.stack.AccessoryStack;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -125,10 +124,10 @@ public class AccessoryEnhancer {
 	 */
 	private double calculateSuccessChance() {
 		int stack = switch (currentLevel) {
-			case 0 -> this.stacksUsed.getMonStack().stackCount;
-			case 1 -> this.stacksUsed.getDuoStack().stackCount;
-			case 2 -> this.stacksUsed.getTriStack().stackCount;
-			case 3 -> this.stacksUsed.getTetStack().stackCount;
+			case 0 -> this.stacksUsed.getMonStack().getStackCount();
+			case 1 -> this.stacksUsed.getDuoStack().getStackCount();
+			case 2 -> this.stacksUsed.getTriStack().getStackCount();
+			case 3 -> this.stacksUsed.getTetStack().getStackCount();
             default -> throw new IllegalStateException("Unexpected value: " + currentLevel);
         };
 

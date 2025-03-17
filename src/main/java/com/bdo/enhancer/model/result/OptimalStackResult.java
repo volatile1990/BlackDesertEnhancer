@@ -1,6 +1,6 @@
 package com.bdo.enhancer.model.result;
 
-import com.bdo.enhancer.model.stack.AccessoryStack;
+import com.bdo.enhancer.model.stack.AbstractStack;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,11 +16,11 @@ public class OptimalStackResult {
     /** Name des Accessoires */
     public String accessoryName;
 
-    public AccessoryStack optimalPriStack;
+    public AbstractStack optimalPriStack;
 
-    public AccessoryStack optimalDuoStack;
+    public AbstractStack optimalDuoStack;
 
-    public AccessoryStack optimalTriStack;
+    public AbstractStack optimalTriStack;
 
     public long totalProfit;
 

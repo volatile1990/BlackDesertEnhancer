@@ -10,12 +10,12 @@ import lombok.Setter;
 @Setter
 public class FailStackSet {
 
-    AccessoryStack monStack;
-    AccessoryStack duoStack;
-    AccessoryStack triStack;
-    AccessoryStack tetStack;
+    AbstractStack monStack;
+    AbstractStack duoStack;
+    AbstractStack triStack;
+    AbstractStack tetStack;
 
-    public FailStackSet(AccessoryStack monStack, AccessoryStack duoStack, AccessoryStack triStack, AccessoryStack tetStack) {
+    public FailStackSet(AbstractStack monStack, AbstractStack duoStack, AbstractStack triStack, AbstractStack tetStack) {
         this.monStack = monStack;
         this.duoStack = duoStack;
         this.triStack = triStack;

@@ -79,7 +79,14 @@ public class BDOMarketConnector {
                         Accessory accessory = new Accessory(name, id);
                         accessory.setBasePrice(jsonObject.getInt("basePrice"));
 
-                        if (skipCurrentAccessory(accessory)) {
+                        boolean isCostume = entry.getKey().equalsIgnoreCase("costume");
+
+                        if (!isCostume && skipCurrentAccessory(accessory) ) {
+                            continue;
+                        }
+
+                        // Process only Silver Embroided costumes
+                        if (isCostume && !StringUtils.containsIgnoreCase(name, "Silver")) {
                             continue;
                         }
 
@@ -146,10 +153,11 @@ public class BDOMarketConnector {
         Map<String, CompletableFuture<String>> futures = new HashMap<>();
 
         Map<String, String> endpoints = new HashMap<>();
-        endpoints.put("ring", Constants.ACCESSORY_RING_CALL_URL);
-        endpoints.put("necklace", Constants.ACCESSORY_NECKLACE_CALL_URL);
-        endpoints.put("earring", Constants.ACCESSORY_EARRING_CALL_URL);
-        endpoints.put("belt", Constants.ACCESSORY_BELT_CALL_URL);
+        //endpoints.put("ring", Constants.ACCESSORY_RING_CALL_URL);
+        //endpoints.put("necklace", Constants.ACCESSORY_NECKLACE_CALL_URL);
+        //endpoints.put("earring", Constants.ACCESSORY_EARRING_CALL_URL);
+        //endpoints.put("belt", Constants.ACCESSORY_BELT_CALL_URL);
+        endpoints.put("costume", Constants.FUNCTIONAL_ARMOR_CALL_URL);
 
         AtomicInteger processed = new AtomicInteger(0);
         int total = endpoints.size();
