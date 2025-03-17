@@ -36,105 +36,16 @@ public class BDOMarketConnector {
         List<Accessory> accessories = new ArrayList<>();
 
         try {
-            updateProgress("Fetching accessory data from market API ...");
             // Step 1: Fetch accessory data in parallel
-            Map<String, CompletableFuture<String>> futureDataMap = getAccessoryDataParallel();
-
-            // Wait for all fetches to complete and collect results
-            Map<String, String> accessoryDataMap = new ConcurrentHashMap<>();
-            for (Map.Entry<String, CompletableFuture<String>> entry : futureDataMap.entrySet()) {
-                accessoryDataMap.put(entry.getKey(), entry.getValue().join());
-            }
-
-            // Count total accessories
-            int totalAccessories = 0;
-            for (String jsonData : accessoryDataMap.values()) {
-                JSONArray jsonArray = new JSONArray(jsonData);
-                totalAccessories += jsonArray.length();
-            }
-
-            updateProgress("Processing market data for " + totalAccessories + " accessories");
-
-            AtomicInteger processedCount = new AtomicInteger(0);
-            final int finalTotalAccessories = totalAccessories; // Make totalAccessories available in lambda
-            List<CompletableFuture<List<Accessory>>> accessoryFutures = new ArrayList<>();
+            updateProgress("Fetching accessory data from market API ...");
+            Map<String, String> accessoryDataMap = getAccessoryDataParallel();
 
             // Step 2: Process each accessory type in parallel
-            for (Map.Entry<String, String> entry : accessoryDataMap.entrySet()) {
-                String accessoryType = entry.getKey();
-                String jsonData = entry.getValue();
-                updateProgress("Processing " + accessoryType + " data");
-
-                CompletableFuture<List<Accessory>> future = CompletableFuture.supplyAsync(() -> {
-                    List<Accessory> typeAccessories = new ArrayList<>();
-                    JSONArray jsonArray = new JSONArray(jsonData);
-
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        int currentProcessed = processedCount.incrementAndGet();
-
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        String name = jsonObject.getString("name");
-                        int id = jsonObject.getInt("id");
-
-                        Accessory accessory = new Accessory(name, id);
-                        accessory.setBasePrice(jsonObject.getInt("basePrice"));
-
-                        boolean isCostume = entry.getKey().equalsIgnoreCase("costume");
-
-                        if (!isCostume && skipCurrentAccessory(accessory) ) {
-                            continue;
-                        }
-
-                        // Process only Silver Embroided costumes
-                        if (isCostume && !StringUtils.containsIgnoreCase(name, "Silver")) {
-                            continue;
-                        }
-
-                        // Only update every 5 accessories to avoid too frequent updates
-                        if (currentProcessed % 5 == 0 || currentProcessed == finalTotalAccessories) {
-                            updateProgress(String.format("Market data progress: %d of %d accessories (%d%%)",
-                                    currentProcessed, finalTotalAccessories,
-                                    (int)(currentProcessed * 100.0 / finalTotalAccessories)));
-                        }
-
-                        typeAccessories.add(accessory);
-                    }
-                    return typeAccessories;
-                }, executorService);
-
-                accessoryFutures.add(future);
-            }
-
-            // Wait for all processing to complete and collect results
-            List<Accessory> accessoryList = accessoryFutures.stream()
-                    .map(CompletableFuture::join)
-                    .flatMap(List::stream)
-                    .toList();
-
-            updateProgress("Enriching accessory data with enhanced information ...");
+            List<Accessory> accessoryList = createAndFilterItems(accessoryDataMap);
 
             // Step 3: Enrich accessory data in parallel
-            List<CompletableFuture<Accessory>> enrichmentFutures = new ArrayList<>();
-            for (Accessory accessory : accessoryList) {
-                CompletableFuture<Accessory> future = CompletableFuture.supplyAsync(() -> {
-                    try {
-                        enrichEnhancedData(accessory);
-                        return accessory;
-                    } catch (IOException e) {
-                        updateProgress("Error enriching data for " + accessory.getName() + ": " + e.getMessage());
-                        e.printStackTrace();
-                        return null;
-                    }
-                }, executorService);
-
-                enrichmentFutures.add(future);
-            }
-
-            // Wait for all enrichment to complete and collect valid results
-            accessories = enrichmentFutures.stream()
-                    .map(CompletableFuture::join)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
+            updateProgress(String.format("Enrichment progress: %d of %d accessories (%d%%)", 0, accessoryList.size(), 0));
+            accessories = enrichData(accessoryList);
 
             updateProgress("Market data processing complete. Found " + accessories.size() + " valid accessories");
 
@@ -142,21 +53,118 @@ public class BDOMarketConnector {
             updateProgress("Error loading market data: " + e.getMessage());
             e.printStackTrace();
         } finally {
-            // Clean up resources
+            // Cleanup resources
             executorService.shutdown();
         }
 
         return accessories;
     }
 
-    private Map<String, CompletableFuture<String>> getAccessoryDataParallel() {
+    private List<Accessory> createAndFilterItems(Map<String, String> accessoryDataMap) {
+        List<Accessory> allAccessories = new ArrayList<>();
+
+        for (Map.Entry<String, String> entry : accessoryDataMap.entrySet()) {
+            String accessoryType = entry.getKey();
+            String jsonData = entry.getValue();
+
+            JSONArray jsonArray = new JSONArray(jsonData);
+            boolean isCostume = accessoryType.equalsIgnoreCase("costume");
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String name = jsonObject.getString("name");
+                int id = jsonObject.getInt("id");
+
+                Accessory accessory = new Accessory(name, id);
+                accessory.setBasePrice(jsonObject.getInt("basePrice"));
+
+                if (isCostume) {
+                    if (!StringUtils.containsIgnoreCase(name, "Silver")) {
+                        continue;
+                    }
+                } else {
+                    if (skipCurrentAccessory(accessory)) {
+                        continue;
+                    }
+                }
+
+                allAccessories.add(accessory);
+            }
+        }
+
+        return allAccessories;
+    }
+
+    private List<Accessory> enrichData(List<Accessory> accessoryList) {
+        final int totalEnrichments = accessoryList.size();
+        AtomicInteger enrichedCount = new AtomicInteger(0);
+        List<CompletableFuture<Accessory>> enrichmentFutures = new ArrayList<>();
+
+        // Seperate future to keep track of progress in a single process
+        CompletableFuture<Void> progressFuture = createAndRunProgressFuture(totalEnrichments, enrichedCount);
+
+        // The actual futures that call the api for data enrichment in parallel
+        createAndRunEnrichmentFutures(accessoryList, enrichedCount, enrichmentFutures);
+
+        // Add to also wait for progress future to finish
+        enrichmentFutures.add(progressFuture.thenApply(v -> null));
+
+        // Wait for all futures to complete then return collected data as accessories
+        return enrichmentFutures.stream()
+                .map(CompletableFuture::join)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
+    private void createAndRunEnrichmentFutures(List<Accessory> accessoryList, AtomicInteger enrichedCount, List<CompletableFuture<Accessory>> enrichmentFutures) {
+        for (Accessory accessory : accessoryList) {
+            CompletableFuture<Accessory> future = CompletableFuture.supplyAsync(() -> {
+                try {
+                    enrichEnhancedData(accessory);
+                    enrichedCount.incrementAndGet();
+                    return accessory;
+                } catch (IOException e) {
+                    updateProgress("Error enriching data for " + accessory.getName() + ": " + e.getMessage());
+                    e.printStackTrace();
+                    return null;
+                }
+            }, executorService);
+
+            enrichmentFutures.add(future);
+        }
+    }
+
+    private CompletableFuture<Void> createAndRunProgressFuture(int totalEnrichments, AtomicInteger enrichedCount) {
+        CompletableFuture<Void> progressFuture = CompletableFuture.runAsync(() -> {
+            int lastReported = 0;
+            while (lastReported < totalEnrichments) {
+                int currentCount = enrichedCount.get();
+                if (currentCount > lastReported) {
+                    updateProgress(String.format("Enrichment progress: %d of %d accessories (%d%%)",
+                            currentCount, totalEnrichments,
+                            (int) (currentCount * 100.0 / totalEnrichments)));
+                    lastReported = currentCount;
+                }
+                try {
+                    Thread.sleep(100); // Kurze Pause, um CPU-Belastung zu reduzieren
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
+        }, executorService);
+        return progressFuture;
+    }
+
+    private Map<String, String> getAccessoryDataParallel() {
         Map<String, CompletableFuture<String>> futures = new HashMap<>();
 
         Map<String, String> endpoints = new HashMap<>();
-        //endpoints.put("ring", Constants.ACCESSORY_RING_CALL_URL);
-        //endpoints.put("necklace", Constants.ACCESSORY_NECKLACE_CALL_URL);
-        //endpoints.put("earring", Constants.ACCESSORY_EARRING_CALL_URL);
-        //endpoints.put("belt", Constants.ACCESSORY_BELT_CALL_URL);
+        endpoints.put("ring", Constants.ACCESSORY_RING_CALL_URL);
+        endpoints.put("necklace", Constants.ACCESSORY_NECKLACE_CALL_URL);
+        endpoints.put("earring", Constants.ACCESSORY_EARRING_CALL_URL);
+        endpoints.put("belt", Constants.ACCESSORY_BELT_CALL_URL);
         endpoints.put("costume", Constants.FUNCTIONAL_ARMOR_CALL_URL);
 
         AtomicInteger processed = new AtomicInteger(0);
@@ -200,7 +208,12 @@ public class BDOMarketConnector {
             futures.put(accessoryType, future);
         }
 
-        return futures;
+        Map<String, String> accessoryDataMap = new ConcurrentHashMap<>();
+        for (Map.Entry<String, CompletableFuture<String>> entry : futures.entrySet()) {
+            accessoryDataMap.put(entry.getKey(), entry.getValue().join());
+        }
+
+        return accessoryDataMap;
     }
 
     private static boolean skipCurrentAccessory(Accessory accessory) {

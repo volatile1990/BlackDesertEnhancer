@@ -27,7 +27,7 @@ public class AccessoryEnhancer {
 	private final long[] failstackCost;         // Cost of failstack at each level
 	private final int[] pityThreshold;          // Number of fails needed for guaranteed success
 	private final double[] chanceIncreaseOnFail;// How much the chance increases per fail
-	private final double[] changeIncreaseOnFailAfterSoftcap;
+	private final double[] chanceIncreaseOnFailAfterSoftcap;
 	private final int[] softcapThreshold;
 
 	private FailStackSet stacksUsed;
@@ -73,7 +73,7 @@ public class AccessoryEnhancer {
 		this.pityThreshold = new int[] { 5, 6, 8, 10 };
 		this.failCounter = new int[] { 0, 0, 0, 0 };
 		this.chanceIncreaseOnFail = new double[] { 0.025, 0.01, 0.0075, 0.0025 };
-		this.changeIncreaseOnFailAfterSoftcap = new double[] { 0.005, 0.002, 0.0015, 0.0005 };
+		this.chanceIncreaseOnFailAfterSoftcap = new double[] { 0.005, 0.002, 0.0015, 0.0005 };
 		this.softcapThreshold = new int[] { 18, 40, 44, 110 };
 
 		this.totalEnhanceCost = 0;
@@ -133,7 +133,7 @@ public class AccessoryEnhancer {
 
 		if (failCounter[currentLevel] + stack > this.softcapThreshold[currentLevel]) {
 			return enhanceChances[currentLevel] +
-					(failCounter[currentLevel] * changeIncreaseOnFailAfterSoftcap[currentLevel]) * 100;
+					(failCounter[currentLevel] * chanceIncreaseOnFailAfterSoftcap[currentLevel]) * 100;
 		}
 
 		return enhanceChances[currentLevel] +

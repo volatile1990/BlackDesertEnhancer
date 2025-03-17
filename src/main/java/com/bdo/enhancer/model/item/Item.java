@@ -1,6 +1,7 @@
 package com.bdo.enhancer.model.item;
 
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 @Data
 public class Item {
@@ -16,5 +17,9 @@ public class Item {
 	public Item(String name, int id) {
 		this.name = name;
 		this.id = id;
+	}
+
+	public boolean isCostume() {
+		return StringUtils.containsIgnoreCase(this.getName(), "Silver");
 	}
 }

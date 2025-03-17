@@ -14,17 +14,17 @@ import com.bdo.enhancer.model.stack.FailStackSet;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @Setter
 @Getter
@@ -32,9 +32,6 @@ import java.util.function.Consumer;
 public class AccessoryProfitCalculator {
 
     private int simulationRuns = Constants.SIMULATION_RUN_COUNT;
-
-    // Anzahl der Threads für die parallele Berechnung
-    private int threadCount = Runtime.getRuntime().availableProcessors();
 
     // Default stacks that can be overridden - using the new Stack interface instead of OldAccessoryStack
     private AbstractStack monStack = AccessoryStack.FOURTY;
@@ -49,7 +46,6 @@ public class AccessoryProfitCalculator {
     @Setter
     private Consumer<String> progressCallback;
 
-    // Completely restructured method to calculate by enhancement level
     public List<AccessoryEnhancementResult> calculateProfits() {
         if (cachedAccessories == null || cachedAccessories.isEmpty()) {
             // Reload if nothing is cached
@@ -62,13 +58,12 @@ public class AccessoryProfitCalculator {
     }
 
     public List<AccessoryEnhancementResult> calculateProfitsWithAccessories(List<Accessory> accessories) {
-        // Accessoires im Cache speichern
+
+        // Cache accessories to calculate without fetching every time
         this.cachedAccessories = accessories;
 
-        // Thread-sichere Map für Zwischenergebnisse
+        // Initialize enhancement results for all accessories
         Map<String, AccessoryEnhancementResult> resultMap = new ConcurrentHashMap<>();
-
-        // Initialisiere Ergebnisobjekte für alle Accessoires
         for (Accessory accessory : accessories) {
             resultMap.put(accessory.getName(), new AccessoryEnhancementResult(
                     accessory.getName(),
@@ -80,20 +75,19 @@ public class AccessoryProfitCalculator {
         }
 
         // Erstelle einen Thread-Pool
-        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+        ExecutorService executorService = Executors.newWorkStealingPool();
 
         try {
-            // DUO-Berechnungen (Level 2)
+            // Simulate and calculate DUO enhancement
             calculateLevelInParallel(accessories, resultMap, 2, executorService);
 
-            // TRI-Berechnungen (Level 3)
+            // Simulate and calculate TRI enhancement
             calculateLevelInParallel(accessories, resultMap, 3, executorService);
 
-            // TET-Berechnungen (Level 4)
+            // Simulate and calculate TET enhancement
             calculateLevelInParallel(accessories, resultMap, 4, executorService);
 
         } finally {
-            // Thread-Pool beenden
             executorService.shutdown();
         }
 
@@ -104,57 +98,42 @@ public class AccessoryProfitCalculator {
         return new ArrayList<>(resultMap.values());
     }
 
-    // Neue Methode für parallele Berechnung pro Enhancement-Level
     private void calculateLevelInParallel(List<Accessory> accessories,
                                           Map<String, AccessoryEnhancementResult> resultMap,
-                                          int level,
+                                          int targetLevel,
                                           ExecutorService executorService) {
-        String levelName = getLevelName(level);
+        String levelName = getLevelName(targetLevel);
         updateProgress("Calculating " + levelName + " enhancements for all accessories...");
 
-        // CountDownLatch zur Synchronisation
-        CountDownLatch latch = new CountDownLatch(accessories.size());
-
-        // Fortschrittsanzeige
+        // Progress bar values
         AtomicInteger completedCount = new AtomicInteger(0);
         int totalCount = accessories.size();
 
-        // Für jedes Accessory einen Task starten
-        for (Accessory accessory : accessories) {
-            executorService.submit(() -> {
-                try {
-                    // Berechnung für dieses Accessory
-                    EnhancementResult result = calculateEnhancementCost(accessory, level);
-                    long profit = calculateProfit(getPrice(accessory, level), result.avgCost);
+        // Create a list of CompletableFuture tasks
+        List<CompletableFuture<Void>> futures = accessories.stream()
+                .map(accessory -> CompletableFuture.runAsync(() -> {
+                    try {
+                        // Simulate enhancement and calculate cost/profit
+                        EnhancementResult result = calculateEnhancementCost(accessory, targetLevel);
+                        long profit = calculateProfit(getPrice(accessory, targetLevel), result.avgCost);
 
-                    // Ergebnis aktualisieren
-                    AccessoryEnhancementResult accessoryResult = resultMap.get(accessory.getName());
-                    updateAccessoryResult(accessoryResult, level, result.avgItems, profit);
+                        // Update resultMap
+                        AccessoryEnhancementResult accessoryResult = resultMap.get(accessory.getName());
+                        updateAccessoryResult(accessoryResult, targetLevel, result.avgItems, profit);
 
-                    // Fortschritt melden
-                    int completed = completedCount.incrementAndGet();
-                    if (completed % 5 == 0 || completed == totalCount) {
-                        updateProgress("Calculating " + levelName + " enhancements: " +
-                                completed + "/" + totalCount + " complete");
+                        // Update progress bar output
+                        int completed = completedCount.incrementAndGet();
+                        updateProgress("Calculating " + levelName + " enhancements: " + completed + "/" + totalCount + " complete");
+                    } catch (Exception e) {
+                        log.error("Error calculating enhancement for {} at level {}", accessory.getName(), targetLevel, e);
                     }
-                } catch (Exception e) {
-                    log.error("Error calculating enhancement for {} at level {}", accessory.getName(), level, e);
-                } finally {
-                    latch.countDown();
-                }
-            });
-        }
+                }, executorService))
+                .collect(Collectors.toList());
 
-        try {
-            // Warten bis alle Tasks für dieses Level abgeschlossen sind
-            latch.await();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            log.error("Interrupted while waiting for enhancement calculations", e);
-        }
+        // Wait for all futures to complete
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
     }
 
-    // Hilfsmethode zum Abrufen des Preises für ein bestimmtes Level
     private long getPrice(Accessory accessory, int level) {
         return switch (level) {
             case 2 -> accessory.getDuoPrice();
@@ -164,7 +143,6 @@ public class AccessoryProfitCalculator {
         };
     }
 
-    // Hilfsmethode zum Aktualisieren des Ergebnisses für ein bestimmtes Level
     private synchronized void updateAccessoryResult(AccessoryEnhancementResult result, int level, long items, long profit) {
         switch (level) {
             case 2 -> {
@@ -183,7 +161,6 @@ public class AccessoryProfitCalculator {
         }
     }
 
-    // Hilfsmethode um den Namen des Levels zu erhalten
     private String getLevelName(int level) {
         return switch (level) {
             case 2 -> "DUO";
@@ -213,25 +190,26 @@ public class AccessoryProfitCalculator {
         return new EnhancementResult(totalCost / simulationRuns, totalItems / simulationRuns);
     }
 
-    private SimulationRun simulateEnhancement(Accessory accessory, int targetLevel) {
+    private SimulationRun simulateEnhancement(Accessory item, int targetLevel) {
 
-        if (StringUtils.containsIgnoreCase(accessory.getName(), "Silver")) {
-            // Get costume stack for corresponding stack count
+        if (item.isCostume()) {
+            // Apply costume stacks
             monStack = CostumeStack.findByStackCount(monStack.getStackCount());
             duoStack = CostumeStack.findByStackCount(duoStack.getStackCount());
             triStack = CostumeStack.findByStackCount(triStack.getStackCount());
             tetStack = CostumeStack.findByStackCount(tetStack.getStackCount());
         }
 
-        // Berechne die Kosten der Failstacks
+        // Get stack costs
         long monStackCost = monStack.getBlackStoneCount() * Constants.BLACK_STONE_PRICE;
         long duoStackCost = duoStack.getBlackStoneCount() * Constants.BLACK_STONE_PRICE;
         long triStackCost = triStack.getBlackStoneCount() * Constants.BLACK_STONE_PRICE;
         long tetStackCost = tetStack.getBlackStoneCount() * Constants.BLACK_STONE_PRICE;
 
-        // Die FailStackSet-Klasse muss ebenfalls angepasst werden, um mit Stack statt OldAccessoryStack zu arbeiten
+        // Setup used stacks
         FailStackSet stacksUsed = new FailStackSet(this.monStack, this.duoStack, this.triStack, this.tetStack);
 
+        // Setup enhance chances
         double[] enhanceChances = new double[]{
                 monStack.getMonChance(),
                 duoStack.getDuoChance(),
@@ -239,15 +217,19 @@ public class AccessoryProfitCalculator {
                 tetStack.getTetChance()
         };
 
+        // Setup failstack cost
         long[] failstackCost = new long[]{monStackCost, duoStackCost, triStackCost, tetStackCost};
 
-        AccessoryEnhancer enhancer = new AccessoryEnhancer(accessory.getBasePrice(), enhanceChances, failstackCost);
+        // Init enhancer with stack data
+        AccessoryEnhancer enhancer = new AccessoryEnhancer(item.getBasePrice(), enhanceChances, failstackCost);
         enhancer.setStacksUsed(stacksUsed);
 
+        // Enhance until target level is reached
         while (enhancer.getCurrentLevel() < targetLevel) {
             enhancer.enhance();
         }
 
+        // Seperate cost value needed as it also includes stacks used
         return new SimulationRun(enhancer.getTotalEnhanceCost(), enhancer.getTotalItemsConsumed());
     }
 
