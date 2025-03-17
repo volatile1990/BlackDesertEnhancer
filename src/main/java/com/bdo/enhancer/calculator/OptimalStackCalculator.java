@@ -6,6 +6,7 @@ import com.bdo.enhancer.model.item.Accessory;
 import com.bdo.enhancer.model.result.OptimalStackResult;
 import com.bdo.enhancer.model.stack.AbstractStack;
 import com.bdo.enhancer.model.stack.AccessoryStack;
+import com.bdo.enhancer.model.stack.CostumeStack;
 import com.bdo.enhancer.model.stack.FailStackSet;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -78,7 +79,8 @@ public class OptimalStackCalculator {
             for (Accessory accessory : accessories) {
                 executorService.submit(() -> {
                     try {
-                        OptimalStackResult optimalResult = findOptimalStacksForAccessory(accessory);
+                        OptimalStackResult optimalResult = optimalResult = findOptimalStacksForAccessory(accessory);
+
                         synchronized (results) {
                             results.add(optimalResult);
                         }
@@ -119,7 +121,7 @@ public class OptimalStackCalculator {
      * Gibt Konfigurationsinformationen aus
      */
     private void logConfiguration(Consumer<String> progressCallback) {
-        AbstractStack[] nonFreeStacks = getNonFreeStacks();
+        AbstractStack[] nonFreeStacks = getNonFreeStacks(false);
         int totalStacks = AccessoryStack.VALUES.length;
         int usedStacks = nonFreeStacks.length;
         long combinations = (long) Math.pow(usedStacks, 2); // Nur PRI und DUO variieren für TRI
@@ -183,26 +185,37 @@ public class OptimalStackCalculator {
      */
     private OptimalStackResult findOptimalStacksForAccessory(Accessory accessory) {
         // Filtere alle Stacks, die "FREE" im Namen haben
-        AbstractStack[] nonFreeStacks = getNonFreeStacks();
+        AbstractStack[] nonFreeStacks = getNonFreeStacks(accessory.isCostume());
 
         OptimalStackResult bestResult = new OptimalStackResult(
                 accessory.getName(),
-                AccessoryStack.FOURTY,  // Standardwerte
+                AccessoryStack.FOURTY,
                 AccessoryStack.FOURTY,
                 AccessoryStack.FOURTYFIVE,
                 Long.MIN_VALUE
         );
 
-        // Alle möglichen Kombinationen von nicht-freien PRI und DUO stacks durchprobieren
+        // Try all combinations of stacks to find the most profitable one
         for (AbstractStack priStack : nonFreeStacks) {
             for (AbstractStack duoStack : nonFreeStacks) {
-                // Probiere alle verfügbaren TRI stacks
+
+                // DUO stack must be higher than PRI
+                if (priStack.getStackCount() > duoStack.getStackCount()) {
+                    continue;
+                }
+
                 for (AbstractStack triStack : nonFreeStacks) {
-                    // Berechne Gewinn für diese Kombination, jetzt für TRI Level (3) statt TET (4)
+
+                    // TRI stack must be higher than PRI and DUO
+                    if (priStack.getStackCount() > triStack.getStackCount() || duoStack.getStackCount() > triStack.getStackCount()) {
+                        continue;
+                    }
+
+                    // Calculate profit for current stack configuration
                     long triProfit = calculateProfitForCombination(
                             accessory, priStack, duoStack, triStack, 3);
 
-                    // Wenn besser als bisher bestes Ergebnis, merken
+                    // Save best result
                     if (triProfit > bestResult.totalProfit) {
                         bestResult = new OptimalStackResult(
                                 accessory.getName(),
@@ -224,7 +237,12 @@ public class OptimalStackCalculator {
      *
      * @return Array mit allen Stacks, die nicht "FREE" im Namen haben
      */
-    private AbstractStack[] getNonFreeStacks() {
+    private AbstractStack[] getNonFreeStacks(boolean isCostume) {
+        if (isCostume) {
+            return Arrays.stream(CostumeStack.VALUES)
+                    .filter(stack -> stack.getStackCount() <= 60)
+                    .toArray(AbstractStack[]::new);
+        }
         return Arrays.stream(AccessoryStack.VALUES)
                 .filter(stack -> stack.getStackCount() <= 60)
                 .toArray(AbstractStack[]::new);
@@ -245,20 +263,21 @@ public class OptimalStackCalculator {
                                                AbstractStack duoStack,
                                                AbstractStack triStack,
                                                int targetLevel) {
-        // Stack-Kosten berechnen
+        // Calc stack costs
         long priStackCost = priStack.getBlackStoneCount() * Constants.BLACK_STONE_PRICE;
         long duoStackCost = duoStack.getBlackStoneCount() * Constants.BLACK_STONE_PRICE;
         long triStackCost = triStack.getBlackStoneCount() * Constants.BLACK_STONE_PRICE;
 
-        // Enhancement-Chancen und Kosten für diese Kombination
+        // Setup enhancement chances
         double[] enhanceChances = new double[]{
                 priStack.getMonChance(),
                 duoStack.getDuoChance(),
                 triStack.getTriChance(),
-                0  // TET-Chance nicht relevant
+                0 // Only up to TRI for now
         };
 
-        long[] failstackCost = new long[]{priStackCost, duoStackCost, triStackCost, 0}; // TET-Kosten nicht relevant
+        // Setup failstack Cost
+        long[] failstackCost = new long[]{priStackCost, duoStackCost, triStackCost, 0};
 
         // Kosten und Verbrauchte Items berechnen
         long totalCost = 0;
@@ -266,8 +285,7 @@ public class OptimalStackCalculator {
         FailStackSet stacksUsed = new FailStackSet(priStack, duoStack, triStack, null);
 
         for (int i = 0; i < simulationRunsPerCombination; i++) {
-            AccessoryEnhancer enhancer = new AccessoryEnhancer(
-                    accessory.getBasePrice(), enhanceChances, failstackCost);
+            AccessoryEnhancer enhancer = new AccessoryEnhancer(accessory.getBasePrice(), enhanceChances, failstackCost);
             enhancer.setStacksUsed(stacksUsed);
 
             while (enhancer.getCurrentLevel() < targetLevel) {
