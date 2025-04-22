@@ -122,12 +122,12 @@ public class BDOMarketConnector {
             CompletableFuture<Accessory> future = CompletableFuture.supplyAsync(() -> {
                 try {
                     enrichEnhancedData(accessory);
-                    enrichedCount.incrementAndGet();
                     return accessory;
-                } catch (IOException e) {
+                } catch (Exception e) {
                     updateProgress("Error enriching data for " + accessory.getName() + ": " + e.getMessage());
-                    e.printStackTrace();
                     return null;
+                } finally {
+                    enrichedCount.incrementAndGet();
                 }
             }, executorService);
 
@@ -136,7 +136,8 @@ public class BDOMarketConnector {
     }
 
     private CompletableFuture<Void> createAndRunProgressFuture(int totalEnrichments, AtomicInteger enrichedCount) {
-        CompletableFuture<Void> progressFuture = CompletableFuture.runAsync(() -> {
+        // Kurze Pause, um CPU-Belastung zu reduzieren
+        return CompletableFuture.runAsync(() -> {
             int lastReported = 0;
             while (lastReported < totalEnrichments) {
                 int currentCount = enrichedCount.get();
@@ -154,7 +155,6 @@ public class BDOMarketConnector {
                 }
             }
         }, executorService);
-        return progressFuture;
     }
 
     private Map<String, String> getAccessoryDataParallel() {
