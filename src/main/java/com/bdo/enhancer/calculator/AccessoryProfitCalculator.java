@@ -34,7 +34,7 @@ public class AccessoryProfitCalculator {
     private int simulationRuns = Constants.SIMULATION_RUN_COUNT;
 
     // Default stacks that can be overridden - using the new Stack interface instead of OldAccessoryStack
-    private AbstractStack monStack = AccessoryStack.FOURTY;
+    private AbstractStack monStack = AccessoryStack.THIRTY;
     private AbstractStack duoStack = AccessoryStack.FOURTY;
     private AbstractStack triStack = AccessoryStack.FOURTYFIVE;
     private AbstractStack tetStack = AccessoryStack.HUNDREDTEN_FREE;
