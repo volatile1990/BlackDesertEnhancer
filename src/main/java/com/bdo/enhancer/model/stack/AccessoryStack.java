@@ -10,6 +10,7 @@ public class AccessoryStack extends AbstractStack {
     public static final AccessoryStack THIRYFIVE = new AccessoryStack(136, 78.5, 45, 33.75, 11.25, 35);
     public static final AccessoryStack FOURTY = new AccessoryStack(230, 81, 50, 37.5, 12.5, 40);
     public static final AccessoryStack FOURTYFIVE = new AccessoryStack(406, 83.5, 51, 40.65, 13.75, 45);
+    public static final AccessoryStack FIFTYFIVE = new AccessoryStack(850, 90, 53, 42.75, 16.25, 55);
     public static final AccessoryStack SIXTY = new AccessoryStack(1540, 90, 54, 42.9, 17.5, 60);
     public static final AccessoryStack SEVENTY_FREE = new AccessoryStack(0, 90, 56, 45, 20, 70);
     public static final AccessoryStack EIGHTY_FREE = new AccessoryStack(0, 90, 58, 46.5, 22.5, 80);
@@ -19,7 +20,7 @@ public class AccessoryStack extends AbstractStack {
 
     // Eine Sammlung aller vordefinierten Stacks für einfachen Zugriff
     public static final AccessoryStack[] VALUES = {
-            TEN, FIFTEEN, TWENTY, TWENTYFIVE, THIRTY, THIRYFIVE, FOURTY, FOURTYFIVE,
+            TEN, FIFTEEN, TWENTY, TWENTYFIVE, THIRTY, THIRYFIVE, FOURTY, FOURTYFIVE,FIFTYFIVE,
             SIXTY, SEVENTY_FREE, EIGHTY_FREE, NINETY_FREE, HUNDRED_FREE, HUNDREDTEN_FREE
     };
 

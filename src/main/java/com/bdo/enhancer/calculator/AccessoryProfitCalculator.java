@@ -234,6 +234,6 @@ public class AccessoryProfitCalculator {
     }
 
     private long calculateProfit(long salePrice, long cost) {
-        return (long) ((salePrice - cost) * Constants.MARKET_TAX);
+        return (long) ((salePrice * Constants.MARKET_TAX) - cost);
     }
 }
