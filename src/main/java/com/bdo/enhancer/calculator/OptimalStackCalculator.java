@@ -300,6 +300,6 @@ public class OptimalStackCalculator {
 
         // Profit berechnen - jetzt mit TRI-Preis statt TET-Preis
         long salePrice = accessory.getTriPrice(); // Für TRI
-        return (long) ((salePrice - avgCost) * Constants.MARKET_TAX);
+        return (long) ((salePrice * Constants.MARKET_TAX) - avgCost);
     }
 }
