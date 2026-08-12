@@ -60,7 +60,7 @@ public class BDOMarketConnector {
         return accessories;
     }
 
-    private List<Accessory> createAndFilterItems(Map<String, String> accessoryDataMap) {
+    List<Accessory> createAndFilterItems(Map<String, String> accessoryDataMap) {
         List<Accessory> allAccessories = new ArrayList<>();
 
         for (Map.Entry<String, String> entry : accessoryDataMap.entrySet()) {
@@ -68,7 +68,7 @@ public class BDOMarketConnector {
             String jsonData = entry.getValue();
 
             JSONArray jsonArray = new JSONArray(jsonData);
-            boolean isCostume = accessoryType.equalsIgnoreCase("costume");
+            boolean isFunctionalArmor = accessoryType.equalsIgnoreCase("costume");
 
             for (int i = 0; i < jsonArray.length(); i++) {
 
@@ -79,14 +79,8 @@ public class BDOMarketConnector {
                 Accessory accessory = new Accessory(name, id);
                 accessory.setBasePrice(jsonObject.getInt("basePrice"));
 
-                if (isCostume) {
-                    if (!StringUtils.containsIgnoreCase(name, "Silver")) {
-                        continue;
-                    }
-                } else {
-                    if (skipCurrentAccessory(accessory)) {
-                        continue;
-                    }
+                if (!shouldIncludeAccessory(accessory, isFunctionalArmor)) {
+                    continue;
                 }
 
                 allAccessories.add(accessory);
@@ -94,6 +88,13 @@ public class BDOMarketConnector {
         }
 
         return allAccessories;
+    }
+
+    static boolean shouldIncludeAccessory(Accessory accessory, boolean isFunctionalArmor) {
+        if (isFunctionalArmor) {
+            return accessory.isCostume() || accessory.isManosClothing();
+        }
+        return !skipCurrentAccessory(accessory);
     }
 
     private List<Accessory> enrichData(List<Accessory> accessoryList) {
@@ -217,7 +218,7 @@ public class BDOMarketConnector {
     }
 
     private static boolean skipCurrentAccessory(Accessory accessory) {
-        // Remove manos
+        // Remove Manos accessories; Manos clothing is handled by the functional armor branch.
         if (StringUtils.containsIgnoreCase(accessory.getName(), "manos")) {
             return true;
         }
@@ -246,16 +247,16 @@ public class BDOMarketConnector {
         enrichBaseEnhancedData(item);
 
         // Get Base bidding info list
-        enrichBiddingInfoForItemLevel(item, 0);
+        enrichBiddingInfoForResultLevel(item, 0);
 
         // Get DUO bidding info list
-        enrichBiddingInfoForItemLevel(item, 2);
+        enrichBiddingInfoForResultLevel(item, 2);
 
         // Get TRI bidding info list
-        enrichBiddingInfoForItemLevel(item, 3);
+        enrichBiddingInfoForResultLevel(item, 3);
 
         // Get TET bidding info list
-        enrichBiddingInfoForItemLevel(item, 4);
+        enrichBiddingInfoForResultLevel(item, 4);
     }
 
     private void enrichBaseEnhancedData(Item item) throws IOException {
@@ -297,14 +298,15 @@ public class BDOMarketConnector {
         appendBaseEnhancementData(item, result.toString());
     }
 
-    private void enrichBiddingInfoForItemLevel(Item item, int level) throws IOException {
-        StringBuilder result = getBiddingInfoList(item, level);
+    private void enrichBiddingInfoForResultLevel(Item item, int resultLevel) throws IOException {
+        int marketLevel = item.getEnhancementType().getMarketLevel(resultLevel);
+        StringBuilder result = getBiddingInfoList(item, marketLevel);
         JSONObject jsonResponse = new JSONObject(result.toString());
 
         JSONArray orders = jsonResponse.getJSONArray("orders");
         long lowestPrice = findLowestPrice(orders);
         if (lowestPrice >= 0) {
-            switch (level) {
+            switch (resultLevel) {
                 case 0 -> item.setBasePrice(lowestPrice);
                 case 2 -> item.setDuoPrice(lowestPrice);
                 case 3 -> item.setTriPrice(lowestPrice);
@@ -352,7 +354,7 @@ public class BDOMarketConnector {
         return result;
     }
 
-    private void appendBaseEnhancementData(Item item, String response) {
+    static void appendBaseEnhancementData(Item item, String response) {
         JSONObject jsonResponse = new JSONObject(response);
         String resultMsg = jsonResponse.getString("resultMsg");
 
@@ -360,15 +362,26 @@ public class BDOMarketConnector {
             String[] split = resultMsg.split("\\|");
 
             for (String enhancementLine : split) {
-                int enhancementIndex = 2;
+                int enhancementStartIndex = 1;
                 int priceIndex = 8;
                 int baseStockIndex = 4;
                 String[] enhancementLineSplit = enhancementLine.split("-");
-                switch (enhancementLineSplit[enhancementIndex]) {
-                    case "2" -> item.setDuoPrice(Long.parseLong(enhancementLineSplit[priceIndex])); // DUO Price
-                    case "3" -> item.setTriPrice(Long.parseLong(enhancementLineSplit[priceIndex])); // TRI Price
-                    case "4" -> item.setTetPrice(Long.parseLong(enhancementLineSplit[priceIndex])); // TET Price
-                    case "0" -> item.setBaseStock(Integer.parseInt(enhancementLineSplit[baseStockIndex])); // Base Stock
+                int marketLevel = Integer.parseInt(enhancementLineSplit[enhancementStartIndex]);
+
+                if (marketLevel == 0) {
+                    item.setBaseStock(Integer.parseInt(enhancementLineSplit[baseStockIndex]));
+                    continue;
+                }
+
+                int resultLevel = item.getEnhancementType().getResultLevel(marketLevel);
+                long price = Long.parseLong(enhancementLineSplit[priceIndex]);
+                switch (resultLevel) {
+                    case 2 -> item.setDuoPrice(price);
+                    case 3 -> item.setTriPrice(price);
+                    case 4 -> item.setTetPrice(price);
+                    default -> {
+                        // This enhancement level is not displayed by the application.
+                    }
                 }
             }
         } else {

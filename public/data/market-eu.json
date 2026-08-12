@@ -1,0 +1,6160 @@
+{
+  "schemaVersion": 1,
+  "region": "eu",
+  "fetchedAt": "2026-08-12T13:00:20.842Z",
+  "source": "Scheduled order-book snapshot (Arsha / Pearl Abyss build fallback)",
+  "items": [
+    {
+      "id": 12001,
+      "name": "Yuria Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 95500,
+          "sellersAtLowest": 1,
+          "totalSellers": 6,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12002,
+      "name": "Bares Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 33400,
+          "sellersAtLowest": 2,
+          "totalSellers": 3,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12003,
+      "name": "Hesus Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 30000,
+          "sellersAtLowest": 5,
+          "totalSellers": 12,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 1330000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 4880000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12004,
+      "name": "Elisha Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 33100,
+          "sellersAtLowest": 2,
+          "totalSellers": 3,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12005,
+      "name": "Kalis Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 33800,
+          "sellersAtLowest": 2,
+          "totalSellers": 24,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12006,
+      "name": "Talis Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 32400,
+          "sellersAtLowest": 1,
+          "totalSellers": 15,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12007,
+      "name": "Mark of Shadow",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 1140000,
+          "sellersAtLowest": 3159,
+          "totalSellers": 3671,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 53000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 14,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 272000000,
+          "sellersAtLowest": 5,
+          "totalSellers": 52,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12008,
+      "name": "Shrine Guardian Token",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 159000,
+          "sellersAtLowest": 1409,
+          "totalSellers": 2009,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 40300000,
+          "sellersAtLowest": 42,
+          "totalSellers": 95,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12010,
+      "name": "Ring of Good Deeds",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 76500,
+          "sellersAtLowest": 1,
+          "totalSellers": 66,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 2130000,
+          "sellersAtLowest": 1,
+          "totalSellers": 20,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 22600000,
+          "sellersAtLowest": 1,
+          "totalSellers": 2,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12011,
+      "name": "Nert Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 1460000,
+          "sellersAtLowest": 1,
+          "totalSellers": 22,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12012,
+      "name": "Outlaw's Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 675000,
+          "sellersAtLowest": 1,
+          "totalSellers": 22,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 45300000,
+          "sellersAtLowest": 1,
+          "totalSellers": 3,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12017,
+      "name": "Blue Coral Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 1100000,
+          "sellersAtLowest": 1,
+          "totalSellers": 129,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 135000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 34,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12018,
+      "name": "Red Coral Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 1130000,
+          "sellersAtLowest": 7,
+          "totalSellers": 29,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 68500000,
+          "sellersAtLowest": 1,
+          "totalSellers": 52,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 301000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 5,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 357000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12031,
+      "name": "Ring of Crescent Guardian",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 4920000,
+          "sellersAtLowest": 1,
+          "totalSellers": 29,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 124000000,
+          "sellersAtLowest": 4,
+          "totalSellers": 11,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 439000000,
+          "sellersAtLowest": 17,
+          "totalSellers": 44,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 1180000000,
+          "sellersAtLowest": 3,
+          "totalSellers": 10,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12032,
+      "name": "Ring of Cadry Guardian",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 57000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 459000000,
+          "sellersAtLowest": 40,
+          "totalSellers": 68,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 1840000000,
+          "sellersAtLowest": 3,
+          "totalSellers": 18,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 5750000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12042,
+      "name": "Forest Ronaros Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 4570000,
+          "sellersAtLowest": 2,
+          "totalSellers": 49,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 162000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 3,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 580000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 5,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12045,
+      "name": "Rainbow Coral Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 2410000,
+          "sellersAtLowest": 6176,
+          "totalSellers": 6549,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 299000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 950000000,
+          "sellersAtLowest": 11,
+          "totalSellers": 12,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12059,
+      "name": "Kagtum Submission Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 1630000,
+          "sellersAtLowest": 18927,
+          "totalSellers": 22208,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 32900000,
+          "sellersAtLowest": 7,
+          "totalSellers": 20,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 183000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 36,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12060,
+      "name": "Eye of the Ruins Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 6800000,
+          "sellersAtLowest": 264,
+          "totalSellers": 553,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 515000000,
+          "sellersAtLowest": 2,
+          "totalSellers": 16,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 1460000000,
+          "sellersAtLowest": 9,
+          "totalSellers": 9,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12061,
+      "name": "Tungrad Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 39700000,
+          "sellersAtLowest": 5,
+          "totalSellers": 78,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 575000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 5,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 1520000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 13,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12068,
+      "name": "Ominous Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 72500000,
+          "sellersAtLowest": 1,
+          "totalSellers": 9,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 890000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 10,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 2900000000,
+          "sellersAtLowest": 7,
+          "totalSellers": 17,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 9250000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 4,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12091,
+      "name": "Ocean Haze Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 55500000,
+          "sellersAtLowest": 74,
+          "totalSellers": 108,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 505000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 18,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 1610000000,
+          "sellersAtLowest": 2,
+          "totalSellers": 11,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 6300000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12094,
+      "name": "Deboreka Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 198000000,
+          "sellersAtLowest": 123,
+          "totalSellers": 273,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 1510000000,
+          "sellersAtLowest": 2,
+          "totalSellers": 44,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 5050000000,
+          "sellersAtLowest": 2,
+          "totalSellers": 5,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 18000000000,
+          "sellersAtLowest": 3,
+          "totalSellers": 25,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12101,
+      "name": "Ruby Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 6850,
+          "sellersAtLowest": 100,
+          "totalSellers": 358,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12102,
+      "name": "Resplendent Ruby Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 42500,
+          "sellersAtLowest": 6,
+          "totalSellers": 365,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12103,
+      "name": "Blood Ruby Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 64500,
+          "sellersAtLowest": 76,
+          "totalSellers": 77,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12104,
+      "name": "Dark Blood Ruby Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 238000,
+          "sellersAtLowest": 30,
+          "totalSellers": 191,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12105,
+      "name": "Corrupt Ruby Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 1200000,
+          "sellersAtLowest": 53,
+          "totalSellers": 96,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12111,
+      "name": "Topaz Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 3050,
+          "sellersAtLowest": 33,
+          "totalSellers": 571,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12112,
+      "name": "Resplendent Topaz Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 28100,
+          "sellersAtLowest": 7,
+          "totalSellers": 357,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12113,
+      "name": "Gold Topaz Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 63000,
+          "sellersAtLowest": 139,
+          "totalSellers": 139,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12114,
+      "name": "Shining Gold Topaz Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 202000,
+          "sellersAtLowest": 122,
+          "totalSellers": 280,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12115,
+      "name": "Topaz Ring of Regeneration",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 470000,
+          "sellersAtLowest": 192,
+          "totalSellers": 302,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11601,
+      "name": "Yuria Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 99500,
+          "sellersAtLowest": 1,
+          "totalSellers": 3,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11602,
+      "name": "Bares Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 53500,
+          "sellersAtLowest": 1,
+          "totalSellers": 4,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 2640000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11603,
+      "name": "Hesus Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 55000,
+          "sellersAtLowest": 1,
+          "totalSellers": 14,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11604,
+      "name": "Elisha Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 97500,
+          "sellersAtLowest": 1,
+          "totalSellers": 5,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 1290000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11605,
+      "name": "Kalis Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 53000,
+          "sellersAtLowest": 1,
+          "totalSellers": 12,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11606,
+      "name": "Talis Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 59000,
+          "sellersAtLowest": 2,
+          "totalSellers": 2,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11607,
+      "name": "Ogre Ring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 19700000,
+          "sellersAtLowest": 1,
+          "totalSellers": 48,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 277000000,
+          "sellersAtLowest": 3,
+          "totalSellers": 18,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 840000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 15,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 3240000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 3,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11609,
+      "name": "Necklace of Good Deeds",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11610,
+      "name": "Scarla Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 6950000,
+          "sellersAtLowest": 1,
+          "totalSellers": 53,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 86500000,
+          "sellersAtLowest": 2,
+          "totalSellers": 10,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11611,
+      "name": "Bensho's Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 12500000,
+          "sellersAtLowest": 1,
+          "totalSellers": 9,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11613,
+      "name": "Ancient Guardian's Seal",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11625,
+      "name": "Sicil's Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 5450000,
+          "sellersAtLowest": 1160,
+          "totalSellers": 1910,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 176000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 477000000,
+          "sellersAtLowest": 5,
+          "totalSellers": 30,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 1580000000,
+          "sellersAtLowest": 2,
+          "totalSellers": 2,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11628,
+      "name": "Serap's Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 7500000,
+          "sellersAtLowest": 1,
+          "totalSellers": 2,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 170000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 5,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 495000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 4,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11629,
+      "name": "Tungrad Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 17100000,
+          "sellersAtLowest": 27,
+          "totalSellers": 52,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 358000000,
+          "sellersAtLowest": 13,
+          "totalSellers": 22,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 845000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 9,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 3760000000,
+          "sellersAtLowest": 6,
+          "totalSellers": 16,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11630,
+      "name": "Laytenn's Power Stone",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 13700000,
+          "sellersAtLowest": 1,
+          "totalSellers": 6,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 267000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 31,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 780000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 30,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 3040000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 2,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11631,
+      "name": "Necklace of Shultz the Gladiator",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 1140000,
+          "sellersAtLowest": 97,
+          "totalSellers": 123,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 85000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 7,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11653,
+      "name": "Deboreka Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 132000000,
+          "sellersAtLowest": 59,
+          "totalSellers": 181,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 895000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 63,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 3140000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 146,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 13000000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 7,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11662,
+      "name": "Revived River Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 269000000,
+          "sellersAtLowest": 9,
+          "totalSellers": 10,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 2640000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 5350000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 2,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11663,
+      "name": "Revived Lunar Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 29200000,
+          "sellersAtLowest": 2,
+          "totalSellers": 12,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 450000000,
+          "sellersAtLowest": 3,
+          "totalSellers": 11,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 955000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 11,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 4340000000,
+          "sellersAtLowest": 2,
+          "totalSellers": 2,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11688,
+      "name": "Asadal Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 17900000,
+          "sellersAtLowest": 2,
+          "totalSellers": 16,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 299000000,
+          "sellersAtLowest": 4,
+          "totalSellers": 34,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 955000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 69,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 4150000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 20,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11701,
+      "name": "Ruby Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 16400,
+          "sellersAtLowest": 4,
+          "totalSellers": 64,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11702,
+      "name": "Resplendent Ruby Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 78500,
+          "sellersAtLowest": 70,
+          "totalSellers": 70,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11703,
+      "name": "Blood Ruby Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 201000,
+          "sellersAtLowest": 8,
+          "totalSellers": 8,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11704,
+      "name": "Dark Blood Ruby Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11706,
+      "name": "Sapphire Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 39600,
+          "sellersAtLowest": 2,
+          "totalSellers": 15,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11707,
+      "name": "Resplendent Sapphire Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11708,
+      "name": "Ocean Sapphire Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11709,
+      "name": "Translucent Ocean Sapphire Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11711,
+      "name": "Topaz Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 36100,
+          "sellersAtLowest": 38,
+          "totalSellers": 41,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11712,
+      "name": "Resplendent Topaz Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 93000,
+          "sellersAtLowest": 2,
+          "totalSellers": 16,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11713,
+      "name": "Gold Topaz Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 173000,
+          "sellersAtLowest": 5,
+          "totalSellers": 5,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11714,
+      "name": "Shining Gold Topaz Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11716,
+      "name": "Emerald Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 38500,
+          "sellersAtLowest": 18,
+          "totalSellers": 18,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11717,
+      "name": "Resplendent Emerald Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11718,
+      "name": "Forest Emerald Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11719,
+      "name": "Placid Forest Emerald Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11721,
+      "name": "Diamond Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 34000,
+          "sellersAtLowest": 30,
+          "totalSellers": 54,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11722,
+      "name": "Resplendent Diamond Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11723,
+      "name": "Star Diamond Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11724,
+      "name": "Starry Night Diamond Necklace",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 1460000,
+          "sellersAtLowest": 1,
+          "totalSellers": 2,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11801,
+      "name": "Yuria Earring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 63500,
+          "sellersAtLowest": 5,
+          "totalSellers": 9,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11802,
+      "name": "Bares Earring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 33900,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11803,
+      "name": "Hesus Earring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 31800,
+          "sellersAtLowest": 1,
+          "totalSellers": 19,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 1540000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11804,
+      "name": "Elisha Earring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 33100,
+          "sellersAtLowest": 11,
+          "totalSellers": 16,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11805,
+      "name": "Kalis Earring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 32000,
+          "sellersAtLowest": 1,
+          "totalSellers": 6,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 1530000,
+          "sellersAtLowest": 2,
+          "totalSellers": 4,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11806,
+      "name": "Talis Earring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 30100,
+          "sellersAtLowest": 1,
+          "totalSellers": 9,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11807,
+      "name": "Token of Friendship",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 8650000,
+          "sellersAtLowest": 5,
+          "totalSellers": 13,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 79500000,
+          "sellersAtLowest": 2,
+          "totalSellers": 2,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11808,
+      "name": "Witch's Earring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 27100000,
+          "sellersAtLowest": 2,
+          "totalSellers": 8,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 210000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 16,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11810,
+      "name": "Mesto Earring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 457000,
+          "sellersAtLowest": 1,
+          "totalSellers": 15,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 175000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11811,
+      "name": "Ridell Earring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 199000,
+          "sellersAtLowest": 1,
+          "totalSellers": 57,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 29600000,
+          "sellersAtLowest": 1,
+          "totalSellers": 9,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 175000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11815,
+      "name": "Blue Whale Molar Earring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 5100000,
+          "sellersAtLowest": 1,
+          "totalSellers": 8,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 301000000,
+          "sellersAtLowest": 8,
+          "totalSellers": 9,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 595000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 3,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11816,
+      "name": "Blue Coral Earring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 455000,
+          "sellersAtLowest": 2481,
+          "totalSellers": 2732,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 19000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 23,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 222000000,
+          "sellersAtLowest": 11,
+          "totalSellers": 13,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 476000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11817,
+      "name": "Red Coral Earring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 1360000,
+          "sellersAtLowest": 650,
+          "totalSellers": 812,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 34300000,
+          "sellersAtLowest": 1,
+          "totalSellers": 10,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 225000000,
+          "sellersAtLowest": 7,
+          "totalSellers": 13,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 474000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11827,
+      "name": "Fugitive Khalk's Earring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 32300000,
+          "sellersAtLowest": 4,
+          "totalSellers": 41,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 2310000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11828,
+      "name": "Tungrad Earring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 18400000,
+          "sellersAtLowest": 1,
+          "totalSellers": 22,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 279000000,
+          "sellersAtLowest": 4,
+          "totalSellers": 16,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 760000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 20,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 1090000000,
+          "sellersAtLowest": 3,
+          "totalSellers": 6,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11834,
+      "name": "Narc Ear Accessory",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 10700000,
+          "sellersAtLowest": 3,
+          "totalSellers": 3,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 212000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 4,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11853,
+      "name": "Black Distortion Earring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 33700000,
+          "sellersAtLowest": 94,
+          "totalSellers": 509,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 358000000,
+          "sellersAtLowest": 8,
+          "totalSellers": 11,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 1150000000,
+          "sellersAtLowest": 2,
+          "totalSellers": 33,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 3980000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 29,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11855,
+      "name": "Dawn Earring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 298000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 23,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 1430000000,
+          "sellersAtLowest": 20,
+          "totalSellers": 22,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 4360000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 11,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 13800000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11856,
+      "name": "Ethereal Earring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 39000000,
+          "sellersAtLowest": 78,
+          "totalSellers": 164,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 630000000,
+          "sellersAtLowest": 18,
+          "totalSellers": 24,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 1270000000,
+          "sellersAtLowest": 3,
+          "totalSellers": 29,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 6200000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 2,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11875,
+      "name": "Vaha's Dawn",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 43200000,
+          "sellersAtLowest": 47,
+          "totalSellers": 81,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 423000000,
+          "sellersAtLowest": 4,
+          "totalSellers": 4,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 1240000000,
+          "sellersAtLowest": 2,
+          "totalSellers": 15,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11882,
+      "name": "Deboreka Earring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 223000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 285,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 1990000000,
+          "sellersAtLowest": 12,
+          "totalSellers": 63,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 5500000000,
+          "sellersAtLowest": 7,
+          "totalSellers": 13,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 18600000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 8,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 11901,
+      "name": "Ruby Earrings",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 2150,
+          "sellersAtLowest": 97,
+          "totalSellers": 232,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11902,
+      "name": "Resplendent Ruby Earrings",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 22300,
+          "sellersAtLowest": 16,
+          "totalSellers": 131,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11903,
+      "name": "Blood Ruby Earrings",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 37200,
+          "sellersAtLowest": 1,
+          "totalSellers": 69,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11904,
+      "name": "Dark Blood Ruby Earrings",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 103000,
+          "sellersAtLowest": 2,
+          "totalSellers": 7,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11905,
+      "name": "Corrupt Ruby Earrings",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 470000,
+          "sellersAtLowest": 897,
+          "totalSellers": 930,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11906,
+      "name": "Sapphire Earring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 9200,
+          "sellersAtLowest": 14,
+          "totalSellers": 17,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11907,
+      "name": "Resplendent Sapphire Earring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 46700,
+          "sellersAtLowest": 7,
+          "totalSellers": 16,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11908,
+      "name": "Ocean Sapphire Earring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11909,
+      "name": "Translucent Ocean Sapphire Earring",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11910,
+      "name": "Sapphire Earring of Storms",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11911,
+      "name": "Topaz Earrings",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 7750,
+          "sellersAtLowest": 97,
+          "totalSellers": 120,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11912,
+      "name": "Resplendent Topaz Earrings",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 53500,
+          "sellersAtLowest": 2,
+          "totalSellers": 82,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11913,
+      "name": "Gold Topaz Earrings",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11914,
+      "name": "Shining Gold Topaz Earrings",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 11915,
+      "name": "Topaz Earrings of Regeneration",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 2820000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12201,
+      "name": "Yuria Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 63500,
+          "sellersAtLowest": 1,
+          "totalSellers": 4,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12202,
+      "name": "Bares Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 80500,
+          "sellersAtLowest": 1,
+          "totalSellers": 3,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12203,
+      "name": "Hesus Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 41900,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12204,
+      "name": "Elisha Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 41800,
+          "sellersAtLowest": 1,
+          "totalSellers": 3,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12205,
+      "name": "Kalis Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 52000,
+          "sellersAtLowest": 2,
+          "totalSellers": 2,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12206,
+      "name": "Talis Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 41700,
+          "sellersAtLowest": 1,
+          "totalSellers": 5,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12208,
+      "name": "Rhutum Elite Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 1610000,
+          "sellersAtLowest": 2,
+          "totalSellers": 15,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12210,
+      "name": "Tree Spirit Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 3410000,
+          "sellersAtLowest": 25436,
+          "totalSellers": 26445,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 94000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 14,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 333000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 10,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12211,
+      "name": "Belt of Shultz the Gladiator",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 680000,
+          "sellersAtLowest": 287,
+          "totalSellers": 339,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 44400000,
+          "sellersAtLowest": 6,
+          "totalSellers": 19,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 185000000,
+          "sellersAtLowest": 2,
+          "totalSellers": 2,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12212,
+      "name": "Gartner Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12220,
+      "name": "Ancient Weapon Core",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 252000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 3,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12229,
+      "name": "Centaurus Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 7500000,
+          "sellersAtLowest": 6,
+          "totalSellers": 43,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 264000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 615000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 3000000000,
+          "sellersAtLowest": 2,
+          "totalSellers": 2,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12230,
+      "name": "Basilisk's Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 6800000,
+          "sellersAtLowest": 543,
+          "totalSellers": 683,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 88500000,
+          "sellersAtLowest": 2,
+          "totalSellers": 8,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 462000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 35,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 1200000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12236,
+      "name": "Valtarra Eclipsed Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 8650000,
+          "sellersAtLowest": 40,
+          "totalSellers": 114,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 79000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 21,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 491000000,
+          "sellersAtLowest": 3,
+          "totalSellers": 37,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 1440000000,
+          "sellersAtLowest": 2,
+          "totalSellers": 2,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12237,
+      "name": "Tungrad Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 23700000,
+          "sellersAtLowest": 13,
+          "totalSellers": 25,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 458000000,
+          "sellersAtLowest": 5,
+          "totalSellers": 33,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 1230000000,
+          "sellersAtLowest": 5,
+          "totalSellers": 26,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 3150000000,
+          "sellersAtLowest": 2,
+          "totalSellers": 12,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12251,
+      "name": "Orkinrad's Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 9050000,
+          "sellersAtLowest": 1,
+          "totalSellers": 174,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 125000000,
+          "sellersAtLowest": 15,
+          "totalSellers": 21,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 420000000,
+          "sellersAtLowest": 4,
+          "totalSellers": 10,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12257,
+      "name": "Turo's Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 33000000,
+          "sellersAtLowest": 3,
+          "totalSellers": 61,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 435000000,
+          "sellersAtLowest": 2,
+          "totalSellers": 58,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 1770000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 37,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 6300000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12276,
+      "name": "Deboreka Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 237000000,
+          "sellersAtLowest": 4,
+          "totalSellers": 181,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 2060000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 21,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 5500000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 3,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 17800000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 10,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12282,
+      "name": "Taebaek's Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 223000000,
+          "sellersAtLowest": 21,
+          "totalSellers": 49,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 7300000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 2,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12285,
+      "name": "Asadal Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 62000000,
+          "sellersAtLowest": 53,
+          "totalSellers": 76,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 865000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 21,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 2400000000,
+          "sellersAtLowest": 6,
+          "totalSellers": 51,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 8400000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 11,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 12301,
+      "name": "Coral Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12302,
+      "name": "Polished Coral Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12303,
+      "name": "Red Coral Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 114000,
+          "sellersAtLowest": 8,
+          "totalSellers": 9,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12304,
+      "name": "Brilliant Red Coral Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12305,
+      "name": "Twilight Red Coral Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 2440000,
+          "sellersAtLowest": 1,
+          "totalSellers": 77,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12308,
+      "name": "Blue Coral Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 114000,
+          "sellersAtLowest": 19,
+          "totalSellers": 32,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12309,
+      "name": "Brilliant Blue Coral Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12310,
+      "name": "Daybreak Blue Coral Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12313,
+      "name": "Green Coral Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12314,
+      "name": "Brilliant Green Coral Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 375000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12315,
+      "name": "Prairie Green Coral Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 1780000,
+          "sellersAtLowest": 1,
+          "totalSellers": 96,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12318,
+      "name": "Golden Coral Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12319,
+      "name": "Brilliant Golden Coral Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12320,
+      "name": "Golden Sun Coral Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12323,
+      "name": "White Coral Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 113000,
+          "sellersAtLowest": 5,
+          "totalSellers": 10,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12324,
+      "name": "Brilliant White Coral Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 323000,
+          "sellersAtLowest": 68,
+          "totalSellers": 68,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 12325,
+      "name": "Breezy White Coral Belt",
+      "category": "accessory",
+      "levels": {
+        "0": {
+          "price": 2000000,
+          "sellersAtLowest": 24,
+          "totalSellers": 52,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "error",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Snapshot refresh failed"
+        }
+      }
+    },
+    {
+      "id": 14021,
+      "name": "Silver Embroidered Trader's Clothes",
+      "category": "silver",
+      "levels": {
+        "0": {
+          "price": 1160000,
+          "sellersAtLowest": 37,
+          "totalSellers": 249,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 14028,
+      "name": "Silver Embroidered Farmer's Clothes",
+      "category": "silver",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 705015,
+      "name": "Manos Trainer's Clothes",
+      "category": "manos",
+      "levels": {
+        "0": {
+          "price": 144000000,
+          "sellersAtLowest": 9,
+          "totalSellers": 23,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 1220000000,
+          "sellersAtLowest": 6,
+          "totalSellers": 17,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 1900000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 705022,
+      "name": "Manos Hunter's Clothes",
+      "category": "manos",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": 1250000000,
+          "sellersAtLowest": 41,
+          "totalSellers": 41,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 1700000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 2,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 5550000000,
+          "sellersAtLowest": 3,
+          "totalSellers": 10,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 705032,
+      "name": "Manos Sailor's Clothes",
+      "category": "manos",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 2280000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 55,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 5450000000,
+          "sellersAtLowest": 3,
+          "totalSellers": 8,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 705037,
+      "name": "Manos Cook's Clothes",
+      "category": "manos",
+      "levels": {
+        "0": {
+          "price": 232000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 20,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 1910000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 6,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 4950000000,
+          "sellersAtLowest": 3,
+          "totalSellers": 16,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 705047,
+      "name": "Manos Alchemist's Clothes",
+      "category": "manos",
+      "levels": {
+        "0": {
+          "price": 259000000,
+          "sellersAtLowest": 31,
+          "totalSellers": 31,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 2030000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 2,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 6000000000,
+          "sellersAtLowest": 4,
+          "totalSellers": 4,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 705052,
+      "name": "Manos Fisher's Clothes",
+      "category": "manos",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 2380000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 24,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 5850000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 705517,
+      "name": "Manos Gatherer's Clothes",
+      "category": "manos",
+      "levels": {
+        "0": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": 2250000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 12,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": 6250000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 1,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    },
+    {
+      "id": 705518,
+      "name": "Manos Craftsman's Clothes",
+      "category": "manos",
+      "levels": {
+        "0": {
+          "price": 207000000,
+          "sellersAtLowest": 1,
+          "totalSellers": 6,
+          "state": "snapshot",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "2": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "3": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        },
+        "4": {
+          "price": null,
+          "sellersAtLowest": 0,
+          "totalSellers": 0,
+          "state": "unlisted",
+          "fetchedAt": "2026-08-12T13:00:20.842Z",
+          "source": "Pearl Abyss order book (build snapshot)"
+        }
+      }
+    }
+  ],
+  "materials": {
+    "blackStone": {
+      "id": 16001,
+      "key": "blackStone",
+      "label": "Black Stone",
+      "price": 144000,
+      "sellersAtLowest": 142,
+      "totalSellers": 142,
+      "state": "snapshot",
+      "fetchedAt": "2026-08-12T13:00:20.842Z",
+      "source": "Pearl Abyss order book (build snapshot)"
+    },
+    "crystallizedDespair": {
+      "id": 8411,
+      "key": "crystallizedDespair",
+      "label": "Crystallized Despair",
+      "price": 47800000,
+      "sellersAtLowest": 25,
+      "totalSellers": 2280,
+      "state": "snapshot",
+      "fetchedAt": "2026-08-12T13:00:20.842Z",
+      "source": "Pearl Abyss order book (build snapshot)"
+    },
+    "primordialBlackStone": {
+      "id": 820934,
+      "key": "primordialBlackStone",
+      "label": "Primordial Black Stone",
+      "price": 57500000,
+      "sellersAtLowest": 39,
+      "totalSellers": 1340,
+      "state": "snapshot",
+      "fetchedAt": "2026-08-12T13:00:20.842Z",
+      "source": "Pearl Abyss order book (build snapshot)"
+    },
+    "blackGem": {
+      "id": 5000,
+      "key": "blackGem",
+      "label": "Black Gem",
+      "price": 469000,
+      "sellersAtLowest": 727,
+      "totalSellers": 727,
+      "state": "snapshot",
+      "fetchedAt": "2026-08-12T13:00:20.842Z",
+      "source": "Pearl Abyss order book (build snapshot)"
+    },
+    "concentratedBlackGem": {
+      "id": 4987,
+      "key": "concentratedBlackGem",
+      "label": "Concentrated Magical Black Gem",
+      "price": 15300000,
+      "sellersAtLowest": 62,
+      "totalSellers": 11763,
+      "state": "snapshot",
+      "fetchedAt": "2026-08-12T13:00:20.842Z",
+      "source": "Pearl Abyss order book (build snapshot)"
+    },
+    "memoryFragment": {
+      "id": 44195,
+      "key": "memoryFragment",
+      "label": "Memory Fragment",
+      "price": 2540000,
+      "sellersAtLowest": 2664,
+      "totalSellers": 74301,
+      "state": "snapshot",
+      "fetchedAt": "2026-08-12T13:00:20.842Z",
+      "source": "Pearl Abyss order book (build snapshot)"
+    }
+  }
+}

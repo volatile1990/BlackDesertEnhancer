@@ -19,6 +19,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Klasse zum Berechnen der optimalen Failstack-Kombination für jedes Accessoire
@@ -63,6 +64,17 @@ public class OptimalStackCalculator {
                                                       Consumer<String> progressCallback) {
         results.clear();
 
+        List<Accessory> optimizableAccessories = accessories.stream()
+                .filter(Accessory::usesFailstacks)
+                .collect(Collectors.toList());
+        int skippedFixedChanceItems = accessories.size() - optimizableAccessories.size();
+
+        if (skippedFixedChanceItems > 0 && progressCallback != null) {
+            progressCallback.accept(String.format(
+                    "Skipping %d fixed-chance Manos clothing item(s); failstacks do not affect them",
+                    skippedFixedChanceItems));
+        }
+
         // Thread-Pool für parallele Berechnung
         ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
 
@@ -71,15 +83,15 @@ public class OptimalStackCalculator {
             logConfiguration(progressCallback);
 
             // Für jedes Accessoire die optimale Kombination berechnen
-            int totalAccessories = accessories.size();
+            int totalAccessories = optimizableAccessories.size();
             AtomicInteger processedCount = new AtomicInteger(0);
             CountDownLatch latch = new CountDownLatch(totalAccessories);
             long startTime = System.currentTimeMillis();
 
-            for (Accessory accessory : accessories) {
+            for (Accessory accessory : optimizableAccessories) {
                 executorService.submit(() -> {
                     try {
-                        OptimalStackResult optimalResult = optimalResult = findOptimalStacksForAccessory(accessory);
+                        OptimalStackResult optimalResult = findOptimalStacksForAccessory(accessory);
 
                         synchronized (results) {
                             results.add(optimalResult);
@@ -104,7 +116,7 @@ public class OptimalStackCalculator {
             latch.await();
 
             if (progressCallback != null) {
-                progressCallback.accept("Stack optimization completed for all accessories (optimized for TRI)");
+                progressCallback.accept("Stack optimization completed for all stack-dependent items (optimized for TRI)");
             }
 
         } catch (InterruptedException e) {

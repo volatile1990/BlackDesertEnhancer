@@ -51,3 +51,10 @@ Desktop.ini
 *.bak
 *.swp
 *~
+
+# Web application
+node_modules/
+dist/
+.vite/
+coverage/
+*.tsbuildinfo

@@ -213,6 +213,14 @@ public class OptimizationDialog extends JDialog {
                     // Get results
                     List<OptimalStackResult> results = get();
 
+                    if (results.isEmpty()) {
+                        JOptionPane.showMessageDialog(parent,
+                                "The selected Manos clothing uses fixed enhancement chances and cannot be optimized with failstacks.",
+                                "No Stack-Dependent Items",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        return;
+                    }
+
                     // Show dialog with isSelectionBased parameter
                     OptimizationDialog dialog = new OptimizationDialog(parent, results, isSelectionBased);
                     dialog.setVisible(true);

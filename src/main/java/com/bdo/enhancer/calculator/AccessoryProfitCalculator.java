@@ -1,6 +1,7 @@
 package com.bdo.enhancer.calculator;
 
 import com.bdo.enhancer.core.AccessoryEnhancer;
+import com.bdo.enhancer.core.ManosClothingEnhancer;
 import com.bdo.enhancer.market.MarketDataService;
 import com.bdo.enhancer.model.constants.Constants;
 import com.bdo.enhancer.model.item.Accessory;
@@ -192,29 +193,39 @@ public class AccessoryProfitCalculator {
 
     private SimulationRun simulateEnhancement(Accessory item, int targetLevel) {
 
+        if (item.isManosClothing()) {
+            return simulateManosClothingEnhancement(item, targetLevel);
+        }
+
+        AbstractStack selectedMonStack = monStack;
+        AbstractStack selectedDuoStack = duoStack;
+        AbstractStack selectedTriStack = triStack;
+        AbstractStack selectedTetStack = tetStack;
+
         if (item.isCostume()) {
             // Apply costume stacks
-            monStack = CostumeStack.findByStackCount(monStack.getStackCount());
-            duoStack = CostumeStack.findByStackCount(duoStack.getStackCount());
-            triStack = CostumeStack.findByStackCount(triStack.getStackCount());
-            tetStack = CostumeStack.findByStackCount(tetStack.getStackCount());
+            selectedMonStack = CostumeStack.findByStackCount(monStack.getStackCount());
+            selectedDuoStack = CostumeStack.findByStackCount(duoStack.getStackCount());
+            selectedTriStack = CostumeStack.findByStackCount(triStack.getStackCount());
+            selectedTetStack = CostumeStack.findByStackCount(tetStack.getStackCount());
         }
 
         // Get stack costs
-        long monStackCost = monStack.getBlackStoneCount() * Constants.BLACK_STONE_PRICE;
-        long duoStackCost = duoStack.getBlackStoneCount() * Constants.BLACK_STONE_PRICE;
-        long triStackCost = triStack.getBlackStoneCount() * Constants.BLACK_STONE_PRICE;
-        long tetStackCost = tetStack.getBlackStoneCount() * Constants.BLACK_STONE_PRICE;
+        long monStackCost = selectedMonStack.getBlackStoneCount() * Constants.BLACK_STONE_PRICE;
+        long duoStackCost = selectedDuoStack.getBlackStoneCount() * Constants.BLACK_STONE_PRICE;
+        long triStackCost = selectedTriStack.getBlackStoneCount() * Constants.BLACK_STONE_PRICE;
+        long tetStackCost = selectedTetStack.getBlackStoneCount() * Constants.BLACK_STONE_PRICE;
 
         // Setup used stacks
-        FailStackSet stacksUsed = new FailStackSet(this.monStack, this.duoStack, this.triStack, this.tetStack);
+        FailStackSet stacksUsed = new FailStackSet(
+                selectedMonStack, selectedDuoStack, selectedTriStack, selectedTetStack);
 
         // Setup enhance chances
         double[] enhanceChances = new double[]{
-                monStack.getMonChance(),
-                duoStack.getDuoChance(),
-                triStack.getTriChance(),
-                tetStack.getTetChance()
+                selectedMonStack.getMonChance(),
+                selectedDuoStack.getDuoChance(),
+                selectedTriStack.getTriChance(),
+                selectedTetStack.getTetChance()
         };
 
         // Setup failstack cost
@@ -230,6 +241,17 @@ public class AccessoryProfitCalculator {
         }
 
         // Seperate cost value needed as it also includes stacks used
+        return new SimulationRun(enhancer.getTotalEnhanceCost(), enhancer.getTotalItemsConsumed());
+    }
+
+    private SimulationRun simulateManosClothingEnhancement(Accessory item, int targetLevel) {
+        int manosTargetLevel = item.getEnhancementType().getMarketLevel(targetLevel);
+        ManosClothingEnhancer enhancer = new ManosClothingEnhancer(item.getBasePrice());
+
+        while (enhancer.getCurrentLevel() < manosTargetLevel) {
+            enhancer.enhance();
+        }
+
         return new SimulationRun(enhancer.getTotalEnhanceCost(), enhancer.getTotalItemsConsumed());
     }
 

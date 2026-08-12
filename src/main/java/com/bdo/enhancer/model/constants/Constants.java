@@ -10,6 +10,10 @@ public class Constants {
     public static final long BLACK_STONE_PRICE = 120000;
     public static final long CRYSTALLIZED_DESPAIR_PRICE = 25000000;
 
+    public static final long BLACK_GEM_PRICE = 418_000;
+    public static final long CONCENTRATED_MAGICAL_BLACK_GEM_PRICE = 14_000_000;
+    public static final long MEMORY_FRAGMENT_PRICE = 2_670_000;
+
     public static final long BASE_PRICE_ACCESSORY_THRESHOLD = 4000000;
 
     public static final int SIMULATION_RUN_COUNT = 100000;
