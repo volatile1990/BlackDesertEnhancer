@@ -20,7 +20,7 @@ Der bestehende Connector sendet Browser-unzulässige Header und POSTs direkt an 
 
 Der Desktop-Connector initialisiert Preise aus `GetWorldMarketSubList` und überschreibt sie nur, wenn ein Orderbuch Verkäufer enthält. Damit bleiben bei null Verkäufern Guide-/letzte Verkaufspreise als angeblich aktueller Marktpreis stehen. Auch der 4-Millionen-Filter nutzt vorab einen solchen Referenzpreis.
 
-**Überarbeitung:** Die Webdomäne trennt `price`, Quote-Status, Verkäufer an der günstigsten Stufe, Gesamtverkäufer, Quelle und Abrufzeit. Nur `orders.filter(sellers > 0)` wird berücksichtigt. Bei keinem Ask ist `price: null` und `state: unlisted`; die Rechnung und das Ranking bleiben aus. Käufer, Guidepreis, Durchschnitt und letzter Verkauf sind keine Fallbacks.
+**Überarbeitung:** Die Webdomäne trennt `price`, Preisart, Quote-Status, Verkäufer-/Käuferzahlen, Quelle und Abrufzeit. Zielpreise berücksichtigen ausschließlich `orders.filter(sellers > 0)`; ohne Ask bleiben sie `null/unlisted` und werden nicht gerankt. Für den BASE-Einkauf gilt auf ausdrücklichen Nutzerwunsch eine eng begrenzte Ausnahme: Fehlt eine Sell-Order, wird `max(order.price)` als höchste zulässige Preorder-Stufe verwendet und als `preorder` gekennzeichnet. Guidepreis, Durchschnitt und letzter Verkauf bleiben ausgeschlossen.
 
 ### Ein API-Fehler leert den gesamten Lauf
 
@@ -86,7 +86,7 @@ Damit sind +6 und +7 derzeit tatsächlich 100 %; verbreitete 90/80-Tabellen sind
 - Namensbasierte Klassifikation bleibt patch- und sprachabhängig. Die App lädt fest englische Namen, nutzt enge Präfixe und schließt unklare Manos-Life-Accessoires aus, anstatt sie falsch zu berechnen. Eine langfristige ID-Profilliste bleibt vorzuziehen.
 - Seit August 2025 sind im Livekatalog nur noch wenige Silver-Embroidered-Items relevant; alte Cook-Fixtures sind keine aktuelle Katalogerwartung.
 - Die dritte Kategorie wird ausdrücklich **Manos-Kleidung** genannt. Manos-Life-Accessoires benötigen ein separates Profil und sind noch nicht enthalten.
-- Zeitstempel, Quelle, Verkäuferzahl, `Live`/`Cache`/`Snapshot`/`Kein Listing`/`Fehler`, Teilfehler und manuelle Materialwerte sind sichtbar.
+- Zeitstempel, Quelle, Verkäufer-/Käuferzahlen, Preisart `Listing`/`Preorder`, `API`/`Cache`/`Snapshot`/`Kein Listing`/`Fehler`, Teilfehler und manuelle Materialwerte sind sichtbar.
 - Tastaturnavigation, semantische Tabelle, Dialog, Live-Status, Skip-Link, Fokuszustände, reduzierbare Animation und responsive Darstellung wurden ergänzt.
 
 ## P1: Abhängigkeiten und Build
@@ -102,7 +102,8 @@ Im Repository fehlt weiterhin eine Lizenzdatei. Sie wurde nicht automatisch erfu
 ## Testabdeckung der Web-Neufassung
 
 - niedrigstes aktives Ask bei ungeordneten Preisstufen;
-- leeres und buyers-only Orderbuch ergibt `null`;
+- BASE ohne Seller nutzt die höchste zulässige Preisstufe, selbst wenn dort noch kein Käufer wartet;
+- buyers-only Zielorderbuch und vollständig leeres BASE-Orderbuch ergeben `null`;
 - ungültiges Schema und Zahlen über Safe-Integer werden verworfen;
 - temporäres 503 wird wiederholt, permanentes 404 nicht;
 - HTML statt JSON wird verworfen;
@@ -110,7 +111,7 @@ Im Repository fehlt weiterhin eine Lizenzdatei. Sie wurde nicht automatisch erfu
 - vollständige aktuelle Manos-Chancentabelle;
 - direkte Stackmaterial-Kosten und bewusster Owned-Modus;
 - fractional expected items, finite Manos-Downgrade-Erwartung;
-- fehlendes Listing deaktiviert Profit;
+- fehlendes Ziel-Listing oder fehlender BASE-Orderbuchpreis deaktiviert Profit;
 - Kategorie- und SID-Trennung.
 
 ## Bewusst verbleibende Grenzen

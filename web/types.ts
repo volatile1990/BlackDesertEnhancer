@@ -1,12 +1,16 @@
 export type Region = "eu" | "na";
 export type Category = "accessory" | "silver" | "manos";
 export type PriceState = "fresh" | "snapshot" | "cached" | "unlisted" | "error";
+export type PriceKind = "listing" | "preorder" | "unavailable";
 export type ResultLevel = 2 | 3 | 4;
 
 export interface MarketQuote {
   price: number | null;
   sellersAtLowest: number;
   totalSellers: number;
+  buyersAtPrice: number;
+  totalBuyers: number;
+  kind: PriceKind;
   state: PriceState;
   fetchedAt: string;
   source: string;
@@ -34,7 +38,7 @@ export interface MaterialQuote extends MarketQuote {
 }
 
 export interface MarketSnapshot {
-  schemaVersion: 1;
+  schemaVersion: 2;
   region: Region;
   fetchedAt: string;
   source: string;

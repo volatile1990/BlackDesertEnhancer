@@ -79,5 +79,5 @@ export function classifyItem(
 }
 
 export function cacheKey(region: Region): string {
-  return `bdo-enhancer-market-v1:${region}`;
+  return `bdo-enhancer-market-v2:${region}`;
 }

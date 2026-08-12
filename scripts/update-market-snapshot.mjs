@@ -158,18 +158,72 @@ function normalizeBooks(payload) {
     .map((book) => ({ ...book, source: "Arsha order book" }));
 }
 
-function quoteFromBook(book, fetchedAt) {
+function quoteFromBook(book, fetchedAt, allowPreorder = false) {
   const asks = book.orders.filter((order) => Number.isSafeInteger(order.price) && order.price >= 0 && Number.isSafeInteger(order.sellers) && order.sellers > 0);
   const totalSellers = asks.reduce((sum, order) => sum + order.sellers, 0);
-  if (asks.length === 0) {
-    return { price: null, sellersAtLowest: 0, totalSellers: 0, state: "unlisted", fetchedAt, source: book.source ?? "Order book" };
+  const validOrders = book.orders.filter((order) => Number.isSafeInteger(order.price) && order.price >= 0);
+  const totalBuyers = validOrders.reduce((sum, order) => sum + (Number.isSafeInteger(order.buyers) ? order.buyers : 0), 0);
+  if (asks.length > 0) {
+    const lowest = asks.reduce((best, order) => order.price < best.price ? order : best);
+    const buyersAtPrice = validOrders
+      .filter((order) => order.price === lowest.price)
+      .reduce((sum, order) => sum + (Number.isSafeInteger(order.buyers) ? order.buyers : 0), 0);
+    return {
+      price: lowest.price,
+      sellersAtLowest: lowest.sellers,
+      totalSellers,
+      buyersAtPrice,
+      totalBuyers,
+      kind: "listing",
+      state: "snapshot",
+      fetchedAt,
+      source: book.source ?? "Order book",
+    };
   }
-  const lowest = asks.reduce((best, order) => order.price < best.price ? order : best);
-  return { price: lowest.price, sellersAtLowest: lowest.sellers, totalSellers, state: "snapshot", fetchedAt, source: book.source ?? "Order book" };
+
+  if (allowPreorder && validOrders.length > 0) {
+    const highestPrice = Math.max(...validOrders.map((order) => order.price));
+    const buyersAtPrice = validOrders
+      .filter((order) => order.price === highestPrice)
+      .reduce((sum, order) => sum + (Number.isSafeInteger(order.buyers) ? order.buyers : 0), 0);
+    return {
+      price: highestPrice,
+      sellersAtLowest: 0,
+      totalSellers: 0,
+      buyersAtPrice,
+      totalBuyers,
+      kind: "preorder",
+      state: "snapshot",
+      fetchedAt,
+      source: `${book.source ?? "Order book"} · höchste zulässige Preorder-Preisstufe`,
+    };
+  }
+
+  return {
+    price: null,
+    sellersAtLowest: 0,
+    totalSellers: 0,
+    buyersAtPrice: 0,
+    totalBuyers,
+    kind: "unavailable",
+    state: "unlisted",
+    fetchedAt,
+    source: book.source ?? "Order book",
+  };
 }
 
 function missingQuote(fetchedAt) {
-  return { price: null, sellersAtLowest: 0, totalSellers: 0, state: "error", fetchedAt, source: "Snapshot refresh failed" };
+  return {
+    price: null,
+    sellersAtLowest: 0,
+    totalSellers: 0,
+    buyersAtPrice: 0,
+    totalBuyers: 0,
+    kind: "unavailable",
+    state: "error",
+    fetchedAt,
+    source: "Snapshot refresh failed",
+  };
 }
 
 async function mapLimit(values, limit, task) {
@@ -307,7 +361,7 @@ async function main() {
     levels: Object.fromEntries([0, ...targetLevels].map((level) => {
       const sid = sidFor(item.category, level);
       const book = books.get(`${item.id}:${sid}`);
-      return [String(level), book ? quoteFromBook(book, fetchedAt) : missingQuote(fetchedAt)];
+      return [String(level), book ? quoteFromBook(book, fetchedAt, level === 0) : missingQuote(fetchedAt)];
     })),
   }));
   const materialQuotes = Object.fromEntries(materials.map((material) => {
@@ -315,7 +369,7 @@ async function main() {
     return [material.key, { ...material, ...(book ? quoteFromBook(book, fetchedAt) : missingQuote(fetchedAt)) }];
   }));
   const snapshot = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     region,
     fetchedAt,
     source: "Scheduled order-book snapshot (Arsha / Pearl Abyss build fallback)",

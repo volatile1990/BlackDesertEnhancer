@@ -27,13 +27,13 @@ interface CatalogRow {
   basePrice?: number;
 }
 
-interface OrderRow {
+export interface OrderRow {
   price: number;
   sellers: number;
   buyers?: number;
 }
 
-interface OrderBook {
+export interface OrderBook {
   id: number;
   sid: number;
   name?: string;
@@ -92,19 +92,31 @@ function validateQuote(value: unknown): MarketQuote {
     throw new Error("Ungültige Marktquote");
   }
   const states = new Set<PriceState>(["fresh", "snapshot", "cached", "unlisted", "error"]);
+  const kinds = new Set(["listing", "preorder", "unavailable"]);
   if (typeof value.state !== "string" || !states.has(value.state as PriceState)) throw new Error("Ungültiger Preisstatus");
+  if (typeof value.kind !== "string" || !kinds.has(value.kind)) throw new Error("Ungültige Preisart");
   if (typeof value.fetchedAt !== "string" || !Number.isFinite(Date.parse(value.fetchedAt))) throw new Error("Ungültiger Abrufzeitpunkt");
   if (typeof value.source !== "string" || value.source.length > 180) throw new Error("Ungültige Preisquelle");
   const price = value.price === null ? null : safeInteger(value.price, "price");
   const sellersAtLowest = safeInteger(value.sellersAtLowest, "sellersAtLowest");
   const totalSellers = safeInteger(value.totalSellers, "totalSellers");
+  const buyersAtPrice = safeInteger(value.buyersAtPrice, "buyersAtPrice");
+  const totalBuyers = safeInteger(value.totalBuyers, "totalBuyers");
   if (sellersAtLowest > totalSellers) throw new Error("Ungültige Verkäuferzahlen");
+  if (buyersAtPrice > totalBuyers) throw new Error("Ungültige Vorbestellungszahlen");
   if (price === null && !["unlisted", "error"].includes(value.state as string)) throw new Error("Preisloser Eintrag ohne Fehlerstatus");
   if (price !== null && ["unlisted", "error"].includes(value.state as string)) throw new Error("Preis trotz Fehlerstatus");
+  if (price === null && value.kind !== "unavailable") throw new Error("Preisloser Eintrag mit falscher Preisart");
+  if (price !== null && value.kind === "unavailable") throw new Error("Verfügbarer Preis mit falscher Preisart");
+  if (value.kind === "listing" && sellersAtLowest === 0) throw new Error("Listing ohne Verkäufer");
+  if (value.kind === "preorder" && (sellersAtLowest !== 0 || totalSellers !== 0)) throw new Error("Preorder mit Verkäufern");
   return {
     price,
     sellersAtLowest,
     totalSellers,
+    buyersAtPrice,
+    totalBuyers,
+    kind: value.kind as MarketQuote["kind"],
     state: value.state as PriceState,
     fetchedAt: value.fetchedAt,
     source: value.source,
@@ -112,7 +124,7 @@ function validateQuote(value: unknown): MarketQuote {
 }
 
 export function validateMarketSnapshot(value: unknown, expectedRegion: Region): MarketSnapshot {
-  if (!isRecord(value) || value.schemaVersion !== 1 || value.region !== expectedRegion) {
+  if (!isRecord(value) || value.schemaVersion !== 2 || value.region !== expectedRegion) {
     throw new Error("Ungültige Snapshot-Version oder Region");
   }
   if (typeof value.fetchedAt !== "string" || !Number.isFinite(Date.parse(value.fetchedAt))) throw new Error("Ungültiger Snapshot-Zeitpunkt");
@@ -132,7 +144,9 @@ export function validateMarketSnapshot(value: unknown, expectedRegion: Region): 
     const levels = Object.fromEntries(
       ["0", "2", "3", "4"].map((level) => {
         if (!(level in levelRecord)) throw new Error("Fehlende Snapshot-Preisstufe");
-        return [level, validateQuote(levelRecord[level])];
+        const quote = validateQuote(levelRecord[level]);
+        if (level !== "0" && quote.kind === "preorder") throw new Error("Preorder ist nur für BASE zulässig");
+        return [level, quote];
       }),
     );
     return { id, name: entry.name, category: entry.category as Category, levels };
@@ -144,11 +158,13 @@ export function validateMarketSnapshot(value: unknown, expectedRegion: Region): 
     const entry = materialRecord[material.key];
     if (!isRecord(entry) || entry.key !== material.key || entry.label !== material.label) throw new Error("Ungültiges Snapshot-Material");
     if (safeInteger(entry.id, "material.id") !== material.id) throw new Error("Falsche Snapshot-Material-ID");
-    return [material.key, { ...material, ...validateQuote(entry) }];
+    const quote = validateQuote(entry);
+    if (quote.kind === "preorder") throw new Error("Material darf keinen Preorder-Preis verwenden");
+    return [material.key, { ...material, ...quote }];
   });
 
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     region: expectedRegion,
     fetchedAt: value.fetchedAt,
     source: value.source,
@@ -191,6 +207,20 @@ export function lowestListedPrice(orders: OrderRow[]): {
   if (asks.length === 0) return { price: null, sellersAtLowest: 0, totalSellers: 0 };
   const lowest = asks.reduce((best, order) => (order.price < best.price ? order : best));
   return { price: lowest.price, sellersAtLowest: lowest.sellers, totalSellers };
+}
+
+export function highestPreorderPrice(orders: OrderRow[]): {
+  price: number | null;
+  buyersAtPrice: number;
+  totalBuyers: number;
+} {
+  const totalBuyers = orders.reduce((sum, order) => sum + (order.buyers ?? 0), 0);
+  if (orders.length === 0) return { price: null, buyersAtPrice: 0, totalBuyers };
+  const highestPrice = Math.max(...orders.map((order) => order.price));
+  const buyersAtPrice = orders
+    .filter((order) => order.price === highestPrice)
+    .reduce((sum, order) => sum + (order.buyers ?? 0), 0);
+  return { price: highestPrice, buyersAtPrice, totalBuyers };
 }
 
 function wait(ms: number): Promise<void> {
@@ -293,11 +323,50 @@ function buildOrderUrl(region: Region, pairs: ReadonlyArray<{ id: number; sid: n
   return `${API_BASE}/${region}/GetBiddingInfoList?${params.toString()}`;
 }
 
-function quoteFromBook(book: OrderBook, fetchedAt: string, state: PriceState = "fresh"): MarketQuote {
+export function quoteFromBook(
+  book: OrderBook,
+  fetchedAt: string,
+  state: PriceState = "fresh",
+  allowPreorder = false,
+): MarketQuote {
   const listing = lowestListedPrice(book.orders);
+  const totalBuyers = book.orders.reduce((sum, order) => sum + (order.buyers ?? 0), 0);
+  if (listing.price !== null) {
+    const buyersAtPrice = book.orders
+      .filter((order) => order.price === listing.price)
+      .reduce((sum, order) => sum + (order.buyers ?? 0), 0);
+    return {
+      ...listing,
+      buyersAtPrice,
+      totalBuyers,
+      kind: "listing",
+      state,
+      fetchedAt,
+      source: "Arsha order book",
+    };
+  }
+
+  const preorder = allowPreorder ? highestPreorderPrice(book.orders) : null;
+  if (preorder && preorder.price !== null) {
+    return {
+      price: preorder.price,
+      sellersAtLowest: 0,
+      totalSellers: 0,
+      buyersAtPrice: preorder.buyersAtPrice,
+      totalBuyers: preorder.totalBuyers,
+      kind: "preorder",
+      state,
+      fetchedAt,
+      source: "Arsha order book · höchste zulässige Preorder-Preisstufe",
+    };
+  }
+
   return {
     ...listing,
-    state: listing.price === null ? "unlisted" : state,
+    buyersAtPrice: 0,
+    totalBuyers,
+    kind: "unavailable",
+    state: "unlisted",
     fetchedAt,
     source: "Arsha order book",
   };
@@ -308,6 +377,9 @@ function unavailableQuote(fetchedAt: string): MarketQuote {
     price: null,
     sellersAtLowest: 0,
     totalSellers: 0,
+    buyersAtPrice: 0,
+    totalBuyers: 0,
+    kind: "unavailable",
     state: "error",
     fetchedAt,
     source: "Arsha order book",
@@ -474,7 +546,7 @@ async function fetchFreshSnapshot(
       [0, ...TARGET_LEVELS].map((level) => {
         const sid = marketSid(item.category, level);
         const book = books.get(`${item.id}:${sid}`);
-        return [String(level), book ? quoteFromBook(book, fetchedAt) : fallbackQuote(fallback, fallbackState, item.id, level, fetchedAt)];
+        return [String(level), book ? quoteFromBook(book, fetchedAt, "fresh", level === 0) : fallbackQuote(fallback, fallbackState, item.id, level, fetchedAt)];
       }),
     ),
   }));
@@ -507,7 +579,7 @@ async function fetchFreshSnapshot(
   ) as Record<MaterialKey, MaterialQuote>;
 
   const snapshot: MarketSnapshot = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     region,
     fetchedAt,
     source: "Arsha order books",

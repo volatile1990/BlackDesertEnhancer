@@ -76,61 +76,34 @@ const quoteTime = new Intl.DateTimeFormat("de-DE", {
 });
 
 app.innerHTML = `
-  <header class="site-header">
-    <a class="brand" href="#top" aria-label="BDO Enhance Lab Startseite">
-      <span class="brand-mark" aria-hidden="true"><span></span></span>
-      <span><strong>BDO</strong><small>Enhance Lab</small></span>
-    </a>
-    <div class="header-market" aria-live="polite">
-      <span class="status-dot" id="status-dot"></span>
-      <span id="header-status">Marktdaten werden geladen</span>
-    </div>
-  </header>
-
   <main id="top">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-copy">
-        <p class="eyebrow" id="hero-region-label">EU Central Market · listing-first</p>
-        <h1 id="hero-title">Enhancement, ohne den Marktpreis schönzurechnen.</h1>
-        <p class="hero-lede">Reproduzierbare Erwartungswerte für drei wirklich unterschiedliche Systeme. Als Preis zählt nur das aktuell günstigste Verkäuferangebot — nie Durchschnitt oder letzter Verkauf.</p>
-        <div class="hero-proof">
-          <span><i aria-hidden="true">01</i> Aktive Sell-Orders</span>
-          <span><i aria-hidden="true">02</i> Deterministische Kosten</span>
-          <span><i aria-hidden="true">03</i> Sichtbarer Fallback</span>
-        </div>
+    <section class="market-overview" aria-labelledby="page-title">
+      <div class="page-title">
+        <h1 id="page-title">BDO Enhancement-Kosten</h1>
+        <p id="hero-region-label">EU Central Market</p>
       </div>
-      <aside class="market-pulse" aria-labelledby="market-pulse-title">
-        <div class="pulse-topline">
-          <p id="market-pulse-title">Marktstatus</p>
-          <span class="source-pill" id="source-pill">Lädt …</span>
+      <div class="market-controls">
+        <div class="market-source" aria-live="polite">
+          <span class="status-dot" id="status-dot"></span>
+          <span id="header-status">Marktdaten werden geladen</span>
+          <span>Stand <time id="updated-at">—</time></span>
         </div>
-        <p class="pulse-price-rule"><span>Niedrigste Preisstufe</span><strong>mit Verkäufern &gt; 0</strong></p>
-        <div class="pulse-meta">
-          <span>Stand</span>
-          <time id="updated-at">—</time>
-        </div>
-        <div class="pulse-actions">
-          <label class="field compact-field">
-            <span>Region</span>
-            <select id="region-select" aria-label="Marktregion">
-              <option value="eu">EU</option>
-              <option value="na">NA</option>
-            </select>
-          </label>
-          <button class="button primary" id="refresh-button" type="button">Live aktualisieren</button>
-        </div>
-      </aside>
+        <label class="field compact-field">
+          <span>Region</span>
+          <select id="region-select" aria-label="Marktregion">
+            <option value="eu">EU</option>
+            <option value="na">NA</option>
+          </select>
+        </label>
+        <button class="button primary" id="refresh-button" type="button">Aktualisieren</button>
+      </div>
     </section>
 
     <section class="category-section" aria-labelledby="category-title">
-      <div class="section-heading">
-        <div><p class="eyebrow">Verstärkungstyp</p><h2 id="category-title">Die richtige Logik für jedes Item.</h2></div>
-        <p>Keine gemeinsamen Annahmen, wo das Spiel unterschiedliche Regeln nutzt.</p>
-      </div>
+      <h2 class="sr-only" id="category-title">Verstärkungstyp</h2>
       <div class="category-tabs" role="tablist" aria-label="Verstärkungstyp auswählen">
         ${(["accessory", "silver", "manos"] as Category[]).map((category, index) => `
           <button class="category-tab${index === 0 ? " active" : ""}" id="tab-${category}" type="button" role="tab" data-category="${category}" aria-controls="results" aria-selected="${index === 0}" tabindex="${index === 0 ? "0" : "-1"}">
-            <span class="tab-number">0${index + 1}</span>
             <span class="tab-copy"><strong>${categoryCopy[category].title}</strong><small>${categoryCopy[category].eyebrow}</small></span>
             <span class="tab-count" data-count="${category}">—</span>
           </button>
@@ -143,8 +116,8 @@ app.innerHTML = `
     </section>
 
     <section class="workspace" aria-labelledby="workspace-title">
-      <div class="section-heading workspace-heading">
-        <div><p class="eyebrow">Profit-Radar</p><h2 id="workspace-title">Was lohnt sich aktuell?</h2></div>
+      <div class="workspace-heading">
+        <h2 id="workspace-title">Ergebnisse</h2>
         <p id="calculation-method">Erwartungskosten inklusive Ancient Anvil, ohne Cron Stones.</p>
       </div>
 
@@ -152,7 +125,7 @@ app.innerHTML = `
 
       <div class="summary-grid" aria-label="Zusammenfassung">
         <article><span>Items</span><strong id="metric-items">—</strong><small>in dieser Kategorie</small></article>
-        <article><span>Berechenbar</span><strong id="metric-calculated">—</strong><small>mit Base- & Ziel-Listing</small></article>
+        <article><span>Berechenbar</span><strong id="metric-calculated">—</strong><small>mit BASE-Einkauf & Ziel-Listing</small></article>
         <article class="accent-metric"><span>Bester Profit</span><strong id="metric-best">—</strong><small id="metric-best-item">wartet auf Marktdaten</small></article>
         <article><span>Preisabdeckung</span><strong id="metric-coverage">—</strong><small>aktive Ziel-Listings</small></article>
       </div>
@@ -178,7 +151,7 @@ app.innerHTML = `
 
       <div class="settings-panel" id="settings-panel" hidden>
         <section id="stack-settings" aria-labelledby="stack-settings-title">
-          <div class="settings-title"><div><p class="eyebrow">Failstack-Kosten</p><h3 id="stack-settings-title">Stacks je Versuchsstufe</h3></div><p id="stack-context">Gilt für Accessoires und Silver Embroidered.</p></div>
+          <div class="settings-title"><h3 id="stack-settings-title">Stacks je Versuchsstufe</h3><p id="stack-context">Gilt für Accessoires und Silver Embroidered.</p></div>
           <div class="field-grid stack-grid">
             ${[0, 1, 2, 3].map((stage) => `
               <label class="field"><span data-stack-label="${stage}">${["PRI", "DUO", "TRI", "TET"][stage]}</span><select data-stack-stage="${stage}">${STACK_OPTIONS.map((value) => `<option value="${value}"${DEFAULT_STACKS[stage] === value ? " selected" : ""}>+${value}</option>`).join("")}</select></label>
@@ -186,7 +159,7 @@ app.innerHTML = `
           </div>
         </section>
         <section aria-labelledby="economy-settings-title">
-          <div class="settings-title"><div><p class="eyebrow">Ökonomie</p><h3 id="economy-settings-title">Steuer & Materialien</h3></div><p>Live-Listings können jederzeit manuell überschrieben werden.</p></div>
+          <div class="settings-title"><h3 id="economy-settings-title">Steuer & Materialien</h3><p>Live-Listings können jederzeit manuell überschrieben werden.</p></div>
           <div class="field-grid economy-grid">
             <label class="field"><span>Netto-Verkauf</span><div class="input-suffix"><input id="tax-input" type="number" min="1" max="100" step="0.1" value="84.5" /><i>%</i></div></label>
             <label class="field"><span>Stack-Bewertung</span><select id="stack-cost-mode"><option value="market">Marktwert der Erzeugung</option><option value="owned">Vorhanden / Kosten 0</option></select></label>
@@ -199,8 +172,8 @@ app.innerHTML = `
 
       <div class="table-shell" id="results" role="tabpanel" aria-labelledby="tab-accessory" tabindex="-1">
         <table>
-          <caption class="sr-only">Enhancement-Profit nach aktuell gelisteten Marktpreisen</caption>
-          <thead><tr><th scope="col">Item</th><th scope="col">BASE Listing</th><th scope="col" data-level-heading="2">DUO</th><th scope="col" data-level-heading="3">TRI</th><th scope="col" data-level-heading="4">TET</th><th scope="col">Bestes Ergebnis</th></tr></thead>
+          <caption class="sr-only">Enhancement-Profit nach aktuellen Orderbuchpreisen</caption>
+          <thead><tr><th scope="col">Item</th><th scope="col">BASE Einkauf</th><th scope="col" data-level-heading="2">DUO</th><th scope="col" data-level-heading="3">TRI</th><th scope="col" data-level-heading="4">TET</th><th scope="col">Bestes Ergebnis</th></tr></thead>
           <tbody id="results-body"></tbody>
         </table>
         <div class="empty-state" id="empty-state">
@@ -211,25 +184,24 @@ app.innerHTML = `
       </div>
     </section>
 
-    <section class="method-section" aria-labelledby="method-title">
-      <div><p class="eyebrow">Methodik</p><h2 id="method-title">Transparent, wenn der Markt schweigt.</h2></div>
-      <div class="method-list">
-        <article><span>01</span><div><strong>Listing statt Anzeige</strong><p>Nur die günstigste Preisstufe mit mindestens einem Verkäufer wird übernommen. Guide-, Durchschnitts- und letzter Verkaufspreis bleiben außen vor.</p></div></article>
-        <article><span>02</span><div><strong>Kein erfundener Fallback</strong><p>Ohne Sell-Order steht „Kein Listing“. Die betreffende Profitrechnung wird nicht gerankt.</p></div></article>
-        <article><span>03</span><div><strong>Resilient, nicht unsichtbar</strong><p>Timeouts, Retries und Teilresultate schützen den Abruf. Cache oder Snapshot werden sichtbar als solche markiert.</p></div></article>
-        <article><span>04</span><div><strong>Agris und Failstack getrennt</strong><p>Beim garantierten Klick bleibt die gewachsene Chance erhalten. Das Kostenmodell bewertet sie konservativ als weggepackten Stack und setzt für einen späteren Wiederaufbau den konfigurierten Startstack neu an.</p></div></article>
+    <details class="calculation-notes">
+      <summary>Berechnungsgrundlagen</summary>
+      <div class="notes-grid">
+        <p><strong>Zielpreis</strong> Günstigstes aktives Verkäuferangebot.</p>
+        <p><strong>BASE ohne Listing</strong> Höchste zulässige Preorder-Preisstufe.</p>
+        <p><strong>Fehlende Daten</strong> Cache und Snapshot werden mit Stand gekennzeichnet; ohne Ziel-Listing keine Rechnung.</p>
+        <p><strong>Ancient Anvil</strong> Gewachsener Failstack wird nach einem garantierten Klick als weggepackt behandelt; ein Rebuild nutzt den konfigurierten Startstack.</p>
       </div>
-    </section>
+    </details>
   </main>
 
   <footer>
-    <p>BDO Enhance Lab · Unabhängiges Community-Tool</p>
-    <p><a href="https://github.com/guy0090/api.arsha.io" target="_blank" rel="noreferrer">Marktdaten-Quelle</a><span>·</span><a href="https://www.naeu.playblackdesert.com/DE-DE/Wiki?wikiNo=402" target="_blank" rel="noreferrer">Ancient Anvil</a></p>
+    <a href="https://github.com/guy0090/api.arsha.io" target="_blank" rel="noreferrer">Arsha API</a>
+    <a href="https://www.naeu.playblackdesert.com/DE-DE/Wiki?wikiNo=402" target="_blank" rel="noreferrer">Ancient-Anvil-Regeln</a>
   </footer>
 
   <dialog id="optimize-dialog" aria-labelledby="optimize-title">
     <form method="dialog"><button class="dialog-close" aria-label="Dialog schließen">×</button></form>
-    <p class="eyebrow">TRI-Optimierung</p>
     <h2 id="optimize-title">Beste Stack-Kombination</h2>
     <div id="optimize-content"></div>
   </dialog>
@@ -274,32 +246,25 @@ function applyMarketMaterials(): void {
 function renderStatus(): void {
   const headerStatus = element<HTMLSpanElement>("header-status");
   const dot = element<HTMLSpanElement>("status-dot");
-  const pill = element<HTMLSpanElement>("source-pill");
   const updated = element<HTMLTimeElement>("updated-at");
   const refresh = element<HTMLButtonElement>("refresh-button");
-  element("hero-region-label").textContent = `${activeRegion.toUpperCase()} Central Market · listing-first`;
+  element("hero-region-label").textContent = `${activeRegion.toUpperCase()} Central Market`;
   refresh.disabled = loading;
-  refresh.textContent = loading ? "Aktualisiere …" : "Live aktualisieren";
+  refresh.textContent = loading ? "Aktualisiere …" : "Aktualisieren";
 
   if (loading) {
     headerStatus.textContent = "Marktdaten werden geladen";
-    pill.textContent = "Verbindet";
-    pill.dataset.state = "loading";
     dot.dataset.state = "loading";
     return;
   }
   if (!snapshot || !marketResult) {
     headerStatus.textContent = "Marktdaten nicht verfügbar";
-    pill.textContent = "Offline";
-    pill.dataset.state = "error";
     dot.dataset.state = "error";
     return;
   }
 
   const labels = { fresh: "API-Orderbücher", partial: "Teilweise API", cached: "Lokaler Cache", snapshot: "GitHub-Snapshot" };
   headerStatus.textContent = labels[marketResult.status];
-  pill.textContent = labels[marketResult.status];
-  pill.dataset.state = marketResult.status;
   dot.dataset.state = marketResult.status;
   const parsed = Date.parse(snapshot.fetchedAt);
   updated.textContent = Number.isFinite(parsed) ? dateTime.format(parsed) : "Unbekannt";
@@ -347,6 +312,12 @@ function addQuoteLine(container: HTMLElement, quote: MarketQuote | undefined): v
     meta.textContent = "Preisstatus unbekannt";
   } else if (quote.price === null) {
     meta.textContent = stateLabel(quote.state);
+  } else if (quote.kind === "preorder") {
+    const age = ["cached", "snapshot"].includes(quote.state) && Number.isFinite(Date.parse(quote.fetchedAt))
+      ? ` · ${quoteTime.format(Date.parse(quote.fetchedAt))}`
+      : "";
+    meta.textContent = `Preorder-Max · ${quote.buyersAtPrice} dort / ${quote.totalBuyers} Käufer · ${stateLabel(quote.state)}${age}`;
+    meta.title = `Höchste im Orderbuch zulässige Kaufpreis-Stufe · Quelle: ${quote.source} · Stand: ${dateTime.format(Date.parse(quote.fetchedAt))}`;
   } else {
     const age = ["cached", "snapshot"].includes(quote.state) && Number.isFinite(Date.parse(quote.fetchedAt))
       ? ` · ${quoteTime.format(Date.parse(quote.fetchedAt))}`
@@ -419,13 +390,14 @@ function makeDetailRow(analysis: ItemAnalysis): HTMLTableRowElement {
     card.append(heading);
     const values: Array<[string, string]> = result.status === "ok"
       ? [
+          [analysis.item.levels["0"]?.kind === "preorder" ? "BASE Preorder-Max" : "BASE Listing", `${formatSilver(analysis.item.levels["0"]?.price ?? null, false)} Silber`],
           ["Aktuelles Listing", `${formatSilver(result.salePrice, false)} Silber`],
           ["Ø Herstellkosten", `${formatSilver(result.avgCost, false)} Silber`],
           ["Ø Basisteile", decimal.format(result.expectedItems ?? 0)],
           ["Netto-Marge", result.margin === null ? "—" : `${(result.margin * 100).toFixed(1)} %`],
           ["Erwarteter Profit", `${result.profit !== null && result.profit >= 0 ? "+" : ""}${formatSilver(result.profit, false)} Silber`],
         ]
-      : [["Berechnung", "Nicht möglich — aktuelles BASE- oder Ziel-Listing fehlt"]];
+      : [["Berechnung", "Nicht möglich — BASE-Orderbuch oder aktuelles Ziel-Listing fehlt"]];
     const list = document.createElement("dl");
     for (const [term, value] of values) {
       const dt = document.createElement("dt");
@@ -492,6 +464,7 @@ function renderResults(): void {
     const baseQuote = analysis.item.levels["0"];
     const basePrice = document.createElement("strong");
     basePrice.textContent = baseQuote?.price === null ? "Kein Listing" : formatSilver(baseQuote?.price ?? null);
+    if (baseQuote?.kind === "preorder") baseCell.classList.add("preorder-cell");
     if (baseQuote?.price) basePrice.title = `${fullSilver.format(baseQuote.price)} Silber`;
     baseCell.append(basePrice);
     addQuoteLine(baseCell, baseQuote);
@@ -596,7 +569,7 @@ function showOptimization(itemId: number): void {
   content.replaceChildren();
   if (!result) {
     const paragraph = document.createElement("p");
-    paragraph.textContent = "Für die Optimierung werden aktive BASE- und TRI-/+3-Listings benötigt.";
+    paragraph.textContent = "Für die Optimierung werden ein verfügbarer BASE-Einkaufspreis und ein aktives TRI-/+3-Listing benötigt.";
     content.append(paragraph);
   } else {
     const lead = document.createElement("p");

@@ -80,12 +80,29 @@ describe("cost model", () => {
       name: "Test Ring",
       category: "accessory",
       levels: {
-        "0": { price: 10_000_000, sellersAtLowest: 1, totalSellers: 1, state: "fresh", fetchedAt, source: "test" },
-        "2": { price: null, sellersAtLowest: 0, totalSellers: 0, state: "unlisted", fetchedAt, source: "test" },
+        "0": { price: 10_000_000, sellersAtLowest: 1, totalSellers: 1, buyersAtPrice: 0, totalBuyers: 0, kind: "listing", state: "fresh", fetchedAt, source: "test" },
+        "2": { price: null, sellersAtLowest: 0, totalSellers: 0, buyersAtPrice: 0, totalBuyers: 0, kind: "unavailable", state: "unlisted", fetchedAt, source: "test" },
       },
     };
     const result = analyzeItem(item, settings).results.find((entry) => entry.level === 2);
     expect(result?.status).toBe("unavailable");
     expect(result?.profit).toBeNull();
+  });
+
+  it("calculates with a BASE preorder when the target has an active listing", () => {
+    const fetchedAt = "2026-08-12T00:00:00.000Z";
+    const item: MarketItem = {
+      id: 2,
+      name: "Preorder Test Ring",
+      category: "accessory",
+      levels: {
+        "0": { price: 8_000_000, sellersAtLowest: 0, totalSellers: 0, buyersAtPrice: 0, totalBuyers: 17, kind: "preorder", state: "fresh", fetchedAt, source: "test" },
+        "2": { price: 400_000_000, sellersAtLowest: 1, totalSellers: 2, buyersAtPrice: 0, totalBuyers: 0, kind: "listing", state: "fresh", fetchedAt, source: "test" },
+      },
+    };
+    const result = analyzeItem(item, settings).results.find((entry) => entry.level === 2);
+    expect(result?.status).toBe("ok");
+    expect(result?.avgCost).toBeGreaterThan(0);
+    expect(result?.salePrice).toBe(400_000_000);
   });
 });

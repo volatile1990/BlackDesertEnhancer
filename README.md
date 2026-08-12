@@ -2,7 +2,7 @@
 
 Eine statische, für GitHub Pages geeignete Webanwendung zur Analyse von Enhancement-Kosten im Black Desert Online Central Market. Accessoires, Silver Embroidered und Manos-Kleidung werden mit getrennten Regelprofilen berechnet.
 
-Entscheidend für alle Marktpreise ist ausschließlich die niedrigste aktuell vorhandene Preisstufe mit mindestens einem Verkäufer. Guide-, Durchschnitts- und zuletzt erzielte Preise werden niemals als Listing ausgegeben oder in die Profitrechnung eingesetzt.
+Für Verkaufspreise zählt ausschließlich die niedrigste aktuell vorhandene Preisstufe mit mindestens einem Verkäufer. Fehlt beim BASE-Einkauf eine Sell-Order, wird stattdessen die höchste im Orderbuch zulässige Preorder-Preisstufe angesetzt und sichtbar als **Preorder** markiert. Guide-, Durchschnitts- und zuletzt erzielte Preise werden niemals verwendet.
 
 ## Lokal starten
 
@@ -44,7 +44,7 @@ Der Abruf arbeitet mit:
 - Teilresultaten statt eines globalen Abbruchs;
 - 30-Minuten-Last-known-good-Cache und versioniertem EU-Snapshot als sichtbarem Fallback.
 
-Ein erfolgreich geladenes Orderbuch ohne Verkäufer ist der Zustand **Kein Listing**. Es wird dabei ausdrücklich nicht auf einen Guide- oder letzten Verkaufspreis zurückgefallen.
+Ein erfolgreich geladenes Ziel-Orderbuch ohne Verkäufer ist der Zustand **Kein Listing**. Nur für BASE wird in diesem Fall die höchste vorhandene Orderbuch-Preisstufe als maximaler Preorder-Einkaufspreis genutzt. Auch dabei wird ausdrücklich nicht auf einen Guide- oder letzten Verkaufspreis zurückgefallen.
 
 ## Berechnungsmodelle
 
