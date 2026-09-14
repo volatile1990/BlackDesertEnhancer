@@ -1,10 +1,14 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
-import { decodeMarketHuffman } from "./huffman.mjs";
+import {
+  OFFICIAL_MARKET_BASES,
+  decodeVeliaInnMarketResponse,
+  parseVeliaInnCatalog,
+  parseVeliaInnOrderBook,
+} from "./velia-inn-market.mjs";
 
 const API_BASE = "https://api.arsha.io/v2";
 const region = process.env.MARKET_REGION === "na" ? "na" : "eu";
-const officialBase = `https://${region}-trade.naeu.playblackdesert.com/TradeMarket`;
 const outputPath = resolve(process.argv[2] ?? `public/data/market-${region}.json`);
 const categories = [
   { main: 20, sub: 1, source: "accessory" },
@@ -26,51 +30,46 @@ const retryable = new Set([408, 425, 429, 500, 502, 503, 504]);
 const snapshotDeadlineAt = Date.now() + 300_000;
 
 const wait = (milliseconds) => new Promise((resolveWait) => setTimeout(resolveWait, milliseconds));
+class NonRetryableFallbackError extends Error {}
 
-async function fetchOfficial(endpoint, payload) {
+async function fetchVeliaInnFallback(endpoint, payload) {
   let lastError;
   for (let attempt = 0; attempt < 3; attempt += 1) {
+    let retryAfterMs = 0;
     const remaining = snapshotDeadlineAt - Date.now();
     if (remaining <= 0) throw new Error("Snapshot deadline exceeded");
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), Math.min(10_000, remaining));
     try {
-      const response = await fetch(`${officialBase}/${endpoint}`, {
+      const marketBase = OFFICIAL_MARKET_BASES[region];
+      const response = await fetch(`${marketBase}/Trademarket/${endpoint}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", "User-Agent": "BlackDesert" },
+        headers: {
+          Accept: "application/octet-stream, application/json",
+          "Content-Type": "application/json",
+          "User-Agent": "BlackDesert",
+        },
         body: JSON.stringify({ keyType: 0, ...payload }),
         signal: controller.signal,
       });
-      if (!response.ok) throw new Error(`Official market HTTP ${response.status}`);
+      if (!response.ok) {
+        const error = new Error(`Velia Inn documented market fallback HTTP ${response.status}`);
+        if (!retryable.has(response.status)) throw new NonRetryableFallbackError(error.message);
+        const retryAfter = Number(response.headers.get("retry-after"));
+        retryAfterMs = Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1_000 : 0;
+        throw error;
+      }
       const data = Buffer.from(await response.arrayBuffer());
-      return decodeMarketHuffman(data);
+      return decodeVeliaInnMarketResponse(data, response.headers.get("content-type") ?? "");
     } catch (error) {
       lastError = error;
-      if (attempt < 2) await wait(700 * 2 ** attempt + Math.random() * 350);
+      if (error instanceof NonRetryableFallbackError) break;
+      if (attempt < 2) await wait(Math.max(retryAfterMs, 700 * 2 ** attempt + Math.random() * 350));
     } finally {
       clearTimeout(timeout);
     }
   }
   throw lastError;
-}
-
-function parseOfficialCatalog(result, category) {
-  return result.split("|").flatMap((entry) => {
-    if (!entry) return [];
-    const [id] = entry.split("-").map(Number);
-    return Number.isSafeInteger(id) ? [{ id, category }] : [];
-  });
-}
-
-function parseOfficialBook(result, id, sid) {
-  const orders = result.split("|").flatMap((entry) => {
-    if (!entry) return [];
-    const [price, sellers, buyers] = entry.split("-").map(Number);
-    return Number.isSafeInteger(price) && Number.isSafeInteger(sellers) && Number.isSafeInteger(buyers)
-      ? [{ price, sellers, buyers }]
-      : [];
-  });
-  return { id, sid, orders, source: "Pearl Abyss order book (build snapshot)" };
 }
 
 async function fetchNames(ids) {
@@ -276,23 +275,23 @@ async function main() {
     }
   });
   const failedCategoryIndexes = categoryResults.flatMap((result, index) => result.status === "rejected" ? [index] : []);
-  const officialCatalogRows = [];
+  const veliaInnCatalogRows = [];
   for (const index of failedCategoryIndexes) {
     const category = categories[index];
     if (!category) continue;
     try {
-      const result = await fetchOfficial("GetWorldMarketList", {
+      const result = await fetchVeliaInnFallback("GetWorldMarketList", {
         mainCategory: category.main,
         subCategory: category.sub,
       });
-      officialCatalogRows.push(...parseOfficialCatalog(result, category.source));
+      veliaInnCatalogRows.push(...parseVeliaInnCatalog(result, category.source));
     } catch {
       // Existing bundled snapshot remains untouched if no complete refresh is possible.
     }
   }
   const unnamedCatalog = Array.from(new Map([
     ...categoryResults.flatMap((result) => result.status === "fulfilled" ? result.value.map((item) => ({ ...item, sourceName: item.name })) : []),
-    ...officialCatalogRows,
+    ...veliaInnCatalogRows,
   ].map((item) => [item.id, item])).values());
   const missingNameIds = unnamedCatalog.filter((item) => !("sourceName" in item)).map((item) => item.id);
   const fetchedNames = await fetchNames(missingNameIds);
@@ -332,15 +331,15 @@ async function main() {
       if (result.status === "fulfilled") result.value.forEach((book) => books.set(`${book.id}:${book.sid}`, book));
     });
   } catch {
-    process.stdout.write("Arsha order books unavailable; switching to build-time official fallback\n");
+    process.stdout.write("Arsha order books unavailable; switching to Velia Inn documented build fallback\n");
   }
   process.stdout.write(`Order-book Arsha: ${books.size}/${pairs.length}\n`);
 
   const missingPairs = pairs.filter(({ id, sid }) => !books.has(`${id}:${sid}`));
-  const officialResults = await mapLimit(missingPairs, 3, async (pair) => {
+  const veliaInnResults = await mapLimit(missingPairs, 3, async (pair) => {
     if (Date.now() >= snapshotDeadlineAt) return null;
     try {
-      return parseOfficialBook(await fetchOfficial("GetBiddingInfoList", {
+      return parseVeliaInnOrderBook(await fetchVeliaInnFallback("GetBiddingInfoList", {
         mainKey: pair.id,
         subKey: pair.sid,
       }), pair.id, pair.sid);
@@ -348,10 +347,10 @@ async function main() {
       return null;
     }
   });
-  officialResults.forEach((result) => {
+  veliaInnResults.forEach((result) => {
     if (result.status === "fulfilled" && result.value) books.set(`${result.value.id}:${result.value.sid}`, result.value);
   });
-  process.stdout.write(`Order-book official fallback: ${books.size}/${pairs.length}\n`);
+  process.stdout.write(`Order-book Velia Inn documented fallback: ${books.size}/${pairs.length}\n`);
   const coverage = books.size / pairs.length;
   if (coverage < 0.7) throw new Error(`Only ${(coverage * 100).toFixed(1)}% order-book coverage; existing snapshot was not touched`);
 
@@ -372,7 +371,7 @@ async function main() {
     schemaVersion: 2,
     region,
     fetchedAt,
-    source: "Scheduled order-book snapshot (Arsha / Pearl Abyss build fallback)",
+    source: "Scheduled order-book snapshot (Arsha / Velia Inn-documented Pearl Abyss fallback)",
     items,
     materials: materialQuotes,
   };

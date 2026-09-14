@@ -1,4 +1,4 @@
-# BDO Enhance Lab
+# BDO Enhancement-Kosten
 
 Eine statische, für GitHub Pages geeignete Webanwendung zur Analyse von Enhancement-Kosten im Black Desert Online Central Market. Accessoires, Silver Embroidered und Manos-Kleidung werden mit getrennten Regelprofilen berechnet.
 
@@ -33,7 +33,9 @@ Der Workflow versucht zusätzlich alle sechs Stunden einen validierten Markt-Sna
 
 ## Marktdaten und Stabilität
 
-Die Browser-App verwendet ausschließlich CORS-fähige GET-Endpunkte der öffentlichen [Arsha Market API](https://github.com/guy0090/api.arsha.io). Der offizielle Pearl-Abyss-POST-Endpunkt kann von einer reinen GitHub-Pages-App wegen CORS nicht zuverlässig gelesen werden. Nur der serverseitige GitHub-Actions-Snapshot darf bei einem Arsha-Ausfall den offiziellen komprimierten Orderbuch-Endpunkt abrufen; ein getesteter Huffman-Decoder wandelt ihn vor dem statischen Build um.
+Die Browser-App verwendet ausschließlich CORS-fähige GET-Endpunkte der öffentlichen [Arsha Market API](https://github.com/guy0090/api.arsha.io). [Velia Inn](https://developers.veliainn.com/) betreibt keine zweite vollständige Preis-API, dokumentiert aber die direkten Pearl-Abyss-Marktendpunkte. Diese POST-Endpunkte kann eine reine GitHub-Pages-App wegen CORS nicht lesen. Deshalb nutzt nur der serverseitige GitHub-Actions-Snapshot sie als Velia-Inn-dokumentierten Fallback, wenn einzelne Arsha-Kataloge oder Orderbücher fehlen.
+
+Der Fallback akzeptiert das aktuelle Huffman-komprimierte Binärformat sowie ältere JSON-Envelopes, validiert Antwortgröße und Zahlenfelder und fragt fehlende Orderbücher einzeln ab. Die eingeschränkten Preisendpunkte der Velia-Inn-Webseite werden nicht verwendet: Sie liefern angezeigte Basispreise statt vollständiger Verkäufer-Orderbücher und würden damit die Listingpreis-Regel verletzen.
 
 Der Abruf arbeitet mit:
 

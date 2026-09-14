@@ -1,6 +1,6 @@
 # Vollständiges Projekt-Audit
 
-Stand: 12. August 2026
+Stand: 14. September 2026
 
 ## Umfang und Ergebnis
 
@@ -14,13 +14,13 @@ Der bisherige Java/Swing-Stand ist keine Webanwendung und lässt sich nicht auf 
 
 Der bestehende Connector sendet Browser-unzulässige Header und POSTs direkt an `eu-trade.naeu.playblackdesert.com`. Dessen Antwort enthält für eine fremde GitHub-Pages-Origin keinen nutzbaren `Access-Control-Allow-Origin`-Header. GitHub Pages kann selbst keinen Runtime-Proxy betreiben.
 
-**Überarbeitung:** Die Web-App nutzt zur Laufzeit nur CORS-fähige Arsha-GETs. Kategorien und Orderbücher werden gebündelt abgefragt. Die GitHub Action kann serverseitig – und damit ohne Browser-CORS – einen statischen Snapshot über den offiziellen komprimierten Orderbuch-Endpunkt erzeugen; dessen Binärformat wird größenvalidiert und mit einem getesteten Huffman-Decoder gelesen. Falls sekundengenaue oder vertraglich garantierte Daten erforderlich werden, ist weiterhin ein eigener Proxy beziehungsweise eine selbst gehostete Arsha-Instanz nötig.
+**Überarbeitung:** Die Web-App nutzt zur Laufzeit nur CORS-fähige Arsha-GETs. Kategorien und Orderbücher werden gebündelt abgefragt. Velia Inn stellt keinen eigenen vollständigen Preisproxy bereit, dokumentiert jedoch die direkten Pearl-Abyss-POST-Endpunkte. Die GitHub Action nutzt diese serverseitig – und damit ohne Browser-CORS – als zweite Abfragestrecke für fehlende Kataloge und Orderbücher. Binärantworten werden größenvalidiert und mit einem getesteten Huffman-Decoder gelesen; ältere JSON-Envelopes sowie `resultCode`-Fehler sind ebenfalls abgedeckt. Eingeschränkte Velia-Inn-Webpreise werden nicht übernommen, da sie keine vollständigen Seller-Orderbücher enthalten. Falls sekundengenaue oder vertraglich garantierte Daten erforderlich werden, ist weiterhin ein eigener Proxy beziehungsweise eine selbst gehostete Arsha-Instanz nötig.
 
 ### Falscher Preis bei fehlenden Listings
 
 Der Desktop-Connector initialisiert Preise aus `GetWorldMarketSubList` und überschreibt sie nur, wenn ein Orderbuch Verkäufer enthält. Damit bleiben bei null Verkäufern Guide-/letzte Verkaufspreise als angeblich aktueller Marktpreis stehen. Auch der 4-Millionen-Filter nutzt vorab einen solchen Referenzpreis.
 
-**Überarbeitung:** Die Webdomäne trennt `price`, Preisart, Quote-Status, Verkäufer-/Käuferzahlen, Quelle und Abrufzeit. Zielpreise berücksichtigen ausschließlich `orders.filter(sellers > 0)`; ohne Ask bleiben sie `null/unlisted` und werden nicht gerankt. Für den BASE-Einkauf gilt auf ausdrücklichen Nutzerwunsch eine eng begrenzte Ausnahme: Fehlt eine Sell-Order, wird `max(order.price)` als höchste zulässige Preorder-Stufe verwendet und als `preorder` gekennzeichnet. Guidepreis, Durchschnitt und letzter Verkauf bleiben ausgeschlossen.
+**Überarbeitung:** Die Webdomäne trennt `price`, Preisart, Quote-Status, Verkaufs-/Kaufordervolumen, Quelle und Abrufzeit. Zielpreise berücksichtigen ausschließlich `orders.filter(sellers > 0)`; ohne Ask bleiben sie `null/unlisted` und werden nicht gerankt. Für den BASE-Einkauf gilt auf ausdrücklichen Nutzerwunsch eine eng begrenzte Ausnahme: Fehlt eine Sell-Order, wird `max(order.price)` als höchste zulässige Preorder-Stufe verwendet und als `preorder` gekennzeichnet. Guidepreis, Durchschnitt und letzter Verkauf bleiben ausgeschlossen.
 
 ### Ein API-Fehler leert den gesamten Lauf
 
@@ -86,7 +86,7 @@ Damit sind +6 und +7 derzeit tatsächlich 100 %; verbreitete 90/80-Tabellen sind
 - Namensbasierte Klassifikation bleibt patch- und sprachabhängig. Die App lädt fest englische Namen, nutzt enge Präfixe und schließt unklare Manos-Life-Accessoires aus, anstatt sie falsch zu berechnen. Eine langfristige ID-Profilliste bleibt vorzuziehen.
 - Seit August 2025 sind im Livekatalog nur noch wenige Silver-Embroidered-Items relevant; alte Cook-Fixtures sind keine aktuelle Katalogerwartung.
 - Die dritte Kategorie wird ausdrücklich **Manos-Kleidung** genannt. Manos-Life-Accessoires benötigen ein separates Profil und sind noch nicht enthalten.
-- Zeitstempel, Quelle, Verkäufer-/Käuferzahlen, Preisart `Listing`/`Preorder`, `API`/`Cache`/`Snapshot`/`Kein Listing`/`Fehler`, Teilfehler und manuelle Materialwerte sind sichtbar.
+- Zeitstempel, Quelle, Verkaufs-/Kaufordervolumen, Preisart `Listing`/`Preorder`, `API`/`Cache`/`Snapshot`/`Kein Listing`/`Fehler`, Teilfehler und manuelle Materialwerte sind sichtbar.
 - Tastaturnavigation, semantische Tabelle, Dialog, Live-Status, Skip-Link, Fokuszustände, reduzierbare Animation und responsive Darstellung wurden ergänzt.
 
 ## P1: Abhängigkeiten und Build
@@ -102,7 +102,7 @@ Im Repository fehlt weiterhin eine Lizenzdatei. Sie wurde nicht automatisch erfu
 ## Testabdeckung der Web-Neufassung
 
 - niedrigstes aktives Ask bei ungeordneten Preisstufen;
-- BASE ohne Seller nutzt die höchste zulässige Preisstufe, selbst wenn dort noch kein Käufer wartet;
+- BASE ohne Seller nutzt die höchste zulässige Preisstufe, selbst wenn dort noch keine Kauforder liegt;
 - buyers-only Zielorderbuch und vollständig leeres BASE-Orderbuch ergeben `null`;
 - ungültiges Schema und Zahlen über Safe-Integer werden verworfen;
 - temporäres 503 wird wiederholt, permanentes 404 nicht;
@@ -126,6 +126,7 @@ Im Repository fehlt weiterhin eine Lizenzdatei. Sie wurde nicht automatisch erfu
 
 - [Arsha API Quellcode](https://github.com/guy0090/api.arsha.io)
 - [Arsha API V2 Dokumentation](https://www.postman.com/bdomarket/arsha-io-bdo-market-api/documentation/qpavrc8/bdo-market-api-v2)
+- [Velia Inn: Dokumentation der Pearl-Abyss-Marktendpunkte](https://developers.veliainn.com/)
 - [Pearl Abyss: Ancient Anvil](https://www.naeu.playblackdesert.com/DE-DE/Wiki?wikiNo=402)
 - [Aktuelle Manos-Kleidungsdaten](https://bdocodex.com/us/item/705037/)
 - [Pearl Abyss: Silver-Embroidered-Entfernung, August 2025](https://www.naeu.playblackdesert.com/es-ES/News/Detail?groupContentNo=8996)

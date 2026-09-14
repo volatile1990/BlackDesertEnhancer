@@ -26,7 +26,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - name: Refresh bundled market fallback
+      - name: Refresh market snapshot (Arsha with Velia Inn documented fallback)
         continue-on-error: true
         timeout-minutes: 6
         run: npm run snapshot

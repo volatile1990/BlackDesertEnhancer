@@ -187,7 +187,7 @@ app.innerHTML = `
     <details class="calculation-notes">
       <summary>Berechnungsgrundlagen</summary>
       <div class="notes-grid">
-        <p><strong>Zielpreis</strong> Günstigstes aktives Verkäuferangebot.</p>
+        <p><strong>Zielpreis</strong> Günstigstes aktives Verkaufsangebot.</p>
         <p><strong>BASE ohne Listing</strong> Höchste zulässige Preorder-Preisstufe.</p>
         <p><strong>Fehlende Daten</strong> Cache und Snapshot werden mit Stand gekennzeichnet; ohne Ziel-Listing keine Rechnung.</p>
         <p><strong>Ancient Anvil</strong> Gewachsener Failstack wird nach einem garantierten Klick als weggepackt behandelt; ein Rebuild nutzt den konfigurierten Startstack.</p>
@@ -197,6 +197,7 @@ app.innerHTML = `
 
   <footer>
     <a href="https://github.com/guy0090/api.arsha.io" target="_blank" rel="noreferrer">Arsha API</a>
+    <a href="https://developers.veliainn.com/" target="_blank" rel="noreferrer">Velia-Inn-Marktdokumentation</a>
     <a href="https://www.naeu.playblackdesert.com/DE-DE/Wiki?wikiNo=402" target="_blank" rel="noreferrer">Ancient-Anvil-Regeln</a>
   </footer>
 
@@ -316,7 +317,7 @@ function addQuoteLine(container: HTMLElement, quote: MarketQuote | undefined): v
     const age = ["cached", "snapshot"].includes(quote.state) && Number.isFinite(Date.parse(quote.fetchedAt))
       ? ` · ${quoteTime.format(Date.parse(quote.fetchedAt))}`
       : "";
-    meta.textContent = `Preorder-Max · ${quote.buyersAtPrice} dort / ${quote.totalBuyers} Käufer · ${stateLabel(quote.state)}${age}`;
+    meta.textContent = `Preorder-Max · ${quote.buyersAtPrice} dort / ${quote.totalBuyers} Kauforders · ${stateLabel(quote.state)}${age}`;
     meta.title = `Höchste im Orderbuch zulässige Kaufpreis-Stufe · Quelle: ${quote.source} · Stand: ${dateTime.format(Date.parse(quote.fetchedAt))}`;
   } else {
     const age = ["cached", "snapshot"].includes(quote.state) && Number.isFinite(Date.parse(quote.fetchedAt))
