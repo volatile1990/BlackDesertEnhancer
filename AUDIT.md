@@ -67,6 +67,8 @@ Die Tests decken insbesondere ab:
 
 Der Pages-Workflow führt Snapshot, Tests und TypeScript/Vite-Produktions-Build aus und veröffentlicht nur das statische `dist/`-Artefakt. Ein geplanter Lauf deployt nur nach erfolgreichem Snapshot; bei gleichzeitigem API-Ausfall kann er daher keinen neueren, zuvor erfolgreich veröffentlichten Stand durch den älteren Repository-Fallback ersetzen.
 
+Die verwendeten offiziellen GitHub-Actions-Majors wurden auf ihre aktuellen Node-24-Versionen angehoben, damit der Pages-Lauf nicht von der abgeschalteten Node-20-Action-Runtime abhängt.
+
 Das Abhängigkeits-Audit meldete zunächst eine moderate Schwachstelle im nur zur Entwicklung verwendeten Vitest-Mocker. Der Lockfile wurde auf die korrigierte Vitest-Version aktualisiert; `npm audit` meldet danach keine bekannte Schwachstelle.
 
 ## Verbleibende Grenzen

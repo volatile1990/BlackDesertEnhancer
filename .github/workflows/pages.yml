@@ -22,8 +22,8 @@ jobs:
     outputs:
       snapshot_outcome: ${{ steps.market-snapshot.outcome }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
@@ -35,9 +35,9 @@ jobs:
         run: npm run snapshot
       - run: npm test
       - run: npm run build
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
         if: ${{ github.event_name != 'schedule' || steps.market-snapshot.outcome == 'success' }}
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         if: ${{ github.event_name != 'schedule' || steps.market-snapshot.outcome == 'success' }}
         with:
           path: dist
@@ -52,4 +52,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
