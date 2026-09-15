@@ -19,6 +19,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      snapshot_outcome: ${{ steps.market-snapshot.outcome }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -27,17 +29,21 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Refresh market snapshot (Arsha with Velia Inn documented fallback)
+        id: market-snapshot
         continue-on-error: true
         timeout-minutes: 6
         run: npm run snapshot
       - run: npm test
       - run: npm run build
       - uses: actions/configure-pages@v5
+        if: ${{ github.event_name != 'schedule' || steps.market-snapshot.outcome == 'success' }}
       - uses: actions/upload-pages-artifact@v3
+        if: ${{ github.event_name != 'schedule' || steps.market-snapshot.outcome == 'success' }}
         with:
           path: dist
 
   deploy:
+    if: ${{ github.event_name != 'schedule' || needs.build.outputs.snapshot_outcome == 'success' }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

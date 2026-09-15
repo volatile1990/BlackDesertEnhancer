@@ -1,133 +1,77 @@
-# Vollständiges Projekt-Audit
+# Audit: Manos-only-Webanwendung
 
-Stand: 14. September 2026
+Stand: 15. September 2026
 
-## Umfang und Ergebnis
+## Umfang
 
-Geprüft wurden Architektur, GitHub-Pages-Tauglichkeit, Markt-API und CORS, Preissemantik, Fehlerpfade, Parallelität, Cache, Zahlenbereiche, Enhancement-Regeln, Erwartungswertmodell, UI-Zustände, Barrierefreiheit, Tests, Build und Abhängigkeiten.
+Geprüft wurden der tatsächlich ausgeführte Webcode, alle Marktpfade, Request-Anzahl, Preiswahl, Cache und Snapshot, Eingabevalidierung, Manos-Berechnung, UI, Tests, Produktions-Build und GitHub-Pages-Workflow. Der alte Java/Swing-Code unter `src/` ist nicht Bestandteil der Webanwendung.
 
-Der bisherige Java/Swing-Stand ist keine Webanwendung und lässt sich nicht auf GitHub Pages ausführen. Die neue TypeScript/Vite-Anwendung ist deshalb eine getrennte, statisch baubare Neufassung. Die Java-Quellen bleiben als Legacy-Desktopcode erhalten, sind aber nicht Teil des Web-Builds.
+## Behobene Ursache der unveränderten Preise
 
-## P0: Markt- und Architekturfehler
+Der bisherige Teilfehlerpfad übernahm eine alte Einzelquote samt altem `fetchedAt`, setzte den äußeren Snapshot-Zeitpunkt aber auf den Zeitpunkt des neuen, fehlgeschlagenen Versuchs. Dadurch blieb der Gesamt-Cache frisch und konnte beispielsweise einen Preis vom 12. August immer wieder weitertragen.
 
-### Offizielle API ist aus GitHub Pages nicht lesbar
+Korrekturen:
 
-Der bestehende Connector sendet Browser-unzulässige Header und POSTs direkt an `eu-trade.naeu.playblackdesert.com`. Dessen Antwort enthält für eine fremde GitHub-Pages-Origin keinen nutzbaren `Access-Control-Allow-Origin`-Header. GitHub Pages kann selbst keinen Runtime-Proxy betreiben.
+- neues, inkompatibles Manos-only-Schema 3 und neuer Local-Storage-Key;
+- Prüfung des Alters jeder einzelnen Quote statt nur des äußeren Snapshots;
+- maximal 24 Stunden alte Fallback-Quoten, danach `Preis fehlt` statt einer Rechnung mit Altwerten;
+- ein vollständiger Arsha-Ausfall schreibt den Cache nicht mehr neu;
+- jeder angezeigte Preis enthält seinen eigenen Abrufzeitpunkt und seine Quelle im Tooltip.
 
-**Überarbeitung:** Die Web-App nutzt zur Laufzeit nur CORS-fähige Arsha-GETs. Kategorien und Orderbücher werden gebündelt abgefragt. Velia Inn stellt keinen eigenen vollständigen Preisproxy bereit, dokumentiert jedoch die direkten Pearl-Abyss-POST-Endpunkte. Die GitHub Action nutzt diese serverseitig – und damit ohne Browser-CORS – als zweite Abfragestrecke für fehlende Kataloge und Orderbücher. Binärantworten werden größenvalidiert und mit einem getesteten Huffman-Decoder gelesen; ältere JSON-Envelopes sowie `resultCode`-Fehler sind ebenfalls abgedeckt. Eingeschränkte Velia-Inn-Webpreise werden nicht übernommen, da sie keine vollständigen Seller-Orderbücher enthalten. Falls sekundengenaue oder vertraglich garantierte Daten erforderlich werden, ist weiterhin ein eigener Proxy beziehungsweise eine selbst gehostete Arsha-Instanz nötig.
+## Marktumfang und Ausfallsicherheit
 
-### Falscher Preis bei fehlenden Listings
+Die dynamische Katalogsuche und alle Accessoire-/Silver-Orderbücher wurden aus dem Webpfad entfernt. Eine geprüfte ID-Liste enthält genau acht Manos-Kleidungsstücke. Die Oberfläche ist auf den verwendeten EU-Markt begrenzt. Dort entstehen höchstens 35 logische Orderbuchpaare: acht Items mal vier Stufen plus drei Materialien. Zuvor waren es über 600.
 
-Der Desktop-Connector initialisiert Preise aus `GetWorldMarketSubList` und überschreibt sie nur, wenn ein Orderbuch Verkäufer enthält. Damit bleiben bei null Verkäufern Guide-/letzte Verkaufspreise als angeblich aktueller Marktpreis stehen. Auch der 4-Millionen-Filter nutzt vorab einen solchen Referenzpreis.
+Der Browser nutzt gebündelte Arsha-GET-Abfragen mit No-Store, Timeout, gezielten Retries, begrenzter Parallelität, Response-Größenlimit, Safe-Integer-/Schema-/ID-Prüfung und rekursiver Teilung fehlerhafter Batches. Ein globaler Circuit Breaker wurde entfernt, weil er bei parallelen Batchfehlern gerade die kleineren Recovery-Abfragen blockieren konnte; Deadline und Parallelitätslimit begrenzen den Abruf stattdessen deterministisch.
 
-**Überarbeitung:** Die Webdomäne trennt `price`, Preisart, Quote-Status, Verkaufs-/Kaufordervolumen, Quelle und Abrufzeit. Zielpreise berücksichtigen ausschließlich `orders.filter(sellers > 0)`; ohne Ask bleiben sie `null/unlisted` und werden nicht gerankt. Für den BASE-Einkauf gilt auf ausdrücklichen Nutzerwunsch eine eng begrenzte Ausnahme: Fehlt eine Sell-Order, wird `max(order.price)` als höchste zulässige Preorder-Stufe verwendet und als `preorder` gekennzeichnet. Guidepreis, Durchschnitt und letzter Verkauf bleiben ausgeschlossen.
+Der Build-Snapshot nutzt Arsha zuerst. Fehlende und leere Paare werden einzeln über den von Velia Inn dokumentierten Pearl-Abyss-POST-Endpunkt gegengeprüft. Der Decoder akzeptiert das aktuelle Huffman-Binärformat und ältere JSON-Envelopes. Dieser direkte Endpoint liefert keine CORS-Freigabe und kann deshalb nicht aus einer statischen GitHub-Pages-Seite aufgerufen werden. Ein neuer Snapshot ersetzt den Last-known-good-Stand nur bei 35/35 erwarteten Orderbüchern. Ein bestätigtes einzelnes leeres Buch bleibt als aktuelles „nicht gelistet“ erhalten; eine komplett leere Antwort gilt als unplausibler Anbieterfehler. Fremde oder fehlende Antworten zählen nicht zur Abdeckung.
 
-### Ein API-Fehler leert den gesamten Lauf
+Live-Prüfung am 15. September 2026:
 
-Im Desktopcode fehlen Connect-/Read-Timeouts, Retry, Backoff, `Retry-After`, Schema-/Statusprüfung und ein Circuit Breaker. Kategorie-Futures werden mit `join()` global gekoppelt, ein Detailfehler entfernt das vollständige Item, und ein äußerer Catch liefert eine leere Liste. Die UI kann anschließend alte Zeilen als scheinbar erfolgreich aktualisiert stehen lassen. Ein Abruf erzeugt außerdem ungefähr 265 Einzelrequests, ein großer Teil davon seriell.
+- direkter Pearl-Abyss-Pfad: 32/32 Manos-Itemorderbücher erfolgreich;
+- lokaler Snapshot-Lauf einschließlich Materialien: 35/35 Orderbücher erfolgreich;
+- Arsha: im Prüfzeitraum durchgehend HTTP 500 / Fehlercode 103; deshalb wurde der direkte Build-Fallback tatsächlich benutzt;
+- acht IDs und englische Namen separat über die Arsha-Datenbank bestätigt.
 
-**Überarbeitung:** Timeout, gezielte Wiederholungen für Netzwerkfehler sowie 408/425/429/5xx, exponentieller Full-Jitter, begrenzte Parallelität, Batches, `allSettled`-Teilresultate, kurze Circuit-Pause und atomarer Last-known-good-Snapshot. Fehler, Cache und Snapshot sind sichtbare Zustände; sie werden nie als frische Daten beschriftet.
+## Preissemantik
 
-### Ungültige oder überlaufende API-Werte
+Orderbuchreihenfolge wird nicht vorausgesetzt.
 
-Der Desktopcode liest `basePrice` als 32-Bit-`int`, obwohl aktuelle Marktpreise darüber liegen können. Status, Content-Type, Responsegröße, IDs, SIDs und JSON-Schema werden nicht konsequent geprüft.
+- Verkauf: `min(price)` ausschließlich über Preisstufen mit `sellers > 0`.
+- BASE mit Verkäufern: ebenfalls niedrigster Ask.
+- BASE ohne Verkäufer: `max(price)` des validierten Orderbuchs als höchstmögliche Preorder-Stufe, auch wenn auf genau dieser Stufe noch kein Käufer steht.
+- DUO, TRI und TET ohne Verkäufer: kein Preis und keine Profitrechnung.
+- Materialien: nur niedrigstes aktives Verkaufsangebot, niemals Preorder.
+- Guide-, Durchschnitts-, `basePrice`- und Last-Sold-Werte werden nicht als Marktpreis verwendet.
 
-**Überarbeitung:** Alle externen Ganzzahlen müssen nichtnegative JavaScript-Safe-Integer sein. Antwortgröße, JSON-Content-Type, Objektform, Orderzahl sowie ID/SID-Zuordnung werden validiert. Unerwartete HTML-/Fehlerantworten werden verworfen.
+## Manos-Berechnung
 
-### Materialpreise sind statisch
+Die Webrechnung enthält nur noch das Manos-Profil. Geprüft sind die 20 festen Chancen, Black-Gem-Mengen, eine Concentrated Magical Black Gem je PRI–PEN-Versuch, 5/10 Haltbarkeit, Memory-Fragment-Reparatur, Downgrade, Rebuild und Ancient-Anvil-Schwellen. Die Berechnung ist ein deterministischer Erwartungswert und verwendet Gleitkommazahlen für erwartete Kosten und Basisteile.
 
-Black Stone, Black Gem, Concentrated Magical Black Gem und Memory Fragment waren feste Konstanten; dadurch konnten selbst korrekte Itempreise keine aktuellen Kosten ergeben.
+Nur drei Materialpreise bleiben konfigurierbar. Nicht verwendete Stack-Parameter, Stack-Materialien, Optimierungsdialoge, Kategorie-Tabs und Marketing-/Erklärüberschriften wurden aus der Weboberfläche entfernt.
 
-**Überarbeitung:** Alle verwendeten Materialien einschließlich Crystallized Despair und Primordial Black Stone werden über dasselbe Listing-first-Orderbuch geladen. Manuelle Werte bleiben möglich und werden sichtbar als manuell markiert.
+## Prüfung
 
-## P0: Fach- und Rechenfehler
+Die Tests decken insbesondere ab:
 
-### Softcap-Formel kann Chancen senken
+- exakt acht Manos-IDs und nur drei Materialien;
+- SID-Zuordnung BASE 0, DUO 17, TRI 18 und TET 19;
+- niedrigstes aktives, unsortiertes Ask;
+- höchste BASE-Preorder-Stufe;
+- kein Verkaufspreis bei buyers-only Orderbüchern;
+- strikte Snapshot-/Orderbuchvalidierung;
+- Ablauf jeder Einzelquote nach 24 Stunden;
+- Retry nur für temporäre HTTP-Fehler;
+- vollständige Manos-Chancentabelle und finite Downgrade-Erwartungen;
+- keine Rechnung ohne aktuellen BASE-, Ziel- oder Materialpreis oder mit ungültigem Netto-Verkauf; `NaN` kann nicht unbemerkt als Ergebnis weiterlaufen.
 
-Die Java-Berechnung wendet nach Überschreiten eines Softcaps den kleinen Zuwachs rückwirkend auf alle hinzugekommenen Fehlschläge an. So kann eine Chance beim nächsten Fehlschlag sinken. Außerdem fehlt das 90-%-Cap und `roll <= chance` erzeugt einen theoretischen Erfolg bei exakt 0 %.
+Der Pages-Workflow führt Snapshot, Tests und TypeScript/Vite-Produktions-Build aus und veröffentlicht nur das statische `dist/`-Artefakt. Ein geplanter Lauf deployt nur nach erfolgreichem Snapshot; bei gleichzeitigem API-Ausfall kann er daher keinen neueren, zuvor erfolgreich veröffentlichten Stand durch den älteren Repository-Fallback ersetzen.
 
-**Überarbeitung:** Chance wird rein aus dem gesamten aktuellen FS stückweise vor/nach Softcap berechnet und auf 90 % begrenzt. Regressionstests decken den Übergang ab, etwa Standard-PRI FS18 = 70 % und FS19 = 70,5 %.
+Das Abhängigkeits-Audit meldete zunächst eine moderate Schwachstelle im nur zur Entwicklung verwendeten Vitest-Mocker. Der Lockfile wurde auf die korrigierte Vitest-Version aktualisiert; `npm audit` meldet danach keine bekannte Schwachstelle.
 
-### Silver Embroidered verwendet die falsche +1-Kurve
+## Verbleibende Grenzen
 
-Silver besitzt eine eigene +1-Kurve: 30 % Basis, +3 Prozentpunkte bis FS14, danach +0,6; höhere Stufen folgen der Standard-Accessoire-Kurve. Der Desktopcode nutzt nach Fehlschlägen pauschal die Accessoire-Kurve. Zudem werden Silver-Stufen als PRI/DUO/TRI/TET beschriftet.
-
-**Überarbeitung:** Eigenes Profil und eigene Ansicht mit +1/+2/+3/+4-Bezeichnungen. Hart codierte, fehlerhafte Tabellenwerte wurden durch Profilformeln ersetzt.
-
-### Zufallssimulation, Ganzzahldivision und veralteter Profit
-
-Der Desktoprechner verwendet rechenintensive Monte-Carlo-Läufe, schneidet durchschnittlichen Itemverbrauch durch Ganzzahldivision ab und hält abgeleitete Profitwerte teilweise nach Feldänderungen nicht synchron; dadurch sind NaN oder veraltete Werte möglich.
-
-**Überarbeitung:** Exakte endliche Erwartungswertrekursion mit Gleitkomma-Itemverbrauch. Ergebnisse werden als unveränderliche Ableitung bei jedem Parameterwechsel neu berechnet.
-
-### Agris und gewachsener Failstack sind vermischt
-
-Ancient Anvil setzt Agris zurück, verbraucht laut offizieller Regel aber die aktuelle Enhancement Chance nicht. Das Desktopmodell setzt einen gemeinsamen Fehlerzähler zurück und verliert damit den gewachsenen Stack.
-
-**Überarbeitung:** Die Webrechnung macht die gewählte Kostenstrategie explizit: Nach einem garantierten Klick gilt der gewachsene Stack als weggepackter Vermögenswert. Ein späterer Rebuild bezieht einen neuen konfigurierten Startstack. Dadurch wird der Stack weder gelöscht noch als stillschweigend kostenlos wiederverwendet. Eine spätere Inventar-/Stackzustandssimulation kann diese Strategie erweitern.
-
-### Failstacks ab +50 wurden falsch beziehungsweise kostenlos bewertet
-
-Die alte Kostentabelle setzt teils unplausible Black-Stone-Mengen an; hohe Stacks waren implizit kostenlos. Das überschätzt besonders TET-Profite.
-
-**Überarbeitung:** Sichtbare Auswahl zwischen Marktwert der direkten Beschaffung und bewusst `vorhanden / Kosten 0`. +50 bis +100 werden über 4/8/15/25/35/50 Crystallized Despair, +110 über 25 Primordial Black Stones bewertet. Die Materialpreise kommen aus aktiven Listings oder einem klar markierten manuellen Wert.
-
-### Manos-Prüfung
-
-Die aktuelle Manos-Kleidungsfolge wurde gegen aktuelle Itemdaten geprüft. Korrekt sind die Chancen:
-
-`100, 100, 100, 100, 100, 100, 100, 70, 60, 50, 40, 30, 20, 15, 10, 30, 25, 20, 15, 6`
-
-Damit sind +6 und +7 derzeit tatsächlich 100 %; verbreitete 90/80-Tabellen sind veraltet. Ebenfalls bestätigt sind Black-Gem-Gruppen, eine Concentrated Magical Black Gem pro PRI–PEN-Versuch, 5/10 Haltbarkeit und Downgrade ab einem fehlgeschlagenen DUO→TRI-Versuch. Die Webrekursion bildet Material, Reparatur, Agris, Downgrade und Rebuild ab.
-
-## P1: Datenmodell und UX
-
-- Der Desktop-Ergebnistyp kennt keine Kategorie. Die Web-App bietet drei getrennte Tabs und kontextspezifische Labels/Parameter.
-- Namensbasierte Klassifikation bleibt patch- und sprachabhängig. Die App lädt fest englische Namen, nutzt enge Präfixe und schließt unklare Manos-Life-Accessoires aus, anstatt sie falsch zu berechnen. Eine langfristige ID-Profilliste bleibt vorzuziehen.
-- Seit August 2025 sind im Livekatalog nur noch wenige Silver-Embroidered-Items relevant; alte Cook-Fixtures sind keine aktuelle Katalogerwartung.
-- Die dritte Kategorie wird ausdrücklich **Manos-Kleidung** genannt. Manos-Life-Accessoires benötigen ein separates Profil und sind noch nicht enthalten.
-- Zeitstempel, Quelle, Verkaufs-/Kaufordervolumen, Preisart `Listing`/`Preorder`, `API`/`Cache`/`Snapshot`/`Kein Listing`/`Fehler`, Teilfehler und manuelle Materialwerte sind sichtbar.
-- Tastaturnavigation, semantische Tabelle, Dialog, Live-Status, Skip-Link, Fokuszustände, reduzierbare Animation und responsive Darstellung wurden ergänzt.
-
-## P1: Abhängigkeiten und Build
-
-Der Legacy-Mavenstand verwendet unter anderem alte Versionen von `org.json`, Commons Lang und Logback mit veröffentlichten Advisories; Java 16 ist EOL. Diese JVM-Abhängigkeiten werden nicht in den Web-Build übernommen. Die Webanwendung besitzt nur die gelockten Build-/Testwerkzeuge TypeScript, Vite und Vitest, keine Runtime-NPM-Abhängigkeiten und eine restriktive Content Security Policy.
-
-Die Pages-Pipeline führt Tests und Produktions-Build aus, erzeugt den korrekten Repository-Basispfad und deployed nur das statische `dist/`-Artefakt.
-
-`npm ci` und `npm audit` melden für die 49 gelockten Web-Buildpakete derzeit keine bekannte Schwachstelle. Dependabot überwacht npm- und GitHub-Actions-Versionen wöchentlich.
-
-Im Repository fehlt weiterhin eine Lizenzdatei. Sie wurde nicht automatisch erfunden, weil die Wahl der Lizenz eine Rechteentscheidung des Eigentümers ist. Ebenso bleibt der Legacy-Mavenstand ohne Wrapper; beides blockiert den statischen Pages-Build nicht.
-
-## Testabdeckung der Web-Neufassung
-
-- niedrigstes aktives Ask bei ungeordneten Preisstufen;
-- BASE ohne Seller nutzt die höchste zulässige Preisstufe, selbst wenn dort noch keine Kauforder liegt;
-- buyers-only Zielorderbuch und vollständig leeres BASE-Orderbuch ergeben `null`;
-- ungültiges Schema und Zahlen über Safe-Integer werden verworfen;
-- temporäres 503 wird wiederholt, permanentes 404 nicht;
-- HTML statt JSON wird verworfen;
-- Standard-/Silver-Softcaps, Monotonie und 90-%-Cap;
-- vollständige aktuelle Manos-Chancentabelle;
-- direkte Stackmaterial-Kosten und bewusster Owned-Modus;
-- fractional expected items, finite Manos-Downgrade-Erwartung;
-- fehlendes Ziel-Listing oder fehlender BASE-Orderbuchpreis deaktiviert Profit;
-- Kategorie- und SID-Trennung.
-
-## Bewusst verbleibende Grenzen
-
-1. Die öffentliche Arsha-Instanz ist ein Community-Dienst und laut Dokumentation gecacht; „Live“ bedeutet daher der aktuell abrufbare Orderbuch-Snapshot, nicht garantierte Sekundengenauigkeit.
-2. Eine rein statische Pages-App kann keinen offiziellen API-Proxy betreiben. Für garantierte Verfügbarkeit ist ein separater Dienst erforderlich.
-3. Cron-Stone-Strategien und Manos-Life-Accessoires sind noch nicht modelliert; die UI behauptet dies nicht.
-4. Enhancement-Regeln, Itemkatalog und direkte Stackbeschaffung können sich durch Patches ändern. Regeltests und der Snapshot-Workflow reduzieren, beseitigen aber nicht das Patch-Risiko.
-5. Ein erfolgreicher Verkauf zu einer aktuell gelisteten Preisstufe ist nicht garantiert; die Rechnung ist eine Erwartungswertanalyse, keine Handelszusage.
-
-## Primär- und Referenzquellen
-
-- [Arsha API Quellcode](https://github.com/guy0090/api.arsha.io)
-- [Arsha API V2 Dokumentation](https://www.postman.com/bdomarket/arsha-io-bdo-market-api/documentation/qpavrc8/bdo-market-api-v2)
-- [Velia Inn: Dokumentation der Pearl-Abyss-Marktendpunkte](https://developers.veliainn.com/)
-- [Pearl Abyss: Ancient Anvil](https://www.naeu.playblackdesert.com/DE-DE/Wiki?wikiNo=402)
-- [Aktuelle Manos-Kleidungsdaten](https://bdocodex.com/us/item/705037/)
-- [Pearl Abyss: Silver-Embroidered-Entfernung, August 2025](https://www.naeu.playblackdesert.com/es-ES/News/Detail?groupContentNo=8996)
-- [Pearl Abyss: direkte zusätzliche Enhancement Chance](https://www.sa.playblackdesert.com/es-mx/Wiki?wikiNo=48)
+1. Arsha ist ein Community-Dienst und kann trotz Retry ausfallen oder upstream-gecachte Daten liefern.
+2. GitHub Pages kann den direkten Pearl-Abyss-Fallback wegen CORS nicht zur Laufzeit nutzen. Er steht im spätestens alle sechs Stunden erzeugten Build-Snapshot bereit.
+3. Bei gleichzeitigem Ausfall beider Wege werden nur höchstens 24 Stunden alte Einzelpreise verwendet; danach bleibt die entsprechende Rechnung bewusst leer.
+4. Marktliquidität und Spielregeln können sich ändern. Ein gelisteter Preis garantiert keinen Verkauf.

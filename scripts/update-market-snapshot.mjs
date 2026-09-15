@@ -1,36 +1,31 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import {
   OFFICIAL_MARKET_BASES,
   decodeVeliaInnMarketResponse,
-  parseVeliaInnCatalog,
   parseVeliaInnOrderBook,
 } from "./velia-inn-market.mjs";
+import { quoteFromBook, sidFor } from "./build-market.mjs";
+import { addExpectedOrderBooks, expectedOrderBookCoverage, hasMarketSignal } from "./snapshot-quality.mjs";
 
 const API_BASE = "https://api.arsha.io/v2";
 const region = process.env.MARKET_REGION === "na" ? "na" : "eu";
 const outputPath = resolve(process.argv[2] ?? `public/data/market-${region}.json`);
-const categories = [
-  { main: 20, sub: 1, source: "accessory" },
-  { main: 20, sub: 2, source: "accessory" },
-  { main: 20, sub: 3, source: "accessory" },
-  { main: 20, sub: 4, source: "accessory" },
-  { main: 15, sub: 5, source: "functional" },
-];
-const materials = [
-  { id: 16001, key: "blackStone", label: "Black Stone" },
-  { id: 8411, key: "crystallizedDespair", label: "Crystallized Despair" },
-  { id: 820934, key: "primordialBlackStone", label: "Primordial Black Stone" },
-  { id: 5000, key: "blackGem", label: "Black Gem" },
-  { id: 4987, key: "concentratedBlackGem", label: "Concentrated Magical Black Gem" },
-  { id: 44195, key: "memoryFragment", label: "Memory Fragment" },
-];
+const configPath = new URL("../shared/manos-market.json", import.meta.url);
+const marketConfig = JSON.parse(await readFile(configPath, "utf8"));
+const items = marketConfig.items;
+const materials = marketConfig.materials.map(({ defaultPrice: _defaultPrice, ...material }) => material);
 const targetLevels = [2, 3, 4];
 const retryable = new Set([408, 425, 429, 500, 502, 503, 504]);
-const snapshotDeadlineAt = Date.now() + 300_000;
+const snapshotDeadlineAt = Date.now() + 240_000;
+const MAX_RESPONSE_BYTES = 2_000_000;
+
+if (!Array.isArray(items) || items.length !== 8 || !Array.isArray(materials) || materials.length !== 3) {
+  throw new Error("Invalid Manos market configuration");
+}
 
 const wait = (milliseconds) => new Promise((resolveWait) => setTimeout(resolveWait, milliseconds));
-class NonRetryableFallbackError extends Error {}
+class NonRetryableFetchError extends Error {}
 
 async function fetchVeliaInnFallback(endpoint, payload) {
   let lastError;
@@ -54,7 +49,7 @@ async function fetchVeliaInnFallback(endpoint, payload) {
       });
       if (!response.ok) {
         const error = new Error(`Velia Inn documented market fallback HTTP ${response.status}`);
-        if (!retryable.has(response.status)) throw new NonRetryableFallbackError(error.message);
+        if (!retryable.has(response.status)) throw new NonRetryableFetchError(error.message);
         const retryAfter = Number(response.headers.get("retry-after"));
         retryAfterMs = Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1_000 : 0;
         throw error;
@@ -63,7 +58,7 @@ async function fetchVeliaInnFallback(endpoint, payload) {
       return decodeVeliaInnMarketResponse(data, response.headers.get("content-type") ?? "");
     } catch (error) {
       lastError = error;
-      if (error instanceof NonRetryableFallbackError) break;
+      if (error instanceof NonRetryableFetchError) break;
       if (attempt < 2) await wait(Math.max(retryAfterMs, 700 * 2 ** attempt + Math.random() * 350));
     } finally {
       clearTimeout(timeout);
@@ -72,27 +67,7 @@ async function fetchVeliaInnFallback(endpoint, payload) {
   throw lastError;
 }
 
-async function fetchNames(ids) {
-  const names = new Map();
-  const chunks = [];
-  for (let index = 0; index < ids.length; index += 80) chunks.push(ids.slice(index, index + 80));
-  for (const chunk of chunks) {
-    const params = new URLSearchParams({ lang: "en" });
-    chunk.forEach((id) => params.append("id", String(id)));
-    try {
-      const payload = await fetchJson(`https://api.arsha.io/util/db?${params}`, 3, 8_000);
-      const rows = Array.isArray(payload) ? payload : [payload];
-      rows.forEach((row) => {
-        if (Number.isSafeInteger(row?.id) && typeof row?.name === "string") names.set(row.id, row.name);
-      });
-    } catch {
-      // Unknown names are skipped instead of assigning an incorrect enhancement profile.
-    }
-  }
-  return names;
-}
-
-async function fetchJson(url, attempts = 4, timeoutMs = 10_000) {
+async function fetchJson(url, attempts = 3, timeoutMs = 8_000) {
   let lastError;
   for (let attempt = 0; attempt < attempts; attempt += 1) {
     const remaining = snapshotDeadlineAt - Date.now();
@@ -101,12 +76,14 @@ async function fetchJson(url, attempts = 4, timeoutMs = 10_000) {
     const timeout = setTimeout(() => controller.abort(), Math.min(timeoutMs, remaining));
     try {
       const response = await fetch(url, {
+        cache: "no-store",
         headers: { Accept: "application/json" },
         signal: controller.signal,
       });
       if (!response.ok) {
         const error = new Error(`HTTP ${response.status} for ${url}`);
-        if (!retryable.has(response.status) || attempt === attempts - 1) throw error;
+        if (!retryable.has(response.status)) throw new NonRetryableFetchError(error.message);
+        if (attempt === attempts - 1) throw error;
         const retryAfter = Number(response.headers.get("retry-after"));
         await wait(Number.isFinite(retryAfter) && retryAfter > 0
           ? retryAfter * 1_000
@@ -114,31 +91,23 @@ async function fetchJson(url, attempts = 4, timeoutMs = 10_000) {
         continue;
       }
       const contentType = response.headers.get("content-type") ?? "";
-      if (!contentType.includes("json")) throw new Error(`Unexpected content type for ${url}`);
-      return await response.json();
+      if (!contentType.includes("json")) throw new NonRetryableFetchError(`Unexpected content type for ${url}`);
+      const announcedLength = Number(response.headers.get("content-length"));
+      if (Number.isFinite(announcedLength) && announcedLength > MAX_RESPONSE_BYTES) {
+        throw new NonRetryableFetchError(`Response too large for ${url}`);
+      }
+      const body = await response.text();
+      if (body.length > MAX_RESPONSE_BYTES) throw new NonRetryableFetchError(`Response too large for ${url}`);
+      return JSON.parse(body);
     } catch (error) {
       lastError = error;
-      if (attempt < attempts - 1) await wait(600 * 2 ** attempt + Math.random() * 500);
+      if (error instanceof NonRetryableFetchError || attempt === attempts - 1) break;
+      await wait(600 * 2 ** attempt + Math.random() * 500);
     } finally {
       clearTimeout(timeout);
     }
   }
   throw lastError;
-}
-
-function classify(name, source) {
-  if (source === "accessory") {
-    if (/manos|preonne|geranoa|loggia/i.test(name)) return null;
-    if (/diamond necklace of fortitude|emerald necklace of tranquility|topaz necklace of regeneration|sapphire necklace of storms|corrupt ruby necklace/i.test(name)) return null;
-    return "accessory";
-  }
-  if (/^silver embroidered /i.test(name)) return "silver";
-  if (/^manos .+clothes$/i.test(name)) return "manos";
-  return null;
-}
-
-function sidFor(category, level) {
-  return category === "manos" && level > 0 ? level + 15 : level;
 }
 
 function orderUrl(pairs) {
@@ -150,65 +119,30 @@ function orderUrl(pairs) {
   return `${API_BASE}/${region}/GetBiddingInfoList?${params}`;
 }
 
-function normalizeBooks(payload) {
-  const books = Array.isArray(payload) ? payload : [payload];
-  return books
-    .filter((book) => Number.isSafeInteger(book?.id) && Number.isSafeInteger(book?.sid) && Array.isArray(book?.orders))
-    .map((book) => ({ ...book, source: "Arsha order book" }));
+function nonNegativeInteger(value) {
+  return Number.isSafeInteger(value) && value >= 0;
 }
 
-function quoteFromBook(book, fetchedAt, allowPreorder = false) {
-  const asks = book.orders.filter((order) => Number.isSafeInteger(order.price) && order.price >= 0 && Number.isSafeInteger(order.sellers) && order.sellers > 0);
-  const totalSellers = asks.reduce((sum, order) => sum + order.sellers, 0);
-  const validOrders = book.orders.filter((order) => Number.isSafeInteger(order.price) && order.price >= 0);
-  const totalBuyers = validOrders.reduce((sum, order) => sum + (Number.isSafeInteger(order.buyers) ? order.buyers : 0), 0);
-  if (asks.length > 0) {
-    const lowest = asks.reduce((best, order) => order.price < best.price ? order : best);
-    const buyersAtPrice = validOrders
-      .filter((order) => order.price === lowest.price)
-      .reduce((sum, order) => sum + (Number.isSafeInteger(order.buyers) ? order.buyers : 0), 0);
-    return {
-      price: lowest.price,
-      sellersAtLowest: lowest.sellers,
-      totalSellers,
-      buyersAtPrice,
-      totalBuyers,
-      kind: "listing",
-      state: "snapshot",
-      fetchedAt,
-      source: book.source ?? "Order book",
-    };
-  }
+function positiveInteger(value) {
+  return Number.isSafeInteger(value) && value > 0;
+}
 
-  if (allowPreorder && validOrders.length > 0) {
-    const highestPrice = Math.max(...validOrders.map((order) => order.price));
-    const buyersAtPrice = validOrders
-      .filter((order) => order.price === highestPrice)
-      .reduce((sum, order) => sum + (Number.isSafeInteger(order.buyers) ? order.buyers : 0), 0);
-    return {
-      price: highestPrice,
-      sellersAtLowest: 0,
-      totalSellers: 0,
-      buyersAtPrice,
-      totalBuyers,
-      kind: "preorder",
-      state: "snapshot",
-      fetchedAt,
-      source: `${book.source ?? "Order book"} · höchste zulässige Preorder-Preisstufe`,
-    };
-  }
-
-  return {
-    price: null,
-    sellersAtLowest: 0,
-    totalSellers: 0,
-    buyersAtPrice: 0,
-    totalBuyers,
-    kind: "unavailable",
-    state: "unlisted",
-    fetchedAt,
-    source: book.source ?? "Order book",
-  };
+function normalizeBooks(payload) {
+  const rawBooks = Array.isArray(payload) ? payload : [payload];
+  if (rawBooks.length > 100) throw new Error("Too many Arsha order books");
+  return rawBooks.map((book) => {
+    if (!nonNegativeInteger(book?.id) || !nonNegativeInteger(book?.sid) || !Array.isArray(book?.orders)) {
+      throw new Error("Invalid Arsha order book");
+    }
+    const orders = book.orders.map((order) => {
+      if (!positiveInteger(order?.price) || !nonNegativeInteger(order?.sellers) ||
+          (order?.buyers !== undefined && !nonNegativeInteger(order.buyers))) {
+        throw new Error("Invalid Arsha order-book price row");
+      }
+      return { price: order.price, sellers: order.sellers, buyers: order.buyers ?? 0 };
+    });
+    return { id: book.id, sid: book.sid, orders, source: "Arsha order book" };
+  });
 }
 
 function missingQuote(fetchedAt) {
@@ -246,97 +180,49 @@ async function mapLimit(values, limit, task) {
 async function fetchChunkResilient(chunk) {
   if (Date.now() >= snapshotDeadlineAt) return [];
   try {
-    return normalizeBooks(await fetchJson(orderUrl(chunk), 2, 8_000));
+    const books = normalizeBooks(await fetchJson(orderUrl(chunk), 2, 7_000));
+    const expected = new Set(chunk.map(({ id, sid }) => `${id}:${sid}`));
+    if (books.some((book) => !expected.has(`${book.id}:${book.sid}`))) throw new Error("Unexpected Arsha order book");
+    return books;
   } catch {
-    if (chunk.length === 1) return [];
+    if (chunk.length === 1 || Date.now() >= snapshotDeadlineAt) return [];
     const midpoint = Math.ceil(chunk.length / 2);
-    await wait(350);
     const left = await fetchChunkResilient(chunk.slice(0, midpoint));
-    await wait(350);
     const right = await fetchChunkResilient(chunk.slice(midpoint));
     return [...left, ...right];
   }
 }
 
 async function main() {
-  const categoryResults = await mapLimit(categories, 1, async (category) => {
-    try {
-      const url = `${API_BASE}/${region}/GetWorldMarketList?mainCategory=${category.main}&subCategory=${category.sub}`;
-      const rows = await fetchJson(url, 5, 10_000);
-      if (!Array.isArray(rows)) throw new Error(`Invalid catalog response for ${category.main}/${category.sub}`);
-      return rows.flatMap((row) => {
-        const itemCategory = typeof row?.name === "string" ? classify(row.name, category.source) : null;
-        return itemCategory && Number.isSafeInteger(row.id)
-          ? [{ id: row.id, name: row.name, category: itemCategory }]
-          : [];
-      });
-    } finally {
-      await wait(500);
-    }
-  });
-  const failedCategoryIndexes = categoryResults.flatMap((result, index) => result.status === "rejected" ? [index] : []);
-  const veliaInnCatalogRows = [];
-  for (const index of failedCategoryIndexes) {
-    const category = categories[index];
-    if (!category) continue;
-    try {
-      const result = await fetchVeliaInnFallback("GetWorldMarketList", {
-        mainCategory: category.main,
-        subCategory: category.sub,
-      });
-      veliaInnCatalogRows.push(...parseVeliaInnCatalog(result, category.source));
-    } catch {
-      // Existing bundled snapshot remains untouched if no complete refresh is possible.
-    }
-  }
-  const unnamedCatalog = Array.from(new Map([
-    ...categoryResults.flatMap((result) => result.status === "fulfilled" ? result.value.map((item) => ({ ...item, sourceName: item.name })) : []),
-    ...veliaInnCatalogRows,
-  ].map((item) => [item.id, item])).values());
-  const missingNameIds = unnamedCatalog.filter((item) => !("sourceName" in item)).map((item) => item.id);
-  const fetchedNames = await fetchNames(missingNameIds);
-  const catalog = unnamedCatalog.flatMap((item) => {
-    const name = "sourceName" in item ? item.sourceName : fetchedNames.get(item.id);
-    if (!name) return [];
-    const category = classify(name, item.category === "accessory" ? "accessory" : "functional");
-    return category ? [{ id: item.id, name, category }] : [];
-  });
-  if (catalog.length === 0) throw new Error("No usable catalog responses; existing snapshot was not touched");
-  for (const requiredCategory of ["accessory", "silver", "manos"]) {
-    if (!catalog.some((item) => item.category === requiredCategory)) {
-      throw new Error(`Missing ${requiredCategory} catalog; existing snapshot was not touched`);
-    }
-  }
-
-  const pairs = catalog.flatMap((item) => [0, ...targetLevels.map((level) => sidFor(item.category, level))].map((sid) => ({ id: item.id, sid })));
+  const pairs = items.flatMap((item) => [0, ...targetLevels.map(sidFor)].map((sid) => ({ id: item.id, sid })));
   pairs.push(...materials.map(({ id }) => ({ id, sid: 0 })));
   const books = new Map();
+
   try {
     const probeChunk = pairs.slice(0, 4);
-    const probeBooks = await normalizeBooks(await fetchJson(orderUrl(probeChunk), 2, 6_000));
-    probeBooks.forEach((book) => books.set(`${book.id}:${book.sid}`, book));
-
-    const chunks = [];
+    const probeBooks = normalizeBooks(await fetchJson(orderUrl(probeChunk), 2, 6_000));
+    addExpectedOrderBooks(books, pairs, probeBooks);
     const remainingPairs = pairs.filter(({ id, sid }) => !books.has(`${id}:${sid}`));
+    const chunks = [];
     for (let index = 0; index < remainingPairs.length; index += 8) chunks.push(remainingPairs.slice(index, index + 8));
-    const chunkResults = await mapLimit(chunks, 2, async (chunk) => {
-      if (Date.now() >= snapshotDeadlineAt) return [];
-      try {
-        return await fetchChunkResilient(chunk);
-      } finally {
-        await wait(250);
-      }
-    });
+    const chunkResults = await mapLimit(chunks, 2, (chunk) => fetchChunkResilient(chunk));
     chunkResults.forEach((result) => {
-      if (result.status === "fulfilled") result.value.forEach((book) => books.set(`${book.id}:${book.sid}`, book));
+      if (result.status === "fulfilled") addExpectedOrderBooks(books, pairs, result.value);
     });
   } catch {
     process.stdout.write("Arsha order books unavailable; switching to Velia Inn documented build fallback\n");
   }
+  if (books.size > 0 && !hasMarketSignal(books)) {
+    books.clear();
+    process.stdout.write("Arsha returned only empty order books; switching to the build fallback\n");
+  }
   process.stdout.write(`Order-book Arsha: ${books.size}/${pairs.length}\n`);
 
-  const missingPairs = pairs.filter(({ id, sid }) => !books.has(`${id}:${sid}`));
-  const veliaInnResults = await mapLimit(missingPairs, 3, async (pair) => {
+  const fallbackPairs = pairs.filter(({ id, sid }) => {
+    const book = books.get(`${id}:${sid}`);
+    return !book || book.orders.length === 0;
+  });
+  const fallbackResults = await mapLimit(fallbackPairs, 3, async (pair) => {
     if (Date.now() >= snapshotDeadlineAt) return null;
     try {
       return parseVeliaInnOrderBook(await fetchVeliaInnFallback("GetBiddingInfoList", {
@@ -347,18 +233,28 @@ async function main() {
       return null;
     }
   });
-  veliaInnResults.forEach((result) => {
-    if (result.status === "fulfilled" && result.value) books.set(`${result.value.id}:${result.value.sid}`, result.value);
+  fallbackResults.forEach((result, index) => {
+    const pair = fallbackPairs[index];
+    if (result.status === "fulfilled" && result.value) {
+      addExpectedOrderBooks(books, pairs, [result.value]);
+    } else if (pair) {
+      const key = `${pair.id}:${pair.sid}`;
+      if (books.get(key)?.orders.length === 0) books.delete(key);
+    }
   });
   process.stdout.write(`Order-book Velia Inn documented fallback: ${books.size}/${pairs.length}\n`);
-  const coverage = books.size / pairs.length;
-  if (coverage < 0.7) throw new Error(`Only ${(coverage * 100).toFixed(1)}% order-book coverage; existing snapshot was not touched`);
+
+  const coverage = expectedOrderBookCoverage(pairs, books);
+  if (coverage < 1 || !hasMarketSignal(books)) {
+    throw new Error(`Only ${(coverage * 100).toFixed(1)}% plausible order-book coverage; existing snapshot was not touched`);
+  }
 
   const fetchedAt = new Date().toISOString();
-  const items = catalog.map((item) => ({
-    ...item,
+  const snapshotItems = items.map((item) => ({
+    id: item.id,
+    name: item.name,
     levels: Object.fromEntries([0, ...targetLevels].map((level) => {
-      const sid = sidFor(item.category, level);
+      const sid = sidFor(level);
       const book = books.get(`${item.id}:${sid}`);
       return [String(level), book ? quoteFromBook(book, fetchedAt, level === 0) : missingQuote(fetchedAt)];
     })),
@@ -368,16 +264,24 @@ async function main() {
     return [material.key, { ...material, ...(book ? quoteFromBook(book, fetchedAt) : missingQuote(fetchedAt)) }];
   }));
   const snapshot = {
-    schemaVersion: 2,
+    schemaVersion: 3,
     region,
     fetchedAt,
-    source: "Scheduled order-book snapshot (Arsha / Velia Inn-documented Pearl Abyss fallback)",
-    items,
+    source: "Manos order-book snapshot (Arsha / Velia Inn-documented Pearl Abyss fallback)",
+    items: snapshotItems,
     materials: materialQuotes,
   };
+
   await mkdir(dirname(outputPath), { recursive: true });
-  await writeFile(outputPath, `${JSON.stringify(snapshot, null, 2)}\n`, "utf8");
-  process.stdout.write(`Wrote ${items.length} items and ${books.size}/${pairs.length} order books to ${outputPath}\n`);
+  const temporaryPath = `${outputPath}.${process.pid}.tmp`;
+  try {
+    await writeFile(temporaryPath, `${JSON.stringify(snapshot, null, 2)}\n`, "utf8");
+    await rename(temporaryPath, outputPath);
+  } catch (error) {
+    await rm(temporaryPath, { force: true });
+    throw error;
+  }
+  process.stdout.write(`Wrote ${snapshotItems.length} Manos items and ${books.size}/${pairs.length} order books to ${outputPath}\n`);
 }
 
 main().catch((error) => {

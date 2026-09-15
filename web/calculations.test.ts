@@ -1,108 +1,110 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_MATERIAL_PRICES, DEFAULT_STACKS } from "./config";
-import {
-  analyzeItem,
-  expectedAccessoryCost,
-  expectedManosCost,
-  manosSuccessChance,
-  stackAcquisitionCost,
-  successChance,
-} from "./calculations";
+import { DEFAULT_MATERIAL_PRICES } from "./config";
+import { analyzeItem, expectedManosCost, manosSuccessChance } from "./calculations";
 import type { CalculationSettings, MarketItem } from "./types";
 
 const settings: CalculationSettings = {
   taxRate: 0.845,
-  stackCostMode: "market",
-  stacks: { ...DEFAULT_STACKS },
   materialPrices: { ...DEFAULT_MATERIAL_PRICES },
 };
 
-describe("piecewise enhancement chances", () => {
-  it("crosses the standard PRI softcap without lowering the chance", () => {
-    expect(successChance("accessory", 0, 18)).toBe(70);
-    expect(successChance("accessory", 0, 19)).toBe(70.5);
-    expect(successChance("accessory", 0, 15 + 4)).toBe(70.5);
-  });
+const fetchedAt = "2026-09-15T00:00:00.000Z";
+const quote = (price: number | null, kind: "listing" | "preorder" | "unavailable" = price === null ? "unavailable" : "listing") => ({
+  price,
+  sellersAtLowest: kind === "listing" ? 1 : 0,
+  totalSellers: kind === "listing" ? 1 : 0,
+  buyersAtPrice: kind === "preorder" ? 10 : 0,
+  totalBuyers: kind === "preorder" ? 10 : 0,
+  kind,
+  state: price === null ? "unlisted" as const : "fresh" as const,
+  fetchedAt,
+  source: "test",
+});
 
-  it("uses the separate Silver Embroidered +1 profile", () => {
-    expect(successChance("silver", 0, 14)).toBe(72);
-    expect(successChance("silver", 0, 15)).toBeCloseTo(72.6);
-    expect(successChance("silver", 1, 40)).toBe(50);
-  });
-
-  it("is monotonic and capped at 90 percent for every accessory stage", () => {
-    for (const category of ["accessory", "silver"] as const) {
-      for (let stage = 0; stage < 4; stage += 1) {
-        let previous = 0;
-        for (let stack = 0; stack <= 500; stack += 1) {
-          const chance = successChance(category, stage, stack);
-          expect(chance).toBeGreaterThanOrEqual(previous);
-          expect(chance).toBeLessThanOrEqual(90);
-          previous = chance;
-        }
-      }
-    }
-  });
-
-  it("keeps the verified current Manos fixed-rate table", () => {
+describe("Manos enhancement model", () => {
+  it("keeps the verified fixed-rate table", () => {
     expect(Array.from({ length: 20 }, (_, level) => manosSuccessChance(level))).toEqual([
       100, 100, 100, 100, 100, 100, 100, 70, 60, 50,
       40, 30, 20, 15, 10, 30, 25, 20, 15, 6,
     ]);
   });
-});
 
-describe("cost model", () => {
-  it("prices direct stack acquisition with the configured live materials", () => {
-    expect(stackAcquisitionCost(50, settings)).toBe(4 * settings.materialPrices.crystallizedDespair);
-    expect(stackAcquisitionCost(110, settings)).toBe(25 * settings.materialPrices.primordialBlackStone);
-    expect(stackAcquisitionCost(110, { ...settings, stackCostMode: "owned" })).toBe(0);
-  });
-
-  it("keeps fractional expected item counts", () => {
-    const expectation = expectedAccessoryCost("accessory", 2, 100_000_000, settings);
-    expect(expectation.items).toBeGreaterThan(2);
-    expect(Number.isInteger(expectation.items)).toBe(false);
-    expect(expectation.cost).toBeGreaterThan(0);
-  });
-
-  it("computes finite Manos downgrade and rebuild expectations", () => {
+  it("computes finite downgrade and rebuild expectations", () => {
     const expectation = expectedManosCost(4, 120_000_000, settings);
     expect(expectation.cost).toBeGreaterThan(120_000_000);
     expect(Number.isFinite(expectation.cost)).toBe(true);
     expect(expectation.items).toBe(1);
   });
 
-  it("does not calculate profit when a current sell listing is missing", () => {
-    const fetchedAt = "2026-08-12T00:00:00.000Z";
+  it("uses only the configured Manos materials", () => {
+    const freeMaterials: CalculationSettings = {
+      ...settings,
+      materialPrices: { blackGem: 0, concentratedBlackGem: 0, memoryFragment: 0 },
+    };
+    expect(expectedManosCost(3, 100_000_000, settings).cost)
+      .toBeGreaterThan(expectedManosCost(3, 100_000_000, freeMaterials).cost);
+  });
+
+  it("does not calculate profit when a current target listing is missing", () => {
     const item: MarketItem = {
-      id: 1,
-      name: "Test Ring",
-      category: "accessory",
-      levels: {
-        "0": { price: 10_000_000, sellersAtLowest: 1, totalSellers: 1, buyersAtPrice: 0, totalBuyers: 0, kind: "listing", state: "fresh", fetchedAt, source: "test" },
-        "2": { price: null, sellersAtLowest: 0, totalSellers: 0, buyersAtPrice: 0, totalBuyers: 0, kind: "unavailable", state: "unlisted", fetchedAt, source: "test" },
-      },
+      id: 705037,
+      name: "Manos Cook's Clothes",
+      levels: { "0": quote(259_000_000), "2": quote(null), "3": quote(null), "4": quote(null) },
     };
     const result = analyzeItem(item, settings).results.find((entry) => entry.level === 2);
     expect(result?.status).toBe("unavailable");
     expect(result?.profit).toBeNull();
   });
 
-  it("calculates with a BASE preorder when the target has an active listing", () => {
-    const fetchedAt = "2026-08-12T00:00:00.000Z";
+  it("calculates with the BASE preorder maximum when a target is listed", () => {
     const item: MarketItem = {
-      id: 2,
-      name: "Preorder Test Ring",
-      category: "accessory",
+      id: 705047,
+      name: "Manos Alchemist's Clothes",
       levels: {
-        "0": { price: 8_000_000, sellersAtLowest: 0, totalSellers: 0, buyersAtPrice: 0, totalBuyers: 17, kind: "preorder", state: "fresh", fetchedAt, source: "test" },
-        "2": { price: 400_000_000, sellersAtLowest: 1, totalSellers: 2, buyersAtPrice: 0, totalBuyers: 0, kind: "listing", state: "fresh", fetchedAt, source: "test" },
+        "0": quote(259_000_000, "preorder"),
+        "2": quote(null),
+        "3": quote(2_990_000_000),
+        "4": quote(7_800_000_000),
       },
     };
-    const result = analyzeItem(item, settings).results.find((entry) => entry.level === 2);
+    const result = analyzeItem(item, settings).results.find((entry) => entry.level === 3);
     expect(result?.status).toBe("ok");
-    expect(result?.avgCost).toBeGreaterThan(0);
-    expect(result?.salePrice).toBe(400_000_000);
+    expect(result?.avgCost).toBeGreaterThan(259_000_000);
+    expect(result?.salePrice).toBe(2_990_000_000);
+  });
+
+  it("does not calculate with a missing or expired material price", () => {
+    const item: MarketItem = {
+      id: 705047,
+      name: "Manos Alchemist's Clothes",
+      levels: {
+        "0": quote(259_000_000, "preorder"),
+        "2": quote(null),
+        "3": quote(2_990_000_000),
+        "4": quote(7_800_000_000),
+      },
+    };
+    const missingMaterial: CalculationSettings = {
+      ...settings,
+      materialPrices: { ...settings.materialPrices, memoryFragment: Number.NaN },
+    };
+    const result = analyzeItem(item, missingMaterial).results.find((entry) => entry.level === 3);
+    expect(result).toMatchObject({ status: "unavailable", unavailableReason: "material", profit: null });
+  });
+
+  it("does not calculate with an invalid net-sale rate", () => {
+    const item: MarketItem = {
+      id: 705047,
+      name: "Manos Alchemist's Clothes",
+      levels: {
+        "0": quote(259_000_000, "preorder"),
+        "2": quote(null),
+        "3": quote(2_990_000_000),
+        "4": quote(7_900_000_000),
+      },
+    };
+    const invalidTax = { ...settings, taxRate: Number.NaN };
+    const result = analyzeItem(item, invalidTax).results.find((entry) => entry.level === 3);
+    expect(result).toMatchObject({ status: "unavailable", unavailableReason: "tax", profit: null });
   });
 });

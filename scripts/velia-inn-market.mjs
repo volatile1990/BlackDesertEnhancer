@@ -63,22 +63,6 @@ function resultEntries(result) {
   return entries;
 }
 
-export function parseVeliaInnCatalog(result, category) {
-  return resultEntries(result).map((entry) => {
-    const fields = entry.split("-");
-    if (fields.length !== 4) throw new Error("Invalid Pearl Abyss catalog row");
-    const [id, currentStock, totalTrades, basePrice] = fields.map((field, index) => unsignedInteger(
-      field,
-      ["catalog item id", "catalog current stock", "catalog total trades", "catalog base price"][index],
-      index !== 0 && index !== 3,
-    ));
-    void currentStock;
-    void totalTrades;
-    void basePrice;
-    return { id, category };
-  });
-}
-
 export function parseVeliaInnOrderBook(result, id, sid) {
   nonNegativeSafeInteger(id, "order-book item id", false);
   nonNegativeSafeInteger(sid, "order-book enhancement id");

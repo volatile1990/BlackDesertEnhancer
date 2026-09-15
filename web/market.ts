@@ -2,16 +2,13 @@ import {
   API_BASE,
   CACHE_MAX_STALE_MS,
   CACHE_TTL_MS,
-  CATALOG_SEEDS,
-  CATEGORY_ENDPOINTS,
+  MANOS_ITEMS,
   MATERIALS,
   TARGET_LEVELS,
   cacheKey,
-  classifyItem,
   marketSid,
 } from "./config";
 import type {
-  Category,
   MarketItem,
   MarketQuote,
   MarketSnapshot,
@@ -20,12 +17,6 @@ import type {
   PriceState,
   Region,
 } from "./types";
-
-interface CatalogRow {
-  id: number;
-  name: string;
-  basePrice?: number;
-}
 
 export interface OrderRow {
   price: number;
@@ -44,6 +35,7 @@ export interface MarketLoadResult {
   snapshot: MarketSnapshot;
   status: "fresh" | "partial" | "cached" | "snapshot";
   warnings: string[];
+  refreshRecommended: boolean;
 }
 
 interface FetchOptions {
@@ -56,9 +48,8 @@ interface FetchOptions {
 const RETRYABLE_STATUS = new Set([408, 425, 429, 500, 502, 503, 504]);
 const REQUEST_CONCURRENCY = 3;
 const MAX_RESPONSE_BYTES = 2_000_000;
-const TOTAL_REFRESH_MS = 45_000;
-let consecutiveFailures = 0;
-let circuitOpenUntil = 0;
+const TOTAL_REFRESH_MS = 35_000;
+const MAX_FUTURE_CLOCK_SKEW_MS = 5 * 60 * 1_000;
 
 class NonRetryableFetchError extends Error {}
 
@@ -73,18 +64,10 @@ function safeInteger(value: unknown, field: string): number {
   return value;
 }
 
-function validateCatalog(value: unknown): CatalogRow[] {
-  if (!Array.isArray(value) || value.length > 500) throw new Error("Ungültiger Marktkatalog");
-  return value.map((entry) => {
-    if (!isRecord(entry) || typeof entry.name !== "string" || entry.name.length > 160) {
-      throw new Error("Ungültiger Katalogeintrag");
-    }
-    return {
-      id: safeInteger(entry.id, "id"),
-      name: entry.name,
-      basePrice: typeof entry.basePrice === "number" ? safeInteger(entry.basePrice, "basePrice") : undefined,
-    };
-  });
+function safePositiveInteger(value: unknown, field: string): number {
+  const result = safeInteger(value, field);
+  if (result === 0) throw new Error(`Ungültiges Feld ${field}`);
+  return result;
 }
 
 function validateQuote(value: unknown): MarketQuote {
@@ -96,8 +79,8 @@ function validateQuote(value: unknown): MarketQuote {
   if (typeof value.state !== "string" || !states.has(value.state as PriceState)) throw new Error("Ungültiger Preisstatus");
   if (typeof value.kind !== "string" || !kinds.has(value.kind)) throw new Error("Ungültige Preisart");
   if (typeof value.fetchedAt !== "string" || !Number.isFinite(Date.parse(value.fetchedAt))) throw new Error("Ungültiger Abrufzeitpunkt");
-  if (typeof value.source !== "string" || value.source.length > 180) throw new Error("Ungültige Preisquelle");
-  const price = value.price === null ? null : safeInteger(value.price, "price");
+  if (typeof value.source !== "string" || value.source.length > 240) throw new Error("Ungültige Preisquelle");
+  const price = value.price === null ? null : safePositiveInteger(value.price, "price");
   const sellersAtLowest = safeInteger(value.sellersAtLowest, "sellersAtLowest");
   const totalSellers = safeInteger(value.totalSellers, "totalSellers");
   const buyersAtPrice = safeInteger(value.buyersAtPrice, "buyersAtPrice");
@@ -124,35 +107,39 @@ function validateQuote(value: unknown): MarketQuote {
 }
 
 export function validateMarketSnapshot(value: unknown, expectedRegion: Region): MarketSnapshot {
-  if (!isRecord(value) || value.schemaVersion !== 2 || value.region !== expectedRegion) {
+  if (!isRecord(value) || value.schemaVersion !== 3 || value.region !== expectedRegion) {
     throw new Error("Ungültige Snapshot-Version oder Region");
   }
   if (typeof value.fetchedAt !== "string" || !Number.isFinite(Date.parse(value.fetchedAt))) throw new Error("Ungültiger Snapshot-Zeitpunkt");
-  if (typeof value.source !== "string" || value.source.length > 180) throw new Error("Ungültige Snapshot-Quelle");
-  if (!Array.isArray(value.items) || value.items.length > 500) throw new Error("Ungültige Snapshot-Itemliste");
+  if (typeof value.source !== "string" || value.source.length > 240) throw new Error("Ungültige Snapshot-Quelle");
+  if (!Array.isArray(value.items) || value.items.length !== MANOS_ITEMS.length) throw new Error("Ungültige Manos-Itemliste");
 
+  const expectedItems = new Map(MANOS_ITEMS.map((item) => [item.id, item]));
   const seenIds = new Set<number>();
   const items = value.items.map((entry): MarketItem => {
-    if (!isRecord(entry) || typeof entry.name !== "string" || entry.name.length > 160 || !isRecord(entry.levels)) {
+    if (!isRecord(entry) || typeof entry.name !== "string" || !isRecord(entry.levels)) {
       throw new Error("Ungültiges Snapshot-Item");
     }
     const levelRecord = entry.levels;
     const id = safeInteger(entry.id, "id");
-    if (seenIds.has(id)) throw new Error("Doppelte Snapshot-ID");
+    const definition = expectedItems.get(id);
+    if (!definition || definition.name !== entry.name || seenIds.has(id)) throw new Error("Unbekanntes oder doppeltes Manos-Item");
     seenIds.add(id);
-    if (!["accessory", "silver", "manos"].includes(entry.category as string)) throw new Error("Ungültige Snapshot-Kategorie");
     const levels = Object.fromEntries(
-      ["0", "2", "3", "4"].map((level) => {
-        if (!(level in levelRecord)) throw new Error("Fehlende Snapshot-Preisstufe");
-        const quote = validateQuote(levelRecord[level]);
-        if (level !== "0" && quote.kind === "preorder") throw new Error("Preorder ist nur für BASE zulässig");
-        return [level, quote];
+      [0, ...TARGET_LEVELS].map((level) => {
+        const key = String(level);
+        if (!(key in levelRecord)) throw new Error("Fehlende Snapshot-Preisstufe");
+        const quote = validateQuote(levelRecord[key]);
+        if (level !== 0 && quote.kind === "preorder") throw new Error("Preorder ist nur für BASE zulässig");
+        return [key, quote];
       }),
     );
-    return { id, name: entry.name, category: entry.category as Category, levels };
+    return { id, name: entry.name, levels };
   });
 
-  if (!isRecord(value.materials)) throw new Error("Ungültige Snapshot-Materialien");
+  if (!isRecord(value.materials) || Object.keys(value.materials).length !== MATERIALS.length) {
+    throw new Error("Ungültige Snapshot-Materialien");
+  }
   const materialRecord = value.materials;
   const materialEntries = MATERIALS.map((material): [MaterialKey, MaterialQuote] => {
     const entry = materialRecord[material.key];
@@ -160,11 +147,11 @@ export function validateMarketSnapshot(value: unknown, expectedRegion: Region): 
     if (safeInteger(entry.id, "material.id") !== material.id) throw new Error("Falsche Snapshot-Material-ID");
     const quote = validateQuote(entry);
     if (quote.kind === "preorder") throw new Error("Material darf keinen Preorder-Preis verwenden");
-    return [material.key, { ...material, ...quote }];
+    return [material.key, { id: material.id, key: material.key, label: material.label, ...quote }];
   });
 
   return {
-    schemaVersion: 2,
+    schemaVersion: 3,
     region: expectedRegion,
     fetchedAt: value.fetchedAt,
     source: value.source,
@@ -176,7 +163,6 @@ export function validateMarketSnapshot(value: unknown, expectedRegion: Region): 
 export function validateOrderBooks(value: unknown): OrderBook[] {
   const books = Array.isArray(value) ? value : [value];
   if (books.length > 100) throw new Error("Zu viele Orderbücher in einer Antwort");
-
   return books.map((entry) => {
     if (!isRecord(entry) || !Array.isArray(entry.orders) || entry.orders.length > 500) {
       throw new Error("Ungültiges Orderbuch");
@@ -188,7 +174,7 @@ export function validateOrderBooks(value: unknown): OrderBook[] {
       orders: entry.orders.map((order) => {
         if (!isRecord(order)) throw new Error("Ungültige Preisstufe");
         return {
-          price: safeInteger(order.price, "price"),
+          price: safePositiveInteger(order.price, "price"),
           sellers: safeInteger(order.sellers, "sellers"),
           buyers: order.buyers === undefined ? undefined : safeInteger(order.buyers, "buyers"),
         };
@@ -223,13 +209,18 @@ export function highestPreorderPrice(orders: OrderRow[]): {
   return { price: highestPrice, buyersAtPrice, totalBuyers };
 }
 
+export function isQuoteWithinMaxAge(quote: MarketQuote, now = Date.now()): boolean {
+  const timestamp = Date.parse(quote.fetchedAt);
+  if (!Number.isFinite(timestamp)) return false;
+  const age = now - timestamp;
+  return age >= -MAX_FUTURE_CLOCK_SKEW_MS && age <= CACHE_MAX_STALE_MS;
+}
+
 function wait(ms: number): Promise<void> {
   return new Promise((resolve) => globalThis.setTimeout(resolve, ms));
 }
 
 export async function fetchJsonWithRetry<T>(url: string, options: FetchOptions = {}): Promise<T> {
-  if (Date.now() < circuitOpenUntil) throw new Error("Markt-API ist vorübergehend pausiert");
-
   const attempts = options.attempts ?? 3;
   const timeoutMs = options.timeoutMs ?? 9_000;
   const fetcher = options.fetcher ?? fetch;
@@ -258,9 +249,9 @@ export async function fetchJsonWithRetry<T>(url: string, options: FetchOptions =
         const retryAfter = Number(response.headers.get("retry-after"));
         const retryDelay = Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1_000 : 0;
         const delay = Math.max(retryDelay, 350 * 2 ** attempt + Math.random() * 300);
-        const deadlineDelay = options.deadlineAt === undefined ? delay : Math.max(0, options.deadlineAt - Date.now());
-        if (deadlineDelay <= 0) throw new Error("Gesamtzeit für Markt-Aktualisierung überschritten");
-        await wait(Math.min(delay, deadlineDelay));
+        const availableDelay = options.deadlineAt === undefined ? delay : Math.max(0, options.deadlineAt - Date.now());
+        if (availableDelay <= 0) throw new Error("Gesamtzeit für Markt-Aktualisierung überschritten");
+        await wait(Math.min(delay, availableDelay));
         continue;
       }
 
@@ -273,22 +264,19 @@ export async function fetchJsonWithRetry<T>(url: string, options: FetchOptions =
       const body = await response.text();
       if (body.length > MAX_RESPONSE_BYTES) throw new NonRetryableFetchError("Markt-Antwort ist unerwartet groß");
       const parsed = JSON.parse(body) as T;
-      consecutiveFailures = 0;
       return parsed;
     } catch (error) {
       lastError = error;
       if (error instanceof NonRetryableFetchError || attempt === attempts - 1) break;
       const delay = 350 * 2 ** attempt + Math.random() * 300;
-      const deadlineDelay = options.deadlineAt === undefined ? delay : Math.max(0, options.deadlineAt - Date.now());
-      if (deadlineDelay <= 0) break;
-      await wait(Math.min(delay, deadlineDelay));
+      const availableDelay = options.deadlineAt === undefined ? delay : Math.max(0, options.deadlineAt - Date.now());
+      if (availableDelay <= 0) break;
+      await wait(Math.min(delay, availableDelay));
     } finally {
       globalThis.clearTimeout(timeout);
     }
   }
 
-  consecutiveFailures += 1;
-  if (consecutiveFailures >= 3) circuitOpenUntil = Date.now() + 20_000;
   throw lastError instanceof Error ? lastError : new Error("Markt-API nicht erreichbar");
 }
 
@@ -372,7 +360,7 @@ export function quoteFromBook(
   };
 }
 
-function unavailableQuote(fetchedAt: string): MarketQuote {
+function unavailableQuote(fetchedAt: string, source = "Arsha order book"): MarketQuote {
   return {
     price: null,
     sellersAtLowest: 0,
@@ -382,7 +370,7 @@ function unavailableQuote(fetchedAt: string): MarketQuote {
     kind: "unavailable",
     state: "error",
     fetchedAt,
-    source: "Arsha order book",
+    source,
   };
 }
 
@@ -390,19 +378,74 @@ function quoteAsFallback<T extends MarketQuote>(quote: T, state: "cached" | "sna
   return { ...quote, state: quote.price === null ? quote.state : state };
 }
 
-function cloneWithState(snapshot: MarketSnapshot, state: "cached" | "snapshot"): MarketSnapshot {
-  return {
-    ...snapshot,
-    source: state === "cached" ? "Lokaler Last-known-good-Cache" : "Gebündelter GitHub-Snapshot",
-    items: snapshot.items.map((item) => ({
-      ...item,
-      levels: Object.fromEntries(
-        Object.entries(item.levels).map(([level, quote]) => [level, quoteAsFallback(quote, state)]),
+interface FallbackCandidate {
+  snapshot: MarketSnapshot;
+  state: "cached" | "snapshot";
+}
+
+function newestFallbackQuote(
+  candidates: FallbackCandidate[],
+  getQuote: (snapshot: MarketSnapshot) => MarketQuote | undefined,
+  failedAt: string,
+): MarketQuote {
+  const current = candidates
+    .flatMap((candidate) => {
+      const quote = getQuote(candidate.snapshot);
+      return quote && quote.state !== "error" && isQuoteWithinMaxAge(quote)
+        ? [{ quote, state: candidate.state }]
+        : [];
+    })
+    .sort((left, right) => Date.parse(right.quote.fetchedAt) - Date.parse(left.quote.fetchedAt))[0];
+  return current
+    ? quoteAsFallback(current.quote, current.state)
+    : unavailableQuote(failedAt, "Kein Fallback-Orderbuch unter 24 Stunden");
+}
+
+export function mergeFallbacks(candidates: FallbackCandidate[], region: Region): {
+  snapshot: MarketSnapshot;
+  state: "cached" | "snapshot";
+  missingQuotes: number;
+} | null {
+  if (candidates.length === 0) return null;
+  const newestCandidate = [...candidates]
+    .sort((left, right) => Date.parse(right.snapshot.fetchedAt) - Date.parse(left.snapshot.fetchedAt))[0]!;
+  const failedAt = newestCandidate.snapshot.fetchedAt;
+  const items: MarketItem[] = MANOS_ITEMS.map((item) => ({
+    id: item.id,
+    name: item.name,
+    levels: Object.fromEntries([0, ...TARGET_LEVELS].map((level) => [
+      String(level),
+      newestFallbackQuote(
+        candidates,
+        (snapshot) => snapshot.items.find((candidate) => candidate.id === item.id)?.levels[String(level)],
+        failedAt,
       ),
-    })),
-    materials: Object.fromEntries(
-      Object.entries(snapshot.materials).map(([key, quote]) => [key, quoteAsFallback(quote, state)]),
-    ) as Record<MaterialKey, MaterialQuote>,
+    ])),
+  }));
+  const materials = Object.fromEntries(MATERIALS.map((material) => [
+    material.key,
+    {
+      id: material.id,
+      key: material.key,
+      label: material.label,
+      ...newestFallbackQuote(candidates, (snapshot) => snapshot.materials[material.key], failedAt),
+    },
+  ])) as Record<MaterialKey, MaterialQuote>;
+  const missingQuotes = [
+    ...items.flatMap((item) => Object.values(item.levels)),
+    ...Object.values(materials),
+  ].filter((quote) => quote.state === "error").length;
+  return {
+    snapshot: {
+      schemaVersion: 3,
+      region,
+      fetchedAt: newestCandidate.snapshot.fetchedAt,
+      source: candidates.length > 1 ? "Lokaler Cache und GitHub-Snapshot" : newestCandidate.snapshot.source,
+      items,
+      materials,
+    },
+    state: newestCandidate.state,
+    missingQuotes,
   };
 }
 
@@ -412,7 +455,8 @@ function readCache(region: Region): MarketSnapshot | null {
     const raw = globalThis.localStorage.getItem(cacheKey(region));
     if (!raw) return null;
     const parsed = validateMarketSnapshot(JSON.parse(raw), region);
-    if (Date.now() - Date.parse(parsed.fetchedAt) > CACHE_MAX_STALE_MS) return null;
+    const age = Date.now() - Date.parse(parsed.fetchedAt);
+    if (age < -MAX_FUTURE_CLOCK_SKEW_MS || age > CACHE_MAX_STALE_MS) return null;
     return parsed;
   } catch {
     return null;
@@ -435,30 +479,6 @@ async function readBundledSnapshot(): Promise<MarketSnapshot> {
   return validateMarketSnapshot(await response.json(), "eu");
 }
 
-async function fetchCatalog(region: Region, deadlineAt: number): Promise<{
-  rows: Array<{ id: number; name: string; category: Category }>;
-  failedCategories: number;
-}> {
-  const responses = await Promise.allSettled(
-    CATEGORY_ENDPOINTS.map(async (endpoint) => {
-      const url = `${API_BASE}/${region}/GetWorldMarketList?mainCategory=${endpoint.main}&subCategory=${endpoint.sub}`;
-      const payload = await fetchJsonWithRetry<unknown>(url, { deadlineAt });
-      return validateCatalog(payload)
-        .map((row) => ({ ...row, category: classifyItem(row.name, endpoint.category) }))
-        .filter((row): row is CatalogRow & { category: Category } => row.category !== null);
-    }),
-  );
-
-  const rows = responses.flatMap((result) => (result.status === "fulfilled" ? result.value : []));
-  const fallbackRows = CATALOG_SEEDS.filter((seed) => !rows.some((row) => row.id === seed.id));
-  rows.push(...fallbackRows);
-  if (rows.length === 0) throw new Error("Kein Marktkatalog verfügbar");
-  return {
-    rows: Array.from(new Map(rows.map((row) => [row.id, row])).values()),
-    failedCategories: responses.filter((result) => result.status === "rejected").length,
-  };
-}
-
 async function fetchOrderBooks(
   region: Region,
   pairs: Array<{ id: number; sid: number }>,
@@ -479,13 +499,17 @@ async function fetchOrderBooks(
       });
       const chunkBooks = validateOrderBooks(payload);
       const expected = new Set(chunk.map(({ id, sid }) => `${id}:${sid}`));
+      const returned = new Set<string>();
       for (const book of chunkBooks) {
-        if (!expected.has(`${book.id}:${book.sid}`)) throw new Error("Orderbuch-ID stimmt nicht mit Anfrage überein");
+        const key = `${book.id}:${book.sid}`;
+        if (!expected.has(key)) throw new Error("Orderbuch-ID stimmt nicht mit Anfrage überein");
+        if (returned.has(key)) throw new Error("Doppeltes Orderbuch in Markt-Antwort");
+        returned.add(key);
       }
-      const returned = new Set(chunkBooks.map((book) => `${book.id}:${book.sid}`));
+      if (returned.size !== chunk.length) throw new Error("Markt-Antwort enthält nicht alle angefragten Orderbücher");
       return {
         books: chunkBooks,
-        failed: chunk.filter(({ id, sid }) => !returned.has(`${id}:${sid}`)),
+        failed: [],
       };
     } catch {
       if (chunk.length === 1 || Date.now() >= deadlineAt) return { books: [], failed: chunk };
@@ -497,7 +521,6 @@ async function fetchOrderBooks(
   };
 
   const settled = await mapLimit(chunks, REQUEST_CONCURRENCY, fetchChunk);
-
   const books = new Map<string, OrderBook>();
   const failedKeys = new Set<string>();
   for (let index = 0; index < settled.length; index += 1) {
@@ -513,120 +536,116 @@ async function fetchOrderBooks(
 }
 
 function fallbackQuote(
-  fallback: MarketSnapshot | null,
-  fallbackState: "cached" | "snapshot",
+  fallbacks: FallbackCandidate[],
   id: number,
   resultLevel: number,
   fetchedAt: string,
 ): MarketQuote {
-  const old = fallback?.items.find((item) => item.id === id)?.levels[String(resultLevel)];
-  if (!old) return unavailableQuote(fetchedAt);
-  return quoteAsFallback(old, fallbackState);
+  return newestFallbackQuote(
+    fallbacks,
+    (snapshot) => snapshot.items.find((item) => item.id === id)?.levels[String(resultLevel)],
+    fetchedAt,
+  );
 }
 
 async function fetchFreshSnapshot(
   region: Region,
-  fallback: MarketSnapshot | null,
-  fallbackState: "cached" | "snapshot",
+  fallbacks: FallbackCandidate[],
 ): Promise<MarketLoadResult> {
   const fetchedAt = new Date().toISOString();
   const deadlineAt = Date.now() + TOTAL_REFRESH_MS;
-  const catalogResult = await fetchCatalog(region, deadlineAt);
-  const pairs = catalogResult.rows.flatMap((item) =>
-    [0, ...TARGET_LEVELS.map((level) => marketSid(item.category, level))].map((sid) => ({ id: item.id, sid })),
+  const pairs = MANOS_ITEMS.flatMap((item) =>
+    [0, ...TARGET_LEVELS.map((level) => marketSid(level))].map((sid) => ({ id: item.id, sid })),
   );
   pairs.push(...MATERIALS.map((material) => ({ id: material.id, sid: 0 })));
 
   const { books, failedKeys } = await fetchOrderBooks(region, pairs, deadlineAt);
-  const items: MarketItem[] = catalogResult.rows.map((item) => ({
+  if (books.size === 0) throw new Error("Arsha lieferte kein einziges Manos-Orderbuch");
+  if (![...books.values()].some((book) => book.orders.length > 0)) {
+    throw new Error("Arsha lieferte ausschließlich leere Manos-Orderbücher");
+  }
+
+  const items: MarketItem[] = MANOS_ITEMS.map((item) => ({
     id: item.id,
     name: item.name,
-    category: item.category,
     levels: Object.fromEntries(
       [0, ...TARGET_LEVELS].map((level) => {
-        const sid = marketSid(item.category, level);
+        const sid = marketSid(level);
         const book = books.get(`${item.id}:${sid}`);
-        return [String(level), book ? quoteFromBook(book, fetchedAt, "fresh", level === 0) : fallbackQuote(fallback, fallbackState, item.id, level, fetchedAt)];
+        return [String(level), book
+          ? quoteFromBook(book, fetchedAt, "fresh", level === 0)
+          : fallbackQuote(fallbacks, item.id, level, fetchedAt)];
       }),
     ),
   }));
 
-  if (catalogResult.failedCategories > 0 && fallback) {
-    const freshIds = new Set(items.map((item) => item.id));
-    items.push(
-      ...fallback.items
-        .filter((item) => !freshIds.has(item.id))
-        .map((item) => ({
-          ...item,
-          levels: Object.fromEntries(
-            Object.entries(item.levels).map(([level, quote]) => [level, quoteAsFallback(quote, fallbackState)]),
-          ),
-        })),
-    );
-  }
-
   const materials = Object.fromEntries(
     MATERIALS.map((material) => {
       const book = books.get(`${material.id}:0`);
-      const old = fallback?.materials[material.key];
       const quote = book
         ? quoteFromBook(book, fetchedAt)
-        : old
-          ? quoteAsFallback(old, fallbackState)
-          : unavailableQuote(fetchedAt);
-      return [material.key, { ...material, ...quote }];
+        : newestFallbackQuote(fallbacks, (snapshot) => snapshot.materials[material.key], fetchedAt);
+      return [material.key, { id: material.id, key: material.key, label: material.label, ...quote }];
     }),
   ) as Record<MaterialKey, MaterialQuote>;
 
+  const warnings: string[] = [];
+  if (failedKeys.size > 0) {
+    warnings.push(`${failedKeys.size} von ${pairs.length} Manos-Orderbüchern waren nach mehreren Versuchen nicht erreichbar.`);
+  }
   const snapshot: MarketSnapshot = {
-    schemaVersion: 2,
+    schemaVersion: 3,
     region,
     fetchedAt,
-    source: "Arsha order books",
+    source: warnings.length ? "Arsha order books (partial)" : "Arsha order books",
     items,
     materials,
   };
-  const warnings: string[] = [];
-  if (catalogResult.failedCategories > 0) {
-    warnings.push(`${catalogResult.failedCategories} Marktkategorien waren nicht erreichbar.`);
-  }
-  if (failedKeys.size > 0) warnings.push(`${failedKeys.size} Orderbücher waren nach mehreren Versuchen nicht erreichbar.`);
-
-  const usableQuotes = items.reduce(
-    (count, item) => count + Object.values(item.levels).filter((entry) => entry.state !== "error").length,
-    0,
-  );
-  if (usableQuotes === 0) throw new Error("Keine gültigen Orderbücher verfügbar");
   writeCache(snapshot);
-  return { snapshot, status: warnings.length ? "partial" : "fresh", warnings };
+  return { snapshot, status: warnings.length ? "partial" : "fresh", warnings, refreshRecommended: false };
 }
 
 export async function loadMarket(region: Region, force = false): Promise<MarketLoadResult> {
   const cached = readCache(region);
-  if (!force && cached && Date.now() - Date.parse(cached.fetchedAt) < CACHE_TTL_MS) {
-    return { snapshot: cloneWithState(cached, "cached"), status: "cached", warnings: [] };
-  }
-
   let bundled: MarketSnapshot | null = null;
-  if (!cached && region === "eu") {
+  if (region === "eu") {
     try {
       bundled = await readBundledSnapshot();
     } catch {
       bundled = null;
     }
   }
-  const fallback = cached ?? bundled;
+  const fallbacks: FallbackCandidate[] = [
+    ...(cached ? [{ snapshot: cached, state: "cached" as const }] : []),
+    ...(bundled ? [{ snapshot: bundled, state: "snapshot" as const }] : []),
+  ];
+  const mergedFallback = mergeFallbacks(fallbacks, region);
+  if (!force && mergedFallback) {
+    const warnings = mergedFallback.missingQuotes > 0
+      ? [`${mergedFallback.missingQuotes} Fallback-Preise fehlen oder sind älter als 24 Stunden.`]
+      : [];
+    const cachedAge = cached ? Date.now() - Date.parse(cached.fetchedAt) : Number.POSITIVE_INFINITY;
+    return {
+      snapshot: mergedFallback.snapshot,
+      status: mergedFallback.state,
+      warnings,
+      refreshRecommended: mergedFallback.state === "snapshot" || cachedAge >= CACHE_TTL_MS,
+    };
+  }
 
   try {
-    return await fetchFreshSnapshot(region, fallback, cached ? "cached" : "snapshot");
+    return await fetchFreshSnapshot(region, fallbacks);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unbekannter API-Fehler";
-    if (fallback) {
-      const kind = cached ? "cached" : "snapshot";
+    if (mergedFallback) {
       return {
-        snapshot: cloneWithState(fallback, kind),
-        status: kind,
-        warnings: [`Live-Abruf fehlgeschlagen (${message}). Letzte gültige Daten werden angezeigt.`],
+        snapshot: mergedFallback.snapshot,
+        status: mergedFallback.state,
+        warnings: [
+          `Live-Abruf fehlgeschlagen (${message}). Der letzte Snapshot wird verwendet; Einzelpreise über 24 Stunden werden verworfen.`,
+          ...(mergedFallback.missingQuotes > 0 ? [`${mergedFallback.missingQuotes} Preise sind deshalb nicht verfügbar.`] : []),
+        ],
+        refreshRecommended: false,
       };
     }
     throw error;

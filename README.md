@@ -1,74 +1,41 @@
-# BDO Enhancement-Kosten
+# Manos-Kleidung
 
-Eine statische, für GitHub Pages geeignete Webanwendung zur Analyse von Enhancement-Kosten im Black Desert Online Central Market. Accessoires, Silver Embroidered und Manos-Kleidung werden mit getrennten Regelprofilen berechnet.
+Statische GitHub-Pages-Anwendung für die Enhancement-Kosten der acht Manos-Kleidungsstücke im EU Central Market. Accessoires, Silver Embroidered und andere Regionen sind nicht Teil der Webanwendung.
 
-Für Verkaufspreise zählt ausschließlich die niedrigste aktuell vorhandene Preisstufe mit mindestens einem Verkäufer. Fehlt beim BASE-Einkauf eine Sell-Order, wird stattdessen die höchste im Orderbuch zulässige Preorder-Preisstufe angesetzt und sichtbar als **Preorder** markiert. Guide-, Durchschnitts- und zuletzt erzielte Preise werden niemals verwendet.
+## Preise
 
-## Lokal starten
+- Verkaufspreise sind ausschließlich das niedrigste aktuell gelistete Angebot mit mindestens einem Verkäufer.
+- Fehlt bei BASE ein Verkaufsangebot, gilt die höchste im Orderbuch zulässige Preisstufe als Preorder-Einkaufspreis.
+- Durchschnitts-, Guide- und Last-Sold-Preise werden nicht verwendet.
+- Abgefragt werden 32 Kleidungs-Orderbücher (BASE, DUO, TRI und TET) sowie Black Gem, Concentrated Magical Black Gem und Memory Fragment: insgesamt 35 statt zuvor über 600 Orderbücher.
 
-Voraussetzung ist Node.js 24.
+Im Browser wird die CORS-fähige [Arsha API](https://github.com/guy0090/api.arsha.io) verwendet. Der GitHub-Actions-Snapshot fragt bei einem Arsha-Ausfall zusätzlich den von [Velia Inn](https://developers.veliainn.com/) dokumentierten Pearl-Abyss-Endpunkt ab. Dieser zweite Weg ist wegen fehlender CORS-Freigabe nur im Build möglich, nicht direkt von GitHub Pages.
+
+Der Browser-Cache gilt zehn Minuten. Jede übernommene Einzelquote darf höchstens 24 Stunden alt sein; ein teilweise fehlgeschlagener Abruf kann ihren Zeitstempel nicht verlängern. Das Manos-only-Schema und der Cache-Key haben Version 3, sodass alte gemischte Daten automatisch verworfen werden.
+
+Fehlt einer der drei aktuellen Materialpreise, wird keine Profitrechnung ausgegeben. Die grauen Zahlen in leeren Materialfeldern sind nur Eingabeplatzhalter; gerechnet wird damit erst nach einer bewussten manuellen Eingabe.
+
+## Lokal
+
+Node.js 24:
 
 ```powershell
 npm install
+npm run check
+npm run snapshot
 npm run dev
 ```
 
-Qualitätsprüfung und Produktions-Build:
+`npm run snapshot` ersetzt `public/data/market-eu.json` nur bei vollständiger, validierter Abdeckung aller 35 Orderbücher. Einzelne leere Arsha-Bücher werden zusätzlich direkt bei Pearl Abyss geprüft und können danach „nicht gelistet“ bedeuten; eine komplett leere Antwort wird als Anbieterfehler verworfen. Die Datei wird über einen temporären Pfad ersetzt.
 
-```powershell
-npm run check
-```
+## GitHub Pages
 
-Der gebaute statische Inhalt liegt anschließend in `dist/`.
+Der Workflow [.github/workflows/pages.yml](.github/workflows/pages.yml) läuft bei jedem Push auf `main`, manuell und alle sechs Stunden. Er aktualisiert den Snapshot, testet, baut und veröffentlicht `dist/`. Scheitern beide Marktwege in einem geplanten Lauf, wird nicht neu deployed; die zuletzt erfolgreich veröffentlichte Seite bleibt dadurch erhalten.
 
-## GitHub Pages veröffentlichen
+Seite: [volatile1990.github.io/BlackDesertEnhancer](https://volatile1990.github.io/BlackDesertEnhancer/)
 
-Der Workflow [pages.yml](.github/workflows/pages.yml) testet die Anwendung, baut sie mit dem Repository-Basispfad `/BlackDesertEnhancer/` und veröffentlicht `dist/` über GitHub Pages.
+## Berechnung
 
-1. Repository zu GitHub pushen.
-2. Unter **Settings → Pages → Build and deployment** als Quelle **GitHub Actions** wählen.
-3. Den Workflow manuell starten oder auf einen Push nach `main` warten.
+Das deterministische Manos-Modell berücksichtigt die festen Erfolgschancen, Black Gems bis +15, Concentrated Magical Black Gems ab PRI, Haltbarkeitsreparatur mit Memory Fragments, Downgrades und die stufenspezifischen Ancient-Anvil-Schwellen. Cron Stones sind nicht eingerechnet.
 
-Der Workflow versucht zusätzlich alle sechs Stunden einen validierten Markt-Snapshot für den Ausfallpfad zu erstellen. Er übernimmt nur einen Snapshot mit allen drei Regelkategorien, gültigen Listingzuständen und mindestens 70 % Orderbuchabdeckung; andernfalls bleibt die zuletzt eingecheckte Version unverändert.
-
-## Marktdaten und Stabilität
-
-Die Browser-App verwendet ausschließlich CORS-fähige GET-Endpunkte der öffentlichen [Arsha Market API](https://github.com/guy0090/api.arsha.io). [Velia Inn](https://developers.veliainn.com/) betreibt keine zweite vollständige Preis-API, dokumentiert aber die direkten Pearl-Abyss-Marktendpunkte. Diese POST-Endpunkte kann eine reine GitHub-Pages-App wegen CORS nicht lesen. Deshalb nutzt nur der serverseitige GitHub-Actions-Snapshot sie als Velia-Inn-dokumentierten Fallback, wenn einzelne Arsha-Kataloge oder Orderbücher fehlen.
-
-Der Fallback akzeptiert das aktuelle Huffman-komprimierte Binärformat sowie ältere JSON-Envelopes, validiert Antwortgröße und Zahlenfelder und fragt fehlende Orderbücher einzeln ab. Die eingeschränkten Preisendpunkte der Velia-Inn-Webseite werden nicht verwendet: Sie liefern angezeigte Basispreise statt vollständiger Verkäufer-Orderbücher und würden damit die Listingpreis-Regel verletzen.
-
-Der Abruf arbeitet mit:
-
-- 9-Sekunden-Timeout pro Versuch, maximal drei Versuchen und exponentiellem Backoff mit Jitter;
-- Berücksichtigung von `Retry-After` bei temporären Fehlern;
-- gebündelten Orderbuch-Abfragen, maximal drei parallelen Requests und kurzer Circuit-Breaker-Pause;
-- Schema-, Größen-, ID-/SID- und Safe-Integer-Validierung;
-- Teilresultaten statt eines globalen Abbruchs;
-- 30-Minuten-Last-known-good-Cache und versioniertem EU-Snapshot als sichtbarem Fallback.
-
-Ein erfolgreich geladenes Ziel-Orderbuch ohne Verkäufer ist der Zustand **Kein Listing**. Nur für BASE wird in diesem Fall die höchste vorhandene Orderbuch-Preisstufe als maximaler Preorder-Einkaufspreis genutzt. Auch dabei wird ausdrücklich nicht auf einen Guide- oder letzten Verkaufspreis zurückgefallen.
-
-## Berechnungsmodelle
-
-- **Accessoires:** stückweise Failstack-Chancen mit 90-%-Cap, Zerstörung/Rebuild und stufenspezifischem Ancient Anvil.
-- **Silver Embroidered:** eigene +1-Kurve; darüber Accessoire-Kurven, UI-Bezeichnungen +1 bis +4.
-- **Manos-Kleidung:** feste aktuelle PC-Chancen, Black Gems, Concentrated Magical Black Gems, Memory-Fragment-Reparatur, Agris und Downgrades.
-
-Die Kosten werden deterministisch als Erwartungswert berechnet, nicht per zufälliger Monte-Carlo-Stichprobe. Failstack-Kosten können als direkter Marktwert ihrer aktuellen Materialbeschaffung oder bewusst als bereits vorhanden angesetzt werden. Bei einem Ancient-Anvil-Erfolg behandelt das Modell den gewachsenen Stack als weggepackten Vermögenswert und verwendet für einen späteren Rebuild einen neuen konfigurierten Startstack.
-
-Nicht enthalten sind derzeit Cron-Strategien und Manos-Life-Accessoires. Die dritte Ansicht heißt deshalb bewusst **Manos-Kleidung**.
-
-## Struktur
-
-- `web/` – TypeScript-App, Marktadapter, Berechnungen und Tests
-- `public/data/market-eu.json` – gebündelter Last-known-good-Snapshot
-- `scripts/update-market-snapshot.mjs` – atomarer Snapshot-Generator
-- `.github/workflows/pages.yml` – Tests, Build und Pages-Deployment
-- `src/` – bestehende Java/Swing-Desktopanwendung; sie wird für den Pages-Build nicht verwendet
-- `AUDIT.md` – vollständige Auditbefunde, Korrekturen und verbleibende Grenzen
-
-## Quellen und Hinweis
-
-Regelquellen: [Ancient Anvil](https://www.naeu.playblackdesert.com/DE-DE/Wiki?wikiNo=402), [Manos-Itemdaten](https://bdocodex.com/us/item/705037/), [aktuelle Silver-Embroidered-Änderung](https://www.naeu.playblackdesert.com/es-ES/News/Detail?groupContentNo=8996) und [direkte Failstack-Beschaffung](https://www.sa.playblackdesert.com/es-mx/Wiki?wikiNo=48).
-
-Dies ist ein unabhängiges Community-Tool. Markt- und Spieldaten können sich durch Patches ändern; die Anwendung zeigt daher Quelle und Abrufzeit der Marktdaten an.
+`src/` enthält weiterhin die frühere Java/Swing-Anwendung, wird aber weder geladen noch in den Pages-Build aufgenommen.

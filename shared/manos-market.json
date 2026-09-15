@@ -1,0 +1,17 @@
+{
+  "items": [
+    { "id": 705015, "name": "Manos Trainer's Clothes" },
+    { "id": 705022, "name": "Manos Hunter's Clothes" },
+    { "id": 705032, "name": "Manos Sailor's Clothes" },
+    { "id": 705037, "name": "Manos Cook's Clothes" },
+    { "id": 705047, "name": "Manos Alchemist's Clothes" },
+    { "id": 705052, "name": "Manos Fisher's Clothes" },
+    { "id": 705517, "name": "Manos Gatherer's Clothes" },
+    { "id": 705518, "name": "Manos Craftsman's Clothes" }
+  ],
+  "materials": [
+    { "id": 5000, "key": "blackGem", "label": "Black Gem", "defaultPrice": 463000 },
+    { "id": 4987, "key": "concentratedBlackGem", "label": "Concentrated Magical Black Gem", "defaultPrice": 14500000 },
+    { "id": 44195, "key": "memoryFragment", "label": "Memory Fragment", "defaultPrice": 2570000 }
+  ]
+}
